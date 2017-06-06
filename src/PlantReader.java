@@ -19,10 +19,12 @@ public class PlantReader
     static boolean isSend;
     static String tail;
     static String[] result;
+    static LinkedList<String> trace;
 
     public static void main(String[] args)
     {
     	listData = new ArrayList<>();
+    	trace =  new LinkedList<>();
     	System.out.println("File input:");
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
@@ -44,28 +46,19 @@ public class PlantReader
 
         for(int i=0;i<result.length;i++){
         	String tmp = result[i];
-        	if(tmp.equals(":")){
-        		if(isSend){
-        			tail = "r";
-	        		result[i+1]+="r";
-	        	}else{
-	        		tail = "s";
-	        		result[i+1]+="s";
-	        	}
-        		
-        		updateMessageToArrayList(result[i+1]);
-        		isSend = !isSend;
-        	}else if(tmp.equals("->")||tmp.equals("-->")){
-        		
+        	if(tmp.equals("->")||tmp.equals("-->")){
         		LinkedList<Map> linkList = new LinkedList<>();
         		if(result[i-1].equals("[*]")){
         			updateToArrayList(result[i-1],tmp,result[i+1],result[i+3]);
             		continue;
             	}
+        		translateMsg(result[i-1],tmp,result[i+3],i);
         		updateToArrayList(result[i-1],tmp,result[i+1],result[i+3]);
         	}else if(tmp.equals("<-")){
+        		translateMsg(result[i-1],result[i+2],result[i+3],i);
         		updateToArrayList(result[i+1], "->", result[i-1], result[i+3]);
         	}else if(tmp.equals("<--")){
+        		translateMsg(result[i-1],result[i+2],result[i+3],i);
         		updateToArrayList(result[i+1], "-->", result[i-1], result[i+3]);
         	}
 
@@ -101,18 +94,21 @@ public class PlantReader
     	return uml;
     }
     
-    public void translateMsg(String tmp,String m,int i){
-    	if(tmp.equals(":")){
-    		if(isSend){
-    			tail = "r";
-        		result[i+1]+="r";
-        	}else{
-        		tail = "s";
-        		result[i+1]+="s";
-        	}
-    		
-    		updateMessageToArrayList(result[i+1]);
-    		isSend = !isSend;
+    public static boolean checkSend(String now){
+    	return trace.getLast().equals(now);
+    }
+    
+    public static void translateMsg(String state,String op,String msg,int i){
+    	String res="";
+    	if(result[i+2].equals(":")){
+    		String[] t = getArrayFromMsg(msg);
+    		if(t[0].length()!=0)
+    		res += t[0]+"r";
+    		if(t[1].length()!=0)
+    		res += "/"+t[1]+"s";
+//    		isSend = !isSend;
+    		result[i+3] = res;
+    		updateMessageToArrayList(result[i+3]);
     	}
     }
     
@@ -121,11 +117,14 @@ public class PlantReader
 		Map<LinkedList<String>, String> map;
 		map = new HashMap<>();
     	linkList.add(left);
+    	trace.add(left);
 		linkList.add(med);
 		linkList.add(right);
+		trace.add(right);
 		if(msg.equals("->")||msg.equals("-->")||msg.equals("<-")||msg.equals("<--")||msg.equals(":"))
 			msg = "NaN";
-		map.put(linkList, msg);
+		map.put(linkList, msg.replace("/", ""));
+		System.out.println("Message :"+msg);
 		LinkedList<Map> linkMap = new LinkedList<>();
 		linkMap.add(map);
 		listData.add(linkMap);
@@ -134,7 +133,7 @@ public class PlantReader
     public static void updateMessageToArrayList(String msg){
     	Map<String, String> map;
     	map = new HashMap<>();
-    	map.put("Message", msg);
+    	map.put("Message", msg.replace("/", ""));
     	LinkedList<Map> linkMap = new LinkedList<>();
     	linkMap.add(map);
     	listData.add(linkMap);
@@ -143,14 +142,17 @@ public class PlantReader
     public static String translateToChannel(){
     	String res = "channel ";
     	int msg = 0;
+    	System.out.println("ListData :"+listData);
     	for (int i = 0; i < listData.size(); i++) {
     		for (int j = 0; j < listData.get(i).size(); j++) {
     			Map map = listData.get(i).get(j);
+				System.out.println("LLL"+map);
     			if(map.containsKey("Message")){
     				msg++;
     				if(msg>1)
     				res += ","+map.get("Message");
     				else res += map.get("Message");
+    			System.out.println("AA :"+map.get("Message"));
     			}
     			
 			}
@@ -174,8 +176,9 @@ public class PlantReader
     				d= state[2].replace("]", "");
     				res += status+" = ";
     				status = d;
-    				if(!b.equals("NaN"))
-    				res += b+" "+c;
+    				if(!b.equals("NaN")){
+    				res += readAction(b)+" "+c;
+    				}
     				res += " "+d+"\n";
 
     			}
@@ -185,5 +188,36 @@ public class PlantReader
     	return res;
     }
     
+    public static String[] getArrayFromMsg(String msg){
+    	String[] a = new String[2];
+    	if(msg.contains(":")){
+	    	String[] arr = msg.split(":");
+	    	System.out.println("T"+arr);
+	    	if(arr[1].contains("/"))
+	    	a = arr[1].split("/");
+	    	else{ 
+	    		a[0] = arr[1];
+	    		a[1] = "";
+	    	}
+    	}else if(msg.contains("/") ){
+			a = msg.split("/");
+		}else {
+			a[0] = msg;
+			a[1] = "";
+			}
+    	return a;
+    }
+    
+    public static String readAction(String message){
+    	String rs="";
+    	String[] a = getArrayFromMsg(message);
+    	if(a[0].length()!=0) rs+=a[0];
+    	if(a[0].length()!=0&&a[1].length()!=0) rs+=" -> ";
+    	if(a[1].length()!=0) rs+=a[1];
+    	return rs;
+    }
+    
+
+        
     
 }
