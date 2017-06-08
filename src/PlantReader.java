@@ -118,7 +118,7 @@ public class PlantReader {
 								if(entry2.getValue().get(j).equals("*")) res += namestate+" ";
 								else res+= entry2.getValue().get(j)+" ";
 							}
-							if(j%3==1 && !entry2.getKey().equals("NaN") ) res+=entry2.getKey()+" -> ";
+							if(j%3==1 && !entry2.getKey().equals("NaN") ) res+= readAction(entry2.getKey());
 						}
 					    res += "\n";
 					}
@@ -129,6 +129,40 @@ public class PlantReader {
 			return res;
 	}
 	
+	public static ArrayList<String> getArrayFromMsg(String msg){
+    	ArrayList<String> a;
+    	if(msg.contains(":")){
+	    	String[] arr = msg.split(":");
+	    	System.out.println("T"+arr);
+	    	if(arr[1].contains("/"))
+	    	a = new  ArrayList<>(Arrays.asList(arr[1].split("/")));
+	    	else{ 
+	    		a = new ArrayList<>();
+	    		a.add(arr[1]);
+	    		a.add("");
+	    	}
+    	}else if(msg.contains("/") ){
+			a = new ArrayList<>(Arrays.asList(msg.split("/")));
+		}else {
+			a = new ArrayList<>();
+			a.add(msg);
+			a.add("");
+			}
+    	return a;
+    }
+    
+    public static String readAction(String message){
+    	String rs="";
+    	System.out.println("Message :"+message);
+    	ArrayList<String> a = getArrayFromMsg(message);
+    	for (int i = 0; i < a.size(); i++) {
+			if (a.get(i).length()!=0) {
+				rs+=a.get(i)+" -> ";
+			}
+			
+		}
+    	return rs;
+    }
 	
 	 
 	 private static ArrayList<String> convertToArrayList(Object[] in) {
