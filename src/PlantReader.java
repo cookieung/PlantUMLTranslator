@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class PlantReader {
@@ -59,7 +60,6 @@ public class PlantReader {
     	
     	for (int i = 0; i < allUML.size(); i++) {
     		System.out.println("State "+(i+1));
-    		System.out.println(allUML.get(i));
     		translateToDiagram(allUML.get(i));
     		
 //			for (int j = 0; j < allUML.get(i).size(); j++) {
@@ -79,19 +79,57 @@ public class PlantReader {
 	}
 	
 
+
+	
+
 	
 	 public static void translateToDiagram(Map<String,ArrayList<String>> map){
 	    	System.out.println("IN TranslateToDiagram :");
 	    	ArrayList<String> res = convertToArrayList(map.values().toString().replace("[", "").replace("]", "").split(", "));
 	    	String state = map.keySet().toString().replace("[", "").replace("]", "");
+	    	System.err.println("State :" +state);
 	    	if(state.contains("M")){
 	    		traceData.put(state,processForStateDiagram(res));
 	    		System.out.println("Trace data :"+traceData);
+	    		System.err.println(getAllSendAndReceiveMessage(state));
 	    	}else if(state.contains("S")){
 	    		System.out.println("PC Sequence");
 //	    		processForSequenceDiagram(res);
 	    	}
 	 }
+	 
+	public static String getAllSendAndReceiveMessage(String nowstate){
+			Collection<LinkedList<Map<String, LinkedList<String>>>> tr = traceData.values();
+			String res="";
+			System.out.println("Test Receive and Send Trace :");
+			
+			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> entry : traceData.entrySet())
+			{
+				String namestate = entry.getKey();
+			    System.out.println("T :"+entry.getKey() + "/" + entry.getValue());
+			    LinkedList<Map<String, LinkedList<String>>> l = entry.getValue();
+			    if(namestate.equals(nowstate))
+			    for (int i = 0; i < l.size(); i++) {
+					for (Entry<String, LinkedList<String>> entry2 : l.get(i).entrySet())
+					{
+					    for (int j = 0; j < entry2.getValue().size(); j++) {
+							if(j%3==1) res+= "= ";
+							else{
+								if(entry2.getValue().get(j).equals("*")) res += namestate+" ";
+								else res+= entry2.getValue().get(j)+" ";
+							}
+							if(j%3==1 && !entry2.getKey().equals("NaN") ) res+=entry2.getKey()+" -> ";
+						}
+					    res += "\n";
+					}
+					
+				}
+			}
+
+			return res;
+	}
+	
+	
 	 
 	 private static ArrayList<String> convertToArrayList(Object[] in) {
 		ArrayList<String> res = new ArrayList<>();
