@@ -69,7 +69,7 @@ public class PlantReader {
 		}
     	
     	System.out.println("Tracedata :");
-    	System.out.println(traceData.size());
+    	System.out.println(traceData);
     	
     	
     	
