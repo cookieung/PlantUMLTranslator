@@ -175,6 +175,7 @@ public class PlantReader {
 	 
 	 public static LinkedList<Map<String,LinkedList<String>>> processForStateDiagram(ArrayList<String> res) {
 		System.out.println("Process State");
+		char state = 'n';
 		LinkedList<Map<String,LinkedList<String>>> rs = new LinkedList<>();
 		for (int j = 1; j < res.size()-1; j++) {
 			String tmp = res.get(j);
@@ -184,16 +185,18 @@ public class PlantReader {
 	    		ll.add(res.get(j+1));
 	    		ll.add(tmp.replace("<", "")+">");
 	    		ll.add(res.get(j-1));
+	    		state = 'r';
 	    	}else if(tmp.contains(">")){
 	    		ll.add(res.get(j-1));
 	    		ll.add(tmp);
 	    		ll.add(res.get(j+1));
+	    		state = 's';
 	    	}
 	    	else continue;
 			Map<String, LinkedList<String>> map = new HashMap<>();
     		String msg = res.get(j+3);
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
-    		map.put(msg, ll);
+    		map.put(messageWithStatus(msg, state), ll);
     		rs.add(map);
 		}
 		
@@ -205,6 +208,7 @@ public class PlantReader {
 	 
 	 public static LinkedList<Map<String,LinkedList<String>>> processForSequenceDiagram(ArrayList<String> res) {
 		System.out.println("Process Sequence");
+		char state = 'n';
 		LinkedList<Map<String,LinkedList<String>>> rs = new LinkedList<>();
 		for (int j = 0; j < res.size(); j++) {
 			String tmp = res.get(j);
@@ -214,21 +218,39 @@ public class PlantReader {
 	    		ll.add(res.get(j+1));
 	    		ll.add(tmp.replace("<", "")+">");
 	    		ll.add(res.get(j-1));
+	    		state = 'r';
 	    	}else if(tmp.contains(">")){
 	    		ll.add(res.get(j-1));
 	    		ll.add(tmp);
 	    		ll.add(res.get(j+1));
+	    		state = 's';
 	    	}
 	    	else continue;
 			Map<String, LinkedList<String>> map = new HashMap<>();
     		String msg = res.get(j+3);
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
-    		map.put(msg, ll);
+    		System.out.println("Test Ms :"+messageWithStatus(msg, state));
+    		map.put(messageWithStatus(msg, state), ll);
     		rs.add(map);
 		}
 		
 		return rs;	
 	}
+	 
+	 public static String messageWithStatus(String s,char c){
+		 String[] ss;
+		 if(s.equals("NaN")) return s; 
+		 if(s.contains(":")){
+			 ss=s.split(":");
+			 s = ss[1];
+		 }
+		 if(s.contains("/")){
+			 ss=s.split("/");
+			 if(c=='s') s=ss[1];
+			 else if(c=='r') s=ss[0];
+		 }
+		 return s+c;
+	 }
 	
 }
 
