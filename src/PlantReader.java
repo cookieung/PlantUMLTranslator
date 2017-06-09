@@ -61,11 +61,7 @@ public class PlantReader {
     	for (int i = 0; i < allUML.size(); i++) {
     		System.out.println("State "+(i+1));
     		translateToDiagram(allUML.get(i));
-    		
-//			for (int j = 0; j < allUML.get(i).size(); j++) {
-//				System.out.println("AAAA :"+allUML.get(i).get(j));
-//				
-//			}
+
 		}
     	
     	System.out.println("Tracedata :");
@@ -100,6 +96,7 @@ public class PlantReader {
 				}
 	    	}
 	 }
+	 
 	 
 	public static String getAllSendAndReceiveMessage(String nowstate){
 			Collection<LinkedList<Map<String, LinkedList<String>>>> tr = traceData.values();
@@ -192,43 +189,54 @@ public class PlantReader {
 
 	}
 	 
+
+	 
 	 public static LinkedList<Map<String,LinkedList<String>>> processForSequenceDiagram(ArrayList<String> res) {
 		System.out.println("Process Sequence");
 		LinkedList<Map<String,LinkedList<String>>> rs = new LinkedList<>();
 		ArrayList<String> trace = new ArrayList<>();
+		char status = 'r';
 		for (int i = 1; i < res.size()-3; i++) {
 			String act = res.get(i);
-			String module1 = res.get(i-1);
-			String module2 = res.get(i+1);
-			String msg = res.get(i+3);
 			LinkedList<String> ll = new LinkedList<>();
 			if(act.contains(">") || act.contains("<"))
-			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq : traceData.entrySet())
-			{
-				if((mapOfNameStateAndAllEq.getKey().equals(module1) || mapOfNameStateAndAllEq.getKey().equals(module2))){
-			    	if(!trace.contains(mapOfNameStateAndAllEq.getKey()))
-					trace.add(mapOfNameStateAndAllEq.getKey());
-			    	System.out.println("Key :"+mapOfNameStateAndAllEq.getKey());
-				    for (int j = 0; j < mapOfNameStateAndAllEq.getValue().size(); j++) {
-				    	for (Entry<String, LinkedList<String>> mapOfEqAndMsg : mapOfNameStateAndAllEq.getValue().get(j).entrySet()) {
-					    	System.out.println("MArk :"+mapOfEqAndMsg.getKey()+" = "+msg);
-				    		System.out.println("GG :"+mapOfEqAndMsg.getValue());
-					    	System.out.println("EE :"+mapOfEqAndMsg.getKey());
-					    	ll.add(mapOfEqAndMsg.getValue().get(0));
-					    	ll.add(mapOfEqAndMsg.getKey());
-					    	ll.add(mapOfEqAndMsg.getValue().get(2));
-					    	
-						}
-				    	
-	
-					}
+			{	
+				String module1 = res.get(i-1);
+				String module2 = res.get(i+1);
+				String msg = res.get(i+3);
+				if(act.contains(">")){
+					status = 's';
+				}else if(act.contains("<")){
+					status = 'r';
 				}
-
-				Map<String, LinkedList<String>> map = new HashMap<>();
-	    		if(msg.contains("Nan") ||msg.contains("@") ) continue;
-	    		if(!map.containsValue(ll)) map.put(msg, ll);
-	    		rs.add(map);
-//			    res += "Test";
+				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq : traceData.entrySet())
+				{
+					if(mapOfNameStateAndAllEq.getKey().equals(module1) || mapOfNameStateAndAllEq.getKey().equals(module2)){
+				    	if(!trace.contains(mapOfNameStateAndAllEq.getKey()))
+				    	System.out.println("Key :"+mapOfNameStateAndAllEq.getKey());
+					    for (int j = 1; j < mapOfNameStateAndAllEq.getValue().size()-1; j++) {
+					    	for (Entry<String, LinkedList<String>> mapOfEqAndMsg : mapOfNameStateAndAllEq.getValue().get(j).entrySet()) {
+						    	if(mapOfEqAndMsg.getKey().equals(msg+status)){
+					    		System.out.println("GG :"+mapOfEqAndMsg.getValue());
+						    	System.out.println("EE :"+mapOfEqAndMsg.getKey());
+						    	ll.add(mapOfEqAndMsg.getValue().get(0));
+						    	ll.add(mapOfEqAndMsg.getKey());
+						    	ll.add(mapOfEqAndMsg.getValue().get(2));
+						    	}
+							}
+					    	
+		
+						}
+					}
+					
+					trace.add(mapOfNameStateAndAllEq.getKey());
+	
+					Map<String, LinkedList<String>> map = new HashMap<>();
+		    		if(msg.contains("Nan") ||msg.contains("@") ) continue;
+		    		if(!map.containsValue(ll)) map.put(msg, ll);
+		    		rs.add(map);
+	//			    res += "Test";
+				}
 			}
 			
 		}
