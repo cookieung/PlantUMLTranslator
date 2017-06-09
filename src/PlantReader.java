@@ -92,9 +92,12 @@ public class PlantReader {
 	    		traceData.put(state,processForStateDiagram(res));
 	    		System.out.println("Trace data :"+traceData);
 	    		System.err.println(getAllSendAndReceiveMessage(state));
-	    	}else if(state.contains("S")){
+	    	}else if(state.contains("SQ")){
 	    		System.out.println("PC Sequence");
-//	    		processForSequenceDiagram(res);
+	    		LinkedList<Map<String,LinkedList<String>>> a = processForSequenceDiagram(res);
+	    		for (int i = 0; i < a.size(); i++) {
+					System.out.println(a.get(i));
+				}
 	    	}
 	 }
 	 
@@ -113,12 +116,13 @@ public class PlantReader {
 					for (Entry<String, LinkedList<String>> entry2 : l.get(i).entrySet())
 					{
 					    for (int j = 0; j < entry2.getValue().size(); j++) {
+					    	System.out.println("entry2 key :"+entry2.getKey());
 							if(j%3==1) res+= "= ";
 							else{
 								if(entry2.getValue().get(j).equals("*")) res += namestate+" ";
 								else res+= entry2.getValue().get(j)+" ";
 							}
-							if(j%3==1 && !entry2.getKey().equals("NaN") ) res+= readAction(entry2.getKey());
+							if(j%3==1 && !entry2.getKey().equals("NaN") ) res+= entry2.getKey()+" -> ";
 						}
 					    res += "\n";
 					}
@@ -129,38 +133,19 @@ public class PlantReader {
 			return res;
 	}
 	
-	public static ArrayList<String> getArrayFromMsg(String msg){
-    	ArrayList<String> a;
-    	if(msg.contains(":")){
-	    	String[] arr = msg.split(":");
-	    	System.out.println("T"+arr);
-	    	if(arr[1].contains("/"))
-	    	a = new  ArrayList<>(Arrays.asList(arr[1].split("/")));
-	    	else{ 
-	    		a = new ArrayList<>();
-	    		a.add(arr[1]);
-	    		a.add("");
-	    	}
-    	}else if(msg.contains("/") ){
-			a = new ArrayList<>(Arrays.asList(msg.split("/")));
-		}else {
-			a = new ArrayList<>();
-			a.add(msg);
-			a.add("");
-			}
-    	return a;
-    }
+
     
-    public static String readAction(String message){
+    public static String readAction(String[] message){
     	String rs="";
     	System.out.println("Message :"+message);
-    	ArrayList<String> a = getArrayFromMsg(message);
-    	for (int i = 0; i < a.size(); i++) {
-			if (a.get(i).length()!=0) {
-				rs+=a.get(i)+" -> ";
+    	for (int i = 0; i < message.length; i++) {
+			if (message[i].length()!=0) {
+				rs+=message[i];
+				if(i<message.length-1) rs+= " -> ";
 			}
 			
 		}
+    	if(rs.length()==0) return "NaN";
     	return rs;
     }
 	
@@ -196,7 +181,8 @@ public class PlantReader {
 			Map<String, LinkedList<String>> map = new HashMap<>();
     		String msg = res.get(j+3);
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
-    		map.put(messageWithStatus(msg, state), ll);
+
+    		map.put(readAction(messageWithStatus(msg)), ll);
     		rs.add(map);
 		}
 		
@@ -208,49 +194,63 @@ public class PlantReader {
 	 
 	 public static LinkedList<Map<String,LinkedList<String>>> processForSequenceDiagram(ArrayList<String> res) {
 		System.out.println("Process Sequence");
-		char state = 'n';
 		LinkedList<Map<String,LinkedList<String>>> rs = new LinkedList<>();
-		for (int j = 0; j < res.size(); j++) {
-			String tmp = res.get(j);
+		ArrayList<String> trace = new ArrayList<>();
+		for (int i = 1; i < res.size()-3; i++) {
+			String act = res.get(i);
+			String module1 = res.get(i-1);
+			String module2 = res.get(i+1);
+			String msg = res.get(i+3);
 			LinkedList<String> ll = new LinkedList<>();
+			if(act.contains(">") || act.contains("<"))
+			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq : traceData.entrySet())
+			{
+				if((mapOfNameStateAndAllEq.getKey().equals(module1) || mapOfNameStateAndAllEq.getKey().equals(module2))){
+			    	if(!trace.contains(mapOfNameStateAndAllEq.getKey()))
+					trace.add(mapOfNameStateAndAllEq.getKey());
+			    	System.out.println("Key :"+mapOfNameStateAndAllEq.getKey());
+				    for (int j = 0; j < mapOfNameStateAndAllEq.getValue().size(); j++) {
+				    	for (Entry<String, LinkedList<String>> mapOfEqAndMsg : mapOfNameStateAndAllEq.getValue().get(j).entrySet()) {
+					    	System.out.println("MArk :"+mapOfEqAndMsg.getKey()+" = "+msg);
+				    		System.out.println("GG :"+mapOfEqAndMsg.getValue());
+					    	System.out.println("EE :"+mapOfEqAndMsg.getKey());
+					    	ll.add(mapOfEqAndMsg.getValue().get(0));
+					    	ll.add(mapOfEqAndMsg.getKey());
+					    	ll.add(mapOfEqAndMsg.getValue().get(2));
+					    	
+						}
+				    	
+	
+					}
+				}
+
+				Map<String, LinkedList<String>> map = new HashMap<>();
+	    		if(msg.contains("Nan") ||msg.contains("@") ) continue;
+	    		if(!map.containsValue(ll)) map.put(msg, ll);
+	    		rs.add(map);
+//			    res += "Test";
+			}
 			
-			if(tmp.contains("<")){
-	    		ll.add(res.get(j+1));
-	    		ll.add(tmp.replace("<", "")+">");
-	    		ll.add(res.get(j-1));
-	    		state = 'r';
-	    	}else if(tmp.contains(">")){
-	    		ll.add(res.get(j-1));
-	    		ll.add(tmp);
-	    		ll.add(res.get(j+1));
-	    		state = 's';
-	    	}
-	    	else continue;
-			Map<String, LinkedList<String>> map = new HashMap<>();
-    		String msg = res.get(j+3);
-    		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
-    		System.out.println("Test Ms :"+messageWithStatus(msg, state));
-    		map.put(messageWithStatus(msg, state), ll);
-    		rs.add(map);
 		}
+		
+		
 		
 		return rs;	
 	}
 	 
-	 public static String messageWithStatus(String s,char c){
-		 String[] ss;
-		 if(s.equals("NaN")) return s; 
+	 public static String[] messageWithStatus(String s){
+		 String[] res = new String[]{"",""};
 		 if(s.contains(":")){
-			 ss=s.split(":");
-			 s = ss[1];
+			 res = s.split(":")[1].split("/");
 		 }
-		 if(s.contains("/")){
-			 ss=s.split("/");
-			 if(c=='s') s=ss[1];
-			 else if(c=='r') s=ss[0];
+		 if(s.equals("NaN")) return res;
+		 if(res[0].length()!=0){
+			 res[0]+="r";
 		 }
-		 return s+c;
+		 System.out.println(res.length);
+		 if(res.length==2){
+			 res[1]+="s";
+		 }
+		 return res;
 	 }
-	
 }
-
