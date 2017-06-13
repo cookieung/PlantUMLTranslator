@@ -93,7 +93,9 @@ public class PlantReader {
 	    		LinkedList<Map<String,LinkedList<String>>> a = processForSequenceDiagram(res);
 	    		for (int i = 0; i < a.size(); i++) {
 					System.out.println(a.get(i));
+					
 				}
+
 	    	}
 	 }
 	 
@@ -189,6 +191,82 @@ public class PlantReader {
 
 	}
 	 
+		public static Map<String,LinkedList<String>> loopMapRight(String module1, ArrayList<String> trace, String state,
+				String key, LinkedList<Map<String, LinkedList<String>>> value) {
+			Map<String, LinkedList<String>> map = new HashMap<>();
+			LinkedList<String> ll = new LinkedList<>();
+			String msg="";
+//			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq : traceData.entrySet())
+//			{
+				System.out.println("RRRRRR :"+key+" M :"+module1);
+				if(key.equals(module1)){
+			    	if(!trace.contains(key))
+			    	state = key;
+			    		System.out.println("KeyR :"+value.size());
+				    for (int j = 0; j < value.size(); j++) {
+				    	System.out.println("VR :"+value.get(j));
+				    	for (Entry<String, LinkedList<String>> mapOfEqAndMsg : value.get(j).entrySet()) {
+				    		for (int k=0; k<mapOfEqAndMsg.getValue().size(); k++) {
+				    			state = mapOfEqAndMsg.getValue().get(k);
+								System.out.println("Test ST :"+mapOfEqAndMsg.getValue().get(k));
+								msg = mapOfEqAndMsg.getKey();
+								if(state.equals("*")){
+									k = 2;
+									continue;
+								}
+								ll.add(state);
+				    		}
+
+						}
+				    	
+	
+					}
+				}
+
+			map.put(msg, ll);
+			return map;
+		}
+	 
+		public static LinkedList<Map<String,LinkedList<String>>> loopMapLeft(String module1,String module2, ArrayList<String> trace, String state,
+				String key, LinkedList<Map<String, LinkedList<String>>> value) {
+			LinkedList<Map<String,LinkedList<String>>> bigLL = new LinkedList<>();
+			LinkedList<String> ll = new LinkedList<>();
+			String msg = "";
+    		Map<String,LinkedList<String>> mapLeft = new HashMap<>();
+    		Map<String,LinkedList<String>> mapRight = new HashMap<>();
+//			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq : traceData.entrySet())
+//			{
+				System.out.println("KKKKKKKKK :"+key+" = "+module1);
+				if(key.equals(module1)){
+			    	if(!trace.contains(key))
+			    	state = key;
+			    		System.out.println("KeyL :"+key);
+				    for (int j = 1; j < value.size()-1; j++) {
+				    	for (Entry<String, LinkedList<String>> mapOfEqAndMsg : value.get(j).entrySet()) {
+				    		msg = mapOfEqAndMsg.getKey();
+				    		for (int k=0; k<mapOfEqAndMsg.getValue().size(); k++) {
+				    			state = mapOfEqAndMsg.getValue().get(k);
+								System.out.println("Test ST :"+mapOfEqAndMsg.getValue().get(k));
+								ll.add(state);
+				    		}
+				    		mapLeft.put(msg, ll);
+				    		for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> map2: traceData.entrySet()) {
+				    		mapRight = loopMapRight(module2, trace, state, map2.getKey(), map2.getValue());
+				    		System.out.println("Right :"+mapRight);
+				    		}
+
+						}
+				    	
+	
+					}
+				}
+
+				bigLL.add(mapLeft);
+				bigLL.add(mapRight);
+
+			return bigLL;
+		}
+	 
 
 	 
 	 public static LinkedList<Map<String,LinkedList<String>>> processForSequenceDiagram(ArrayList<String> res) {
@@ -196,57 +274,56 @@ public class PlantReader {
 		LinkedList<Map<String,LinkedList<String>>> rs = new LinkedList<>();
 		ArrayList<String> trace = new ArrayList<>();
 		char status = 'r';
+		String state = "",module1="",module2="";
 		for (int i = 1; i < res.size()-3; i++) {
 			String act = res.get(i);
+			System.out.println(act);
 			LinkedList<String> ll = new LinkedList<>();
-			if(act.contains(">") || act.contains("<"))
+			if(!act.contains(">")&&!act.contains("<")) continue;
+			if(act.contains(">"))
 			{	
-				String module1 = res.get(i-1);
-				String module2 = res.get(i+1);
-				String msg = res.get(i+3);
-				if(act.contains(">")){
-					status = 's';
-				}else if(act.contains("<")){
-					status = 'r';
-				}
-				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq : traceData.entrySet())
-				{
-					if(mapOfNameStateAndAllEq.getKey().equals(module1) || mapOfNameStateAndAllEq.getKey().equals(module2)){
-				    	if(!trace.contains(mapOfNameStateAndAllEq.getKey()))
-				    	System.out.println("Key :"+mapOfNameStateAndAllEq.getKey());
-					    for (int j = 1; j < mapOfNameStateAndAllEq.getValue().size()-1; j++) {
-					    	for (Entry<String, LinkedList<String>> mapOfEqAndMsg : mapOfNameStateAndAllEq.getValue().get(j).entrySet()) {
-						    	if(mapOfEqAndMsg.getKey().equals(msg+status)){
-					    		System.out.println("GG :"+mapOfEqAndMsg.getValue());
-						    	System.out.println("EE :"+mapOfEqAndMsg.getKey());
-						    	ll.add(mapOfEqAndMsg.getValue().get(0));
-						    	ll.add(mapOfEqAndMsg.getKey());
-						    	ll.add(mapOfEqAndMsg.getValue().get(2));
-						    	}
-							}
-					    	
-		
-						}
-					}
-					
-					trace.add(mapOfNameStateAndAllEq.getKey());
-	
-					Map<String, LinkedList<String>> map = new HashMap<>();
-		    		if(msg.contains("Nan") ||msg.contains("@") ) continue;
-		    		if(!map.containsValue(ll)) map.put(msg, ll);
-		    		rs.add(map);
-	//			    res += "Test";
-				}
+				System.out.println("IN >");
+				module1 = res.get(i-1);
+				module2 = res.get(i+1);
+				status = 's';
+			}else if(act.contains("<")){
+				System.out.println("IN <");
+				module1 = res.get(i+1);
+				module2 = res.get(i-1);
+				status = 'r';
 			}
+				String msg = res.get(i+3);
+				System.out.println("Module 1 :"+module1);
+				System.out.println("Module 2 :"+module2);
+				
+
+				Map<String, LinkedList<String>> map = new HashMap<>();
+				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq: traceData.entrySet()) {
+		    		if(msg.contains("Nan") ||msg.contains("@") ) continue;
+		    		rs = loopMapLeft(module1,module2,trace,state,mapOfNameStateAndAllEq.getKey(),mapOfNameStateAndAllEq.getValue());
+		    		System.out.println("RSSSSSSSS :"+rs);
+				}
+				
+	    		
 			
 		}
+		System.out.println("RS :");
+		System.out.println(rs);
+		
 		
 		
 		
 		return rs;	
 	}
 	 
-	 public static String[] messageWithStatus(String s){
+
+
+
+
+
+
+
+	public static String[] messageWithStatus(String s){
 		 String[] res = new String[]{"",""};
 		 if(s.contains(":")){
 			 res = s.split(":")[1].split("/");
