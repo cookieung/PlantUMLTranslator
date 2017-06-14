@@ -178,7 +178,8 @@ public class PlantReader {
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
 
     		map.put(readAction(messageWithStatus(msg)), ll);
-    		rs.add(map);
+//    		rs.add(map);
+    		rs.add(checkMap(map));
 		}
 		
 		System.out.println("Process State"+rs);
@@ -186,6 +187,30 @@ public class PlantReader {
 		return rs;			
 
 	}
+
+	 public static Map<String, LinkedList<String>> checkMap(Map<String, LinkedList<String>> map){
+		 Map<String, LinkedList<String>> resMap = new HashMap<>();
+		 for (Entry<String, LinkedList<String>> emap : map.entrySet()) {
+			if(emap.getKey().contains("->")) {
+				String[] arr = emap.getKey().split(" -> ");
+				LinkedList<String> origin = emap.getValue();
+				LinkedList<String> left = new LinkedList<>();
+				left.add(origin.get(0));
+				left.add(origin.get(1));
+				left.add(origin.get(0));
+				LinkedList<String> right = new LinkedList<>();
+				right.add(origin.get(0));
+				right.add(origin.get(1));
+				right.add(origin.get(2));
+				
+				 resMap.put(arr[0], left);
+				 resMap.put(arr[1], right);
+ 			}else
+			 resMap.put(emap.getKey(), emap.getValue());
+			
+		}
+		 return resMap;
+	 }
 	 
 		public static Map<String,LinkedList<String>> loopMapRight(String module1, ArrayList<String> trace, String state,
 				String key, LinkedList<Map<String, LinkedList<String>>> value) {
