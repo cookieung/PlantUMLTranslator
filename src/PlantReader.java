@@ -90,11 +90,7 @@ public class PlantReader {
 	    		System.err.println(getAllSendAndReceiveMessage(state));
 	    	}else if(state.contains("SQ")){
 	    		System.out.println("PC Sequence");
-	    		LinkedList<Map<String,LinkedList<String>>> a = processForSequenceDiagram(res);
-	    		for (int i = 0; i < a.size(); i++) {
-					System.out.println(a.get(i));
-					
-				}
+	    		traceData.put(state,processForSequenceDiagram(res));
 
 	    	}
 	 }
@@ -221,7 +217,7 @@ public class PlantReader {
 				    	
 	
 					}
-				}
+				}else return null;
 
 			map.put(msg, ll);
 			return map;
@@ -259,7 +255,8 @@ public class PlantReader {
 				    	
 	
 					}
-				}
+				}else return null;
+				
 
 				bigLL.add(mapLeft);
 				bigLL.add(mapRight);
@@ -300,8 +297,10 @@ public class PlantReader {
 				Map<String, LinkedList<String>> map = new HashMap<>();
 				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> mapOfNameStateAndAllEq: traceData.entrySet()) {
 		    		if(msg.contains("Nan") ||msg.contains("@") ) continue;
-		    		rs = loopMapLeft(module1,module2,trace,state,mapOfNameStateAndAllEq.getKey(),mapOfNameStateAndAllEq.getValue());
-		    		System.out.println("RSSSSSSSS :"+rs);
+		    		LinkedList<Map<String, LinkedList<String>>> tmp = loopMapLeft(module1,module2,trace,state,mapOfNameStateAndAllEq.getKey(),mapOfNameStateAndAllEq.getValue());
+		    		if(tmp!=null) {
+		    			return tmp;
+		    		}
 				}
 				
 	    		
