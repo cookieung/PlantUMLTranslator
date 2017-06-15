@@ -359,30 +359,51 @@ public class PlantReader {
 			}else continue;
 
 			 System.out.println(left+" > "+newMsg+" > "+right);
+			 System.out.println("LEFT -> RIGHT");
 			 System.out.println(getLinkedFromtrace(left,right, newMsg));
+//			 System.out.println("RIGHT -> LEFT");
+//			 System.out.println(getLinkedFromtrace(right,left, newMsg));
 		}
 		 
 	 }
 	 
 	 
 	 
-	 public static LinkedList<LinkedList<String>> getLinkedFromtrace(String left,String right,String message) {
-		 LinkedList<LinkedList<String>> res = new LinkedList<>();
+	 public static Map<String,LinkedList<String>> getLinkedFromtrace(String left,String right,String message) {
+		 LinkedList<String> res = new LinkedList<>();
+		 Map<String, LinkedList<String>> map = new HashMap<>();
 			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
 				if(diagram.getKey().equals(left)){
 					System.out.println("Name :"+diagram.getKey());
 					for (int j = 0; j < diagram.getValue().size(); j++) {
 						for (Entry<String, LinkedList<String>> eachentry:diagram.getValue().get(j).entrySet()) {
 							System.out.println(eachentry.getKey()+" = "+message+" : "+eachentry.getKey().equals(message));
-							if(eachentry.getKey().equals(message))
-							res.add(eachentry.getValue());
-//							if(right.length()!=0){
-//							LinkedList<LinkedList<String>> aa = getLinkedFromtrace(right,"",message);
-//							for (int i = 0; i < aa.size(); i++) {
-//								res.add(aa.get(i));
-//								
-//							}
-//							}
+							if(eachentry.getKey().equals(message)){
+								for (int i = 0; i < eachentry.getValue().size(); i++) {
+									res.add(eachentry.getValue().get(i));
+								}
+							}
+
+						}
+
+						
+					}
+					break;
+				}
+
+			}
+			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
+				if(diagram.getKey().equals(right)){
+					System.out.println("Name :"+diagram.getKey());
+					for (int j = 0; j < diagram.getValue().size(); j++) {
+						for (Entry<String, LinkedList<String>> eachentry:diagram.getValue().get(j).entrySet()) {
+							System.out.println(eachentry.getKey()+" = "+message+" : "+eachentry.getKey().equals(message));
+							if(eachentry.getKey().equals(message)){
+								for (int i = 0; i < eachentry.getValue().size(); i++) {
+									res.add(eachentry.getValue().get(i));
+								}
+							}
+
 						}
 
 						
@@ -393,7 +414,8 @@ public class PlantReader {
 			}
 			if (res.size()==0)
 				return null;
-			return res;
+			map.put(message, res);
+			return map;
 	}
 	 
 
