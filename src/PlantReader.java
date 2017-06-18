@@ -347,27 +347,48 @@ public class PlantReader {
 	 
 	 public static void getResult(ArrayList<String> res){
 		 String newMsg="",left="",right="",state="";
+		 boolean isWait;
+		 LinkedList<Map<String, LinkedList<String>>> list=new LinkedList<>();
 		 for (int i = 1; i < res.size()-1; i++) {
 			 if (res.get(i+1).contains(">")) {
 				left = res.get(i);
 				right = res.get(i+2);
-				newMsg = res.get(i+4);
+				newMsg = res.get(i+4)+"s";
 			}else if(res.get(i+1).contains("<")){
 				left = res.get(i+2);
 				right = res.get(i);
-				newMsg = res.get(i+4);
+				newMsg = res.get(i+4)+"r";
 			}else continue;
 
+			 
 			 System.out.println(left+" > "+newMsg+" > "+right);
 			 System.out.println("LEFT -> RIGHT by "+newMsg);
 //			 System.out.println(loopForResult(left, newMsg));
 			 System.out.println(getLinkedFromtrace(left,newMsg));
+			 Map<String, LinkedList<String>> m = new HashMap<>();
+			 LinkedList<String> leftL = getLinkedFromtrace(left, newMsg.substring(0, newMsg.length()-1));
+
 			 System.out.println("===============================");
 			 System.out.println("RIGHT -> LEFT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(right,newMsg));
+			 LinkedList<String> rightL = getLinkedFromtrace(right, newMsg.substring(0, newMsg.length()-1));
+
 			 System.out.println("===============================");
+			 
+			 if (newMsg.charAt(newMsg.length()-1)=='s') {
+				m.put(newMsg, leftL);
+				m.put(newMsg.substring(0,newMsg.length()-1)+"r", rightL);
+			}else if(newMsg.charAt(newMsg.length()-1)=='r'){
+				m.put(newMsg.substring(0,newMsg.length()-1)+"s", leftL);
+				m.put(newMsg, rightL);
+			}
+			 
+			 list.add(m);
+			 
 //			 System.out.println(getLinkedFromtrace(right,left, newMsg));
 		}
+		 
+		 System.out.println("MMMM :"+list);
 		 
 	 }
 	 
@@ -408,7 +429,7 @@ public class PlantReader {
 					for (int j = 0; j < diagram.getValue().size(); j++) {
 						for (Entry<String, LinkedList<String>> eachentry:diagram.getValue().get(j).entrySet()) {
 							System.out.println(eachentry.getKey()+" = "+message+" : "+eachentry.getKey().equals(message));
-							if(eachentry.getKey().contains(message)){
+							if(!eachentry.getKey().equals("NaN") && eachentry.getKey().contains(message)){
 								for (int i = 0; i < eachentry.getValue().size(); i++) {
 									res.add(eachentry.getValue().get(i));
 								}
