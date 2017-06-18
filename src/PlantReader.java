@@ -351,28 +351,29 @@ public class PlantReader {
 			 if (res.get(i+1).contains(">")) {
 				left = res.get(i);
 				right = res.get(i+2);
-				newMsg = res.get(i+4)+"s";
+				newMsg = res.get(i+4);
 			}else if(res.get(i+1).contains("<")){
 				left = res.get(i+2);
 				right = res.get(i);
-				newMsg = res.get(i+4)+"r";
+				newMsg = res.get(i+4);
 			}else continue;
 
 			 System.out.println(left+" > "+newMsg+" > "+right);
-			 System.out.println("LEFT -> RIGHT");
-			 System.out.println(getLinkedFromtrace(left,right, newMsg));
-//			 System.out.println("RIGHT -> LEFT");
+			 System.out.println("LEFT -> RIGHT by "+newMsg);
+//			 System.out.println(loopForResult(left, newMsg));
+			 System.out.println(getLinkedFromtrace(left,newMsg));
+			 System.out.println("===============================");
+			 System.out.println("RIGHT -> LEFT by "+newMsg);
+			 System.out.println(getLinkedFromtrace(right,newMsg));
+			 System.out.println("===============================");
 //			 System.out.println(getLinkedFromtrace(right,left, newMsg));
 		}
 		 
 	 }
 	 
-	 
-	 
-	 public static Map<String,LinkedList<String>> getLinkedFromtrace(String left,String right,String message) {
+	 public static LinkedList<String> loopForResult(String left,String message){
 		 LinkedList<String> res = new LinkedList<>();
-		 Map<String, LinkedList<String>> map = new HashMap<>();
-			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
+		 for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
 				if(diagram.getKey().equals(left)){
 					System.out.println("Name :"+diagram.getKey());
 					for (int j = 0; j < diagram.getValue().size(); j++) {
@@ -383,22 +384,31 @@ public class PlantReader {
 									res.add(eachentry.getValue().get(i));
 								}
 							}
+							return res;
 
 						}
 
 						
 					}
-					break;
 				}
 
 			}
+		return res;
+
+	 }
+	 
+	 
+	 
+	 public static LinkedList<String> getLinkedFromtrace(String left,String message) {
+		 LinkedList<String> res = new LinkedList<>();
+//		 Map<String, LinkedList<String>> map = new HashMap<>();
 			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
-				if(diagram.getKey().equals(right)){
+				if(diagram.getKey().equals(left)){
 					System.out.println("Name :"+diagram.getKey());
 					for (int j = 0; j < diagram.getValue().size(); j++) {
 						for (Entry<String, LinkedList<String>> eachentry:diagram.getValue().get(j).entrySet()) {
 							System.out.println(eachentry.getKey()+" = "+message+" : "+eachentry.getKey().equals(message));
-							if(eachentry.getKey().equals(message)){
+							if(eachentry.getKey().contains(message)){
 								for (int i = 0; i < eachentry.getValue().size(); i++) {
 									res.add(eachentry.getValue().get(i));
 								}
@@ -412,10 +422,29 @@ public class PlantReader {
 				}
 
 			}
+//			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
+//				if(diagram.getKey().equals(right)){
+//					System.out.println("Name :"+diagram.getKey());
+//					for (int j = 0; j < diagram.getValue().size(); j++) {
+//						for (Entry<String, LinkedList<String>> eachentry:diagram.getValue().get(j).entrySet()) {
+//							System.out.println(eachentry.getKey()+" = "+message+" : "+eachentry.getKey().equals(message));
+//							if(eachentry.getKey().equals(message)){
+//								for (int i = 0; i < eachentry.getValue().size(); i++) {
+//									res.add(eachentry.getValue().get(i));
+//								}
+//							}
+//
+//						}
+//
+//						
+//					}
+//					break;
+//				}
+//
+//			}
 			if (res.size()==0)
 				return null;
-			map.put(message, res);
-			return map;
+			return res;
 	}
 	 
 
