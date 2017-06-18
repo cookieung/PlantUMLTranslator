@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,7 +18,7 @@ public class PlantReader {
 	private static  ArrayList<Map<String,ArrayList<String>>> allUML;
 	
 	public static void main(String[]args){
-    	traceData = new HashMap<>();
+    	traceData = new LinkedHashMap<>();
     	allUML = new ArrayList<>();
 		
     	Scanner scanner = new Scanner(System.in);
@@ -34,7 +34,7 @@ public class PlantReader {
     	equations = input.split(" ");
     	
     	//Add All UML to ArrayList by separate each state
-    	Map<String,ArrayList<String>> map = new HashMap<>();
+    	Map<String,ArrayList<String>> map = new LinkedHashMap<>();
     	ArrayList<String> tmp = new ArrayList<>();
     	String t= "";
     	for (int i = 0; i < equations.length; i++) {
@@ -50,7 +50,7 @@ public class PlantReader {
     		if(equations[i].equals("@enduml")){
     			map.put(t,tmp);
     			allUML.add(map);
-    			map = new HashMap<>();
+    			map = new LinkedHashMap<>();
     			tmp = new ArrayList<>();
     		}
 			
@@ -63,7 +63,18 @@ public class PlantReader {
 		}
     	
     	System.out.println("Tracedata :");
-    	System.out.println(traceData);
+    	for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
+    		System.out.println(trace.getKey());
+    		for (int i = 0; i < trace.getValue().size(); i++) {
+    			for ( Entry<String, LinkedList<String>> line : trace.getValue().get(i).entrySet()) {
+        			System.err.println(line.getValue() +" : " +line.getKey());
+					
+				}
+
+			}
+			System.out.println("===================================");
+		}
+
     	
     	
     	
@@ -168,7 +179,7 @@ public class PlantReader {
 	    		state = 's';
 	    	}
 	    	else continue;
-			Map<String, LinkedList<String>> map = new HashMap<>();
+			Map<String, LinkedList<String>> map = new LinkedHashMap<>();
     		String msg = res.get(j+3);
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
 
@@ -183,7 +194,7 @@ public class PlantReader {
 	}
 
 	 public static Map<String, LinkedList<String>> checkMap(Map<String, LinkedList<String>> map){
-		 Map<String, LinkedList<String>> resMap = new HashMap<>();
+		 Map<String, LinkedList<String>> resMap = new LinkedHashMap<>();
 		 for (Entry<String, LinkedList<String>> emap : map.entrySet()) {
 			if(emap.getKey().contains("->")) {
 				String[] arr = emap.getKey().split(" -> ");
@@ -226,7 +237,7 @@ public class PlantReader {
 			 System.out.println(left+" > "+newMsg+" > "+right);
 			 System.out.println("LEFT -> RIGHT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(left,newMsg));
-			 Map<String, LinkedList<String>> m = new HashMap<>();
+			 Map<String, LinkedList<String>> m = new LinkedHashMap<>();
 			 LinkedList<String> leftL = getLinkedFromtrace(left, newMsg.substring(0, newMsg.length()-1));
 
 			 System.out.println("===============================");
@@ -261,7 +272,7 @@ public class PlantReader {
 	 
 	 public static LinkedList<String> getLinkedFromtrace(String left,String message) {
 		 LinkedList<String> res = new LinkedList<>();
-//		 Map<String, LinkedList<String>> map = new HashMap<>();
+//		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
 			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
 				if(diagram.getKey().equals(left)){
 					System.out.println("Name :"+diagram.getKey());
