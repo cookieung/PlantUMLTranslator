@@ -6,12 +6,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import Model.Diagram;
+import View.UMLReader;
+import View.UMLReaderGUI;
+
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
-
-import Application.MainReader;
-import Application.UMLReader;
 
 public class PlantReader {
 	
@@ -21,7 +23,10 @@ public class PlantReader {
 	private static int count=0;
 	private static Integer STATE_DG=0;
 	private static Integer SEQUENCE_DG=0;
-	private static  ArrayList<Map<String,ArrayList<String>>> allUML;
+	private static ArrayList<Map<String,ArrayList<String>>> allUML = new ArrayList<>();
+	
+	private static ArrayList<Diagram> diagrams;
+
 	
 	public static void main(String[]args){
 //    	traceData = new LinkedHashMap<>();
@@ -37,30 +42,13 @@ public class PlantReader {
 //			input+=chk+" ";
 //		}
 //    	
-//    	equations = input.split(" ");
+
 //    	
 //    	//Add All UML to ArrayList by separate each state
-//    	Map<String,ArrayList<String>> map = new LinkedHashMap<>();
-//    	ArrayList<String> tmp = new ArrayList<>();
-//    	String t= "";
-//    	for (int i = 0; i < equations.length; i++) {
-//    		if(equations[i].equals("@startuml")){
-//    			count+=1;
-//    			if (equations[i+1].equals("participant")) {
-//					t = "SQ"+ ++SEQUENCE_DG;
-//				}else {
-//					t = "M"+ ++STATE_DG;
-//				}
-//    		}
-//    		tmp.add(equations[i]);
-//    		if(equations[i].equals("@enduml")){
-//    			map.put(t,tmp);
-//    			allUML.add(map);
-//    			map = new LinkedHashMap<>();
-//    			tmp = new ArrayList<>();
-//    		}
-//			
-//		}
+    	diagrams = new ArrayList<>();
+//    	System.out.println(input);
+//		allUML = readAllInput(input);
+
 //    	
 //    	for (int i = 0; i < allUML.size(); i++) {
 //    		System.out.println("State "+(i+1));
@@ -100,7 +88,8 @@ public class PlantReader {
 //			System.out.println("===================================");
 //		}
     	
-    	MainReader a = new MainReader(new UMLReader());
+		
+    	UMLReaderGUI a = new UMLReaderGUI(new UMLReader());
     	a.run();
     	
     	String s = "file:/D:/Save/OkayamaPreU/3_watchdog.puml";
@@ -116,9 +105,63 @@ public class PlantReader {
     	
 	}
 	
+	public static ArrayList<Map<String, ArrayList<String>>> readAllInput(String input,String name) {
+		ArrayList<Map<String, ArrayList<String>>> allUML =  new ArrayList<>();
+		equations = prepareInput(input.replace("\n", " "));
+		String[] names = name.split(",");
+    	System.out.println("EQ :"+equations.length);
+    	Map<String,ArrayList<String>> map = new LinkedHashMap<>();
+    	ArrayList<String> tmp = new ArrayList<>();
+    	String t= "";
+    	for (int i = 0; i < equations.length; i++) {
+    		if(equations[i].equals("@startuml")){
+    			count+=1;
+    			if (equations[i+1].equals("participant")) {
+//					t = "SQ"+ ++SEQUENCE_DG+names[count-1];
+    				t = "SQ_"+names[count-1];
+				}else {
+//					t = "M"+ ++STATE_DG+names[count-1];
+					t = "M_"+names[count-1];
+				}
+    		}
 
-
+    		tmp.add(equations[i]);
+    		System.err.println("EQ"+i+" : "+equations[i] + equations[i].length());
+    		if(equations[i].equals("@enduml")){
+    			map.put(t,tmp);
+    			System.out.println("Map :"+map);
+    			System.out.println("AllUML :"+allUML);
+    			System.out.println();
+    			allUML.add(map);
+    			System.out.println("ALL :"+allUML);
+    			map = new LinkedHashMap<>();
+    			tmp = new ArrayList<>();
+    		}
+			
+		}
+    	
+    	System.out.println("In PlantUNL"+allUML);
+    	return allUML;
+	}
 	
+
+
+	public static String[] prepareInput(String s){
+
+		String[] ss = s.replace(":", " : ").replaceAll("->", " -> ").replace("<-", " <- ").split(" ");
+
+		ArrayList<String> sl = new ArrayList<>();
+		for (int i = 0; i < ss.length; i++) {
+			if(ss[i].length()!=0)
+			sl.add(ss[i]);
+			
+		}
+		String[] rs = new String[sl.size()] ;
+		
+		rs = sl.toArray(rs);
+		
+		return rs;
+	}
 
 	
 	 public static void translateToDiagram(Map<String,ArrayList<String>> map){
