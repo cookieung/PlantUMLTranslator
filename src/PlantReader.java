@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class PlantReader {
 	
@@ -62,6 +64,25 @@ public class PlantReader {
 
 		}
     	
+
+    	
+    	
+    	
+    	
+    	System.out.println("******CSP Output******");
+    	System.err.print("Channel :");
+    	Set<String> allProcess = showAllProcess();
+    	System.err.println(allProcess.toString().substring(1, allProcess.toString().length()-1));
+    	System.out.println();
+
+    	Object[] allDiagram = showAllDiagram().toArray();
+    	
+    	for (int i = 0; i < allDiagram.length; i++) {
+    		System.out.println(allDiagram[i]+"");
+        	System.err.println(getAllSendAndReceiveMessage(allDiagram[i]+""));
+			
+		}
+    	
     	System.out.println("Tracedata :");
     	for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
     		System.out.println(trace.getKey());
@@ -74,7 +95,7 @@ public class PlantReader {
 			}
 			System.out.println("===================================");
 		}
-
+    	
     	
     	
     	
@@ -92,10 +113,10 @@ public class PlantReader {
 	    	System.out.println("IN TranslateToDiagram :");
 	    	ArrayList<String> res = convertToArrayList(map.values().toString().replace("[", "").replace("]", "").split(", "));
 	    	String state = map.keySet().toString().replace("[", "").replace("]", "");
-	    	System.err.println("State :" +state);
+	    	System.out.println("State :" +state);
 	    	if(state.contains("M")){
 	    		traceData.put(state,processForStateDiagram(res));
-	    		System.err.println(getAllSendAndReceiveMessage(state));
+	    		System.out.println(getAllSendAndReceiveMessage(state));
 	    	}else if(state.contains("SQ")){
 	    		System.out.println("PC Sequence");
 	    		traceData.put(state,getResult(res));
@@ -103,11 +124,41 @@ public class PlantReader {
 	    	}
 	 }
 	 
+	 public void showTheRelation(ArrayList<Map<String, LinkedList<String>>> all){
+		 for (int i = 0; i < all.size(); i++) {
+			for (int j = 0; j < all.size(); j++) {
+				
+				
+			}
+		}
+	 }
+	 
+	 
+	 public static Set<String> showAllProcess(){
+		 Set<String> processes = new TreeSet<>();
+		 for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
+	    		for (int i = 0; i < trace.getValue().size(); i++) {
+	    			for ( Entry<String, LinkedList<String>> line : trace.getValue().get(i).entrySet()) {
+	        			if(!line.getKey().equals("NaN"))
+	        				processes.add(line.getKey());
+					}
+
+				}
+			}
+		 return processes;
+	 }
+
+	 public static Set<String> showAllDiagram(){
+		 Set<String> processes = new TreeSet<>();
+		 for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
+	    		processes.add(trace.getKey());
+			}
+		 return processes;
+	 }
 	 
 	public static String getAllSendAndReceiveMessage(String nowstate){
 			Collection<LinkedList<Map<String, LinkedList<String>>>> tr = traceData.values();
 			String res="";
-			System.out.println("Test Receive and Send Trace :");
 			
 			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> entry : traceData.entrySet())
 			{
