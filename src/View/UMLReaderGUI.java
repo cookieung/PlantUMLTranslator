@@ -205,6 +205,7 @@ public class UMLReaderGUI extends JFrame {
 			inputSource.setText("");
 			result.setText("");
 			nameFile.setText("");
+			cspFile.setText("");
 		}
 	}
 	
