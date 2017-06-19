@@ -1,3 +1,4 @@
+package Controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,6 +9,9 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
+
+import Application.MainReader;
+import Application.UMLReader;
 
 public class PlantReader {
 	
@@ -20,81 +24,84 @@ public class PlantReader {
 	private static  ArrayList<Map<String,ArrayList<String>>> allUML;
 	
 	public static void main(String[]args){
-    	traceData = new LinkedHashMap<>();
-    	allUML = new ArrayList<>();
-		
-    	Scanner scanner = new Scanner(System.in);
-    	System.out.println("Input UML :");
-    	while (scanner.hasNextLine()) {
-			String chk = scanner.nextLine();
-			if (chk.equals("end")) {
-				break;
-			}
-			input+=chk+" ";
-		}
+//    	traceData = new LinkedHashMap<>();
+//    	allUML = new ArrayList<>();
+//		
+//    	Scanner scanner = new Scanner(System.in);
+//    	System.out.println("Input UML :");
+//    	while (scanner.hasNextLine()) {
+//			String chk = scanner.nextLine();
+//			if (chk.equals("end")) {
+//				break;
+//			}
+//			input+=chk+" ";
+//		}
+//    	
+//    	equations = input.split(" ");
+//    	
+//    	//Add All UML to ArrayList by separate each state
+//    	Map<String,ArrayList<String>> map = new LinkedHashMap<>();
+//    	ArrayList<String> tmp = new ArrayList<>();
+//    	String t= "";
+//    	for (int i = 0; i < equations.length; i++) {
+//    		if(equations[i].equals("@startuml")){
+//    			count+=1;
+//    			if (equations[i+1].equals("participant")) {
+//					t = "SQ"+ ++SEQUENCE_DG;
+//				}else {
+//					t = "M"+ ++STATE_DG;
+//				}
+//    		}
+//    		tmp.add(equations[i]);
+//    		if(equations[i].equals("@enduml")){
+//    			map.put(t,tmp);
+//    			allUML.add(map);
+//    			map = new LinkedHashMap<>();
+//    			tmp = new ArrayList<>();
+//    		}
+//			
+//		}
+//    	
+//    	for (int i = 0; i < allUML.size(); i++) {
+//    		System.out.println("State "+(i+1));
+//    		translateToDiagram(allUML.get(i));
+//
+//		}
+//    	
+//
+//    	
+//    	
+//    	
+//    	
+//    	System.out.println("******CSP Output******");
+//    	System.err.print("Channel :");
+//    	Set<String> allProcess = showAllProcess();
+//    	System.err.println(allProcess.toString().substring(1, allProcess.toString().length()-1));
+//    	System.out.println();
+//
+//    	Object[] allDiagram = showAllDiagram().toArray();
+//    	
+//    	for (int i = 0; i < allDiagram.length; i++) {
+//    		System.out.println(allDiagram[i]+"");
+//        	System.err.println(getAllSendAndReceiveMessage(allDiagram[i]+""));
+//			
+//		}
+//    	
+//    	System.out.println("Tracedata :");
+//    	for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
+//    		System.out.println(trace.getKey());
+//    		for (int i = 0; i < trace.getValue().size(); i++) {
+//    			for ( Entry<String, LinkedList<String>> line : trace.getValue().get(i).entrySet()) {
+//        			System.err.println(line.getValue() +" : " +line.getKey());
+//					
+//				}
+//
+//			}
+//			System.out.println("===================================");
+//		}
     	
-    	equations = input.split(" ");
-    	
-    	//Add All UML to ArrayList by separate each state
-    	Map<String,ArrayList<String>> map = new LinkedHashMap<>();
-    	ArrayList<String> tmp = new ArrayList<>();
-    	String t= "";
-    	for (int i = 0; i < equations.length; i++) {
-    		if(equations[i].equals("@startuml")){
-    			count+=1;
-    			if (equations[i+1].equals("participant")) {
-					t = "SQ"+ ++SEQUENCE_DG;
-				}else {
-					t = "M"+ ++STATE_DG;
-				}
-    		}
-    		tmp.add(equations[i]);
-    		if(equations[i].equals("@enduml")){
-    			map.put(t,tmp);
-    			allUML.add(map);
-    			map = new LinkedHashMap<>();
-    			tmp = new ArrayList<>();
-    		}
-			
-		}
-    	
-    	for (int i = 0; i < allUML.size(); i++) {
-    		System.out.println("State "+(i+1));
-    		translateToDiagram(allUML.get(i));
-
-		}
-    	
-
-    	
-    	
-    	
-    	
-    	System.out.println("******CSP Output******");
-    	System.err.print("Channel :");
-    	Set<String> allProcess = showAllProcess();
-    	System.err.println(allProcess.toString().substring(1, allProcess.toString().length()-1));
-    	System.out.println();
-
-    	Object[] allDiagram = showAllDiagram().toArray();
-    	
-    	for (int i = 0; i < allDiagram.length; i++) {
-    		System.out.println(allDiagram[i]+"");
-        	System.err.println(getAllSendAndReceiveMessage(allDiagram[i]+""));
-			
-		}
-    	
-    	System.out.println("Tracedata :");
-    	for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
-    		System.out.println(trace.getKey());
-    		for (int i = 0; i < trace.getValue().size(); i++) {
-    			for ( Entry<String, LinkedList<String>> line : trace.getValue().get(i).entrySet()) {
-        			System.err.println(line.getValue() +" : " +line.getKey());
-					
-				}
-
-			}
-			System.out.println("===================================");
-		}
+    	MainReader a = new MainReader(new UMLReader());
+    	a.run();
     	
     	
     	
