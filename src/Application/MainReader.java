@@ -1,6 +1,7 @@
 package Application;
 
 import java.awt.Container;
+
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,10 +24,11 @@ import javax.swing.JTextField;
 public class MainReader extends JFrame {
 	
 	private UMLReader umlReader;
-	private Container contents;
-	private LayoutManager layout;
-	private JButton browseButton, countButton ,clearButton;
+	private Container contents,contentResult,contentNameFile;
+	private LayoutManager layout,layoutResult,layoutNameFile;
+	private JButton browseButton, countButton ,clearButton,addButton;
 	private JTextField inputSource;
+	private JTextField nameFile;
 	private JTextArea result;
 	private JLabel label;
 	private JFileChooser filechooser;
@@ -44,24 +46,36 @@ public class MainReader extends JFrame {
 
 	private void initComponents() {
 		contents = new Container();
+		contentResult = new Container();
+		contentNameFile = new Container();
 		layout = new BoxLayout(contents, BoxLayout.Y_AXIS);
+		layoutResult = new BoxLayout(contentResult, BoxLayout.Y_AXIS);
+		layoutNameFile = new BoxLayout(contentNameFile, BoxLayout.X_AXIS);
 		panel1 = new JPanel();
 		panel2 = new JPanel();
 		contents.setLayout(layout);
 		result = new JTextArea(40,40);
 		result.setEditable(false);
 		browseButton = new JButton("Browse");
-		countButton = new JButton("Count");
+		countButton = new JButton("Read");
 		clearButton = new JButton("Clear");
+		addButton = new JButton("Add File");
 		filechooser = new JFileChooser();
 		label =new JLabel("File or URL name");
 		inputSource = new JTextField(20);
+		nameFile = new JTextField(10);
 		panel1.add(label);
 		panel1.add(inputSource);
 		panel1.add(browseButton);
 		panel1.add(countButton);
 		panel1.add(clearButton);
-		panel2.add(result);
+		contentNameFile.setLayout(layoutNameFile);
+		contentNameFile.add(nameFile);
+		contentNameFile.add(addButton);
+		contentResult.setLayout(layoutResult);
+		contentResult.add(contentNameFile);
+		contentResult.add(result);
+		panel2.add(contentResult);
 		contents.add(panel1);
 		contents.add(panel2);
 
@@ -73,7 +87,19 @@ public class MainReader extends JFrame {
 		inputSource.addActionListener(listener);
 		ActionListener listener3 = new BrowseButtonListener();
 		browseButton.addActionListener(listener3);
+		ActionListener listener4 = new AddFileListener();
+		addButton.addActionListener(listener4);
 		
+	}
+	
+	public class AddFileListener implements ActionListener {
+		/**
+		 *  method to perform action when the button is pressed 
+		 */
+		public void actionPerformed(ActionEvent evt) {
+			inputSource.setText("");
+
+		}
 	}
 	
 	public class ReadStateDiagramListener implements ActionListener {
@@ -91,7 +117,14 @@ public class MainReader extends JFrame {
 			} 
 			
 			umlReader = new UMLReader();
-			result.setText(umlReader.readAllLine(url));
+			if(nameFile.getText().length()==0){
+				result.setText(umlReader.readAllLine(url));
+				nameFile.setText(umlReader.fileName(url+""));
+			}
+			else {
+				result.append(umlReader.readAllLine(url));
+				nameFile.setText(nameFile.getText()+","+umlReader.fileName(url+""));
+			}
 		}
 	}
 

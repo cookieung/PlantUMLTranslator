@@ -47,6 +47,12 @@ public class UMLReader {
 		return str;
 	}
 	
+	public String fileName(String url) {
+		String[] res = url.split("/");
+		String[] rs = res[res.length-1].split("\\.");
+		return rs[0];
+	}
+	
 
 	
 

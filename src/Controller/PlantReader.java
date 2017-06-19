@@ -103,6 +103,11 @@ public class PlantReader {
     	MainReader a = new MainReader(new UMLReader());
     	a.run();
     	
+    	String s = "file:/D:/Save/OkayamaPreU/3_watchdog.puml";
+    	String[] ss = s.split("/");
+    	String[] sss = ss[ss.length-1].split("\\.");
+    	System.out.println(sss[0]);
+    	
     	
     	
     	
