@@ -146,17 +146,26 @@ public class PlantReader {
 		for (int i = 0; i < ss.length; i++) {
 			if(ss[i].length()!=0)
 			if(ss[i].contains(":")){
-				String[] g =ss[i].split(":");
-				if(g.length==0){
-				sl.add(ss[i]);
-				}else if(g.length==2){
-				sl.add(g[0]+":"+g[1]);
+				if(sl.get(sl.size()-1).contains(">")||sl.get(sl.size()-1).contains("<")){
+					int count =0;
+					String[] g =ss[i].split(":");
+					if(g.length==0){// this is :
+						sl.add(ss[i]);
+					}else if(g.length==2){// this is send and receive message
+						sl.add(g[0]);
+						sl.add(":");
+						sl.add(g[1]);
+					}
+					else if(g.length==3){// this is send and receive message with name process
+						sl.add(g[0]);
+						sl.add(":");
+						sl.add(g[1]+":"+g[2]);
+					}
+				}else{
+					sl.add(ss[i]);
+					System.out.println("Out :"+ss[i]);
 				}
-				else if(g.length==3){
-				sl.add(g[0]);
-				sl.add(":");
-				sl.add(g[1]+":"+g[2]);
-				}
+
 			}else sl.add(ss[i]);
 			
 		}
@@ -429,6 +438,8 @@ public class PlantReader {
 		 if(s.contains(":")){
 			 System.out.println("if has : "+s);
 			 res = s.split(":")[1].split("/");
+		 }else{
+			 res = s.split("/");
 		 }
 		 if(s.equals("NaN")) return res;
 		 System.out.println("Res1:"+res[0]);

@@ -182,20 +182,20 @@ public class UMLReaderGUI extends JFrame {
 //			System.out.println(result.getText());
 			ArrayList<Map<String, ArrayList<String>>> a=plantReader.readAllInput(result.getText(),nameFile.getText());
 			for (int i = 0; i < a.size(); i++) {
-				for (Entry<String, ArrayList<String>> aa : a.get(i).entrySet()) {
-					cspFile.append(aa.getKey()+"\n");
-					for (int j = 0; j < aa.getValue().size(); j++) {
-						cspFile.append(aa.getValue().get(j)+" ");
-					}
-					cspFile.append("\n");
-				}
+//				for (Entry<String, ArrayList<String>> aa : a.get(i).entrySet()) {
+//					cspFile.append(aa.getKey()+"\n");
+//					for (int j = 0; j < aa.getValue().size(); j++) {
+//						cspFile.append(aa.getValue().get(j)+" ");
+//					}
+//					cspFile.append("\n");
+//				}
 				dg =  plantReader.translateToDiagram(a.get(i));
 				
 			}
 			
-			System.out.println("DIAGRAM :");
+			cspFile.append("DIAGRAM :\n");
 			for (int i = 0; i < dg.size(); i++) {
-				System.out.print(dg.get(i).getName()+" : ");
+				cspFile.append(dg.get(i).getName()+" : \n");
 				cspFile.append(dg.get(i).getProcesses()+"\n");
 				
 			}
