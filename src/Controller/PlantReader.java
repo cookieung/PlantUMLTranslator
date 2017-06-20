@@ -1,8 +1,11 @@
 package Controller;
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,7 +18,7 @@ import View.UMLReaderGUI;
 
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 
 import javax.sound.midi.Sequence;
 
@@ -30,70 +33,48 @@ public class PlantReader {
 	private static ArrayList<Map<String,ArrayList<String>>> allUML = new ArrayList<>();
 	
 	private static ArrayList<Diagram> diagrams;
+	private static Set<String> traceMsg = new LinkedHashSet<>();
+	private static Set<String> originalMsg = new LinkedHashSet<>();
+	
+	private static Map<String, LinkedList<String>> traceMessage = new LinkedHashMap<>();
 
 	
 	public static void main(String[]args){
  	
 //    	//Add All UML to ArrayList by separate each state
     	diagrams = new ArrayList<>();
-    	
-//    	System.out.println(input);
-//		allUML = readAllInput(input);
-
-    	
+    	    	
     	for (int i = 0; i < allUML.size(); i++) {
     		System.out.println("State "+(i+1));
     		translateToDiagram(allUML.get(i));
 
 		}
-//    	
-//
-//    	
-//    	
-//    	
-//    	
-//    	System.out.println("******CSP Output******");
-//    	System.err.print("Channel :");
-    	Set<String> allProcess = showAllProcess();
-//    	System.err.println(allProcess.toString().substring(1, allProcess.toString().length()-1));
-//    	System.out.println();
-//
-//    	Object[] allDiagram = showAllDiagram().toArray();
-//    	
-//    	for (int i = 0; i < allDiagram.length; i++) {
-//    		System.out.println(allDiagram[i]+"");
-//        	System.err.println(getAllSendAndReceiveMessage(allDiagram[i]+""));
-//			
-//		}
-//    	
-//    	System.out.println("Tracedata :");
-//    	for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
-//    		System.out.println(trace.getKey());
-//    		for (int i = 0; i < trace.getValue().size(); i++) {
-//    			for ( Entry<String, LinkedList<String>> line : trace.getValue().get(i).entrySet()) {
-//        			System.err.println(line.getValue() +" : " +line.getKey());
-//					
-//				}
-//
-//			}
-//			System.out.println("===================================");
-//		}
-    	
+
 		
     	UMLReaderGUI a = new UMLReaderGUI(new UMLReader());
     	a.run();
-    	
-    	String s = "file:/D:/Save/OkayamaPreU/3_watchdog.puml";
-    	String[] ss = s.split("/");
-    	String[] sss = ss[ss.length-1].split("\\.");
-    	System.out.println(sss[0]);
-    	
-    	
-    	
-    	
-    	
-    	
-    	
+    		
+    	    	
+	}
+	
+	public static String showAllTraceOfMessage() {
+		String str="";
+		Object[] o = traceMsg.toArray();
+		Object[] allM = originalMsg.toArray();
+		for (int i = 0; i < allM.length; i++) {
+			LinkedList<String> linklist = new LinkedList<>();
+			str+= allM[i].toString().toUpperCase()+" = ";
+			for (int j = 0; j < o.length; j++) {
+					if(o[j].toString().contains(allM[i].toString()))
+					{
+						str+=o[j]+"->";
+						linklist.add(o[j]+"");
+					}
+			}
+			str+= allM[i].toString().toUpperCase()+"\n";
+			traceMessage.put(allM[i]+"", linklist);
+		}
+		return str;
 	}
 	
 	public static ArrayList<Map<String, ArrayList<String>>> readAllInput(String input,String name) {
@@ -187,35 +168,102 @@ public class PlantReader {
 	    		diagram = new StateDiagram(state);
 	    		diagram.addProcess(processForStateDiagram(res));
 	    		diagrams.add(diagram);
-//	    		traceData.put(state,processForStateDiagram(res));
-//	    		System.out.println(getAllSendAndReceiveMessage(state));
 	    	}else if(state.contains("SQ")){
 	    		diagram = new SequenceDiagram(state);
 	    		diagram.addProcess(getResult(res));
 	    		diagrams.add(diagram);
-//	    		System.out.println("PC Sequence");
-//	    		traceData.put(state,getResult(res));
 
 	    	}
 	    	return diagrams;
 	 }
 	 
-	 public void showTheRelation(ArrayList<Map<String, LinkedList<String>>> all){
-		 for (int i = 0; i < all.size(); i++) {
-			for (int j = 0; j < all.size(); j++) {
-				
+	 
+	 public Map<String, LinkedList<String>> getRelationOfStateDiagram(){
+		 LinkedList<String> str= new LinkedList<>();
+		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
+		 Object[] names= getAllStateDiagramName();
+		 for (int i = 0; i < names.length; i++) {
+			 str.add(names[i]+"");
+		}
+		 map.put("SMI", str);
+		 return map;
+	 }
+	 
+	 public String showRelationOfStateDiagram(){
+		 String str="";
+		 Map<String, LinkedList<String>> m = getRelationOfStateDiagram();
+		 for (Entry<String, LinkedList<String>> eachLine : m.entrySet()) {
+			str+=eachLine.getKey().toUpperCase()+" = ";
+			for (int i = 0; i < eachLine.getValue().size(); i++) {
+				str+=eachLine.getValue().get(i);
+				if(i<eachLine.getValue().size()-1) str+=" ||| ";
 				
 			}
 		}
+		 return str;
+	 }
+
+	 public Map<String,LinkedList<String>> getRelationOfAllMessage(){
+		 LinkedList<String> str= new LinkedList<>();
+		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
+		 for (Entry<String, LinkedList<String>> eachLine : traceMessage.entrySet()) {
+			 str.add(eachLine.getKey().toUpperCase());
+		}
+		map.put("MSG", str); 
+		return map;
+	 }
+	 
+
+	 public String showRelationOfAllMessage(){
+		 String str = "";
+		 Map<String, LinkedList<String>> map = getRelationOfAllMessage();
+		 for (Entry<String, LinkedList<String>> eachLine:map.entrySet()) {
+			 str+=eachLine.getKey()+" = ";
+			 for (int i = 0; i < eachLine.getValue().size(); i++) {
+				 str+=eachLine.getValue().get(i);
+				 if(i<eachLine.getValue().size()-1) str+=" ||| ";
+				
+			}
+			 
+		}
+		 return str+"\n";
+	 }
+	 
+	 public Map<String ,Map<String,String>> getRelationWithSMIAndMSG(){
+		 Map<String,String> map = new HashMap<String,String>();
+		 map.put("state_diagram", showRelationOfStateDiagram().split(" = ")[0]);
+		 map.put("condition", showAllProcess().toString().substring(1, showAllProcess().toString().length()-1));
+		 map.put("message", showRelationOfAllMessage().split(" = ")[0]);
+		 Map<String, Map<String,String>> m = new HashMap<String, Map<String,String>>();
+		 m.put("SM", map);
+		 return m;
+	 }
+
+	 public String showRelationWithSMIAndMSG(){
+		 String s="";
+		 Map<String ,Map<String,String>> map = getRelationWithSMIAndMSG();
+		 for (Entry<String, Map<String, String>> m : map.entrySet()) {
+			s+=m.getKey()+" = "+m.getValue().get("state_diagram")+"|["+m.getValue().get("condition")+"]|"+m.getValue().get("message");
+		}
+		 return s;
+	 }
+	 
+	 public Object[] getAllStateDiagramName(){
+		Set<String> s = new LinkedHashSet<>();
+		for (int i = 0; i < diagrams.size(); i++) {
+			if(diagrams.get(i).getName().contains("M_"))
+			s.add(diagrams.get(i).getName());
+		}
+		return s.toArray();
 	 }
 	 
 	 
 	 public static Set<String> showAllProcess(){
-		 Set<String> processes = new TreeSet<>();
+		 Set<String> processes = new LinkedHashSet<>();
 		 for (int n = 0;n<diagrams.size();n++) {
 	    		for (int i = 0; i < diagrams.get(n).getProcesses().size(); i++) {
 	    			for ( Entry<String, LinkedList<String>> line : diagrams.get(n).getProcesses().get(i).entrySet()) {
-	        			if(!line.getKey().equals("NaN"))
+	        			if(!line.getKey().equals("NaN") && !line.getKey().contains(">"))
 	        				processes.add(line.getKey());
 					}
 
@@ -225,7 +273,7 @@ public class PlantReader {
 	 }
 
 	 public static Set<String> showAllStateDiagram(){
-		 Set<String> processes = new TreeSet<>();
+		 Set<String> processes = new LinkedHashSet<>();
 		 for (int i =0;i<diagrams.size();i++) {
 		    	if (diagrams.get(i).getName().contains("M_"))
 		    		processes.add(getAllSendAndReceiveMessage(diagrams.get(i).getName()));	
@@ -311,10 +359,10 @@ public class PlantReader {
 			Map<String, LinkedList<String>> map = new LinkedHashMap<>();
     		String msg = res.get(j+3);
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
-    		System.out.println("Message :"+msg);
+    		System.out.println("Message :"+readAction(messageWithStatus(msg)));
     		map.put(readAction(messageWithStatus(msg)), ll);
-//    		rs.add(map);
-    		rs.add(checkMap(map));
+    		rs.add(map);
+//    		rs.add(checkMap(map));
 		}
 		
 		
@@ -362,7 +410,7 @@ public class PlantReader {
 				newMsg = res.get(i+4)+"r";
 			}else continue;
 
-			 
+			 originalMsg.add(res.get(i+4));
 			 System.out.println(left+" > "+newMsg+" > "+right);
 			 System.out.println("LEFT -> RIGHT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(left,newMsg));
@@ -379,10 +427,16 @@ public class PlantReader {
 			 if (newMsg.charAt(newMsg.length()-1)=='s') {
 				m.put(newMsg, leftL);
 				m.put(newMsg.substring(0,newMsg.length()-1)+"r", rightL);
+				traceMsg.add(newMsg);
+				traceMsg.add(newMsg.substring(0,newMsg.length()-1)+"r");
 			}else if(newMsg.charAt(newMsg.length()-1)=='r'){
 				m.put(newMsg.substring(0,newMsg.length()-1)+"s", leftL);
 				m.put(newMsg, rightL);
+				traceMsg.add(newMsg.substring(0,newMsg.length()-1)+"s");
+				traceMsg.add(newMsg);
 			}
+			 
+
 			 
 			 list.add(m);
 			 

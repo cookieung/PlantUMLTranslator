@@ -8,14 +8,11 @@ public class StateDiagram implements Diagram {
 	
 	private String name;
 	private LinkedList<Map<String, LinkedList<String>>> processes;
-	private Map<String, LinkedList<String>> map;
-	private LinkedList<String> ll;
+
 	
 	public StateDiagram(String name){
 		this.name = name;
 		this.processes = new LinkedList<>();
-		map = new LinkedHashMap<>();
-		ll = new LinkedList<>();
 	}
 	
 	public LinkedList<Map<String,LinkedList<String>>> addProcess(LinkedList<Map<String,LinkedList<String>>> process) {

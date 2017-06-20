@@ -217,6 +217,14 @@ public class UMLReaderGUI extends JFrame {
 			for (int i = 0; i < s.length; i++) {
 				cspFile.append(s[i]+"\n");
 			}
+			
+			cspFile.append(plantReader.showRelationOfStateDiagram()+"\n");
+			
+			cspFile.append(plantReader.showAllTraceOfMessage()+"\n");
+			
+			cspFile.append(plantReader.showRelationOfAllMessage()+"\n");
+			
+			cspFile.append(plantReader.showRelationWithSMIAndMSG()+"\n");
 
 			
 

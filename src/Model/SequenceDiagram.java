@@ -8,14 +8,10 @@ public class SequenceDiagram implements Diagram {
 	
 	private String name;
 	private LinkedList<Map<String, LinkedList<String>>> processes;
-	private Map<String, LinkedList<String>> map;
-	private LinkedList<String> ll;
-	
+
 	public SequenceDiagram(String name){
 		this.name = name;
 		this.processes = new LinkedList<>();
-		map = new LinkedHashMap<>();
-		ll = new LinkedList<>();
 	}
 
 	@Override
