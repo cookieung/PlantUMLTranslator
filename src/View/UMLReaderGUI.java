@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -48,7 +49,6 @@ public class UMLReaderGUI extends JFrame {
 	private ArrayList<Diagram> diagrams;
 	private PlantReader plantReader;
 	private ArrayList<Map<String, ArrayList<String>>> allUML;
-	ArrayList<Diagram> dg;
 
 	public UMLReaderGUI(UMLReader reader) {
 		this.umlReader = reader;
@@ -189,17 +189,24 @@ public class UMLReaderGUI extends JFrame {
 //					}
 //					cspFile.append("\n");
 //				}
-				dg =  plantReader.translateToDiagram(a.get(i));
+				diagrams =  plantReader.translateToDiagram(a.get(i));
 				
 			}
 			
 			cspFile.append("DIAGRAM :\n");
-			for (int i = 0; i < dg.size(); i++) {
-				cspFile.append(dg.get(i).getName()+" : \n");
-				cspFile.append(dg.get(i).getProcesses()+"\n");
+			for (int i = 0; i < diagrams.size(); i++) {
+				cspFile.append(diagrams.get(i).getName()+" : \n");
+				cspFile.append(diagrams.get(i).getProcesses()+"\n");
 				
 			}
 			
+			Set<String> allProcess = plantReader.showAllProcess();
+			cspFile.append("channel : "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n");
+			Object[] s = plantReader.showAllStateDiagram().toArray();
+			for (int i = 0; i < s.length; i++) {
+				cspFile.append(s[i]+"\n");
+			}
+
 			
 
 		}

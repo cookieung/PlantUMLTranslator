@@ -54,7 +54,7 @@ public class PlantReader {
 //    	
 //    	System.out.println("******CSP Output******");
 //    	System.err.print("Channel :");
-//    	Set<String> allProcess = showAllProcess();
+    	Set<String> allProcess = showAllProcess();
 //    	System.err.println(allProcess.toString().substring(1, allProcess.toString().length()-1));
 //    	System.out.println();
 //
@@ -212,9 +212,9 @@ public class PlantReader {
 	 
 	 public static Set<String> showAllProcess(){
 		 Set<String> processes = new TreeSet<>();
-		 for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
-	    		for (int i = 0; i < trace.getValue().size(); i++) {
-	    			for ( Entry<String, LinkedList<String>> line : trace.getValue().get(i).entrySet()) {
+		 for (int n = 0;n<diagrams.size();n++) {
+	    		for (int i = 0; i < diagrams.get(n).getProcesses().size(); i++) {
+	    			for ( Entry<String, LinkedList<String>> line : diagrams.get(n).getProcesses().get(i).entrySet()) {
 	        			if(!line.getKey().equals("NaN"))
 	        				processes.add(line.getKey());
 					}
@@ -224,22 +224,23 @@ public class PlantReader {
 		 return processes;
 	 }
 
-	 public static Set<String> showAllDiagram(){
+	 public static Set<String> showAllStateDiagram(){
 		 Set<String> processes = new TreeSet<>();
-		 for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> trace : traceData.entrySet()) {
-	    		processes.add(trace.getKey());
+		 for (int i =0;i<diagrams.size();i++) {
+		    	if (diagrams.get(i).getName().contains("M_"))
+		    		processes.add(getAllSendAndReceiveMessage(diagrams.get(i).getName()));	
 			}
 		 return processes;
 	 }
 	 
 	public static String getAllSendAndReceiveMessage(String nowstate){
-			Collection<LinkedList<Map<String, LinkedList<String>>>> tr = traceData.values();
+
 			String res="";
 			
-			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> entry : traceData.entrySet())
+			for (int n = 0;n<diagrams.size();n++)
 			{
-				String namestate = entry.getKey();
-			    LinkedList<Map<String, LinkedList<String>>> l = entry.getValue();
+				String namestate = diagrams.get(n).getName();
+			    LinkedList<Map<String, LinkedList<String>>> l = diagrams.get(n).getProcesses();
 			    if(namestate.equals(nowstate))
 			    for (int i = 0; i < l.size(); i++) {
 					for (Entry<String, LinkedList<String>> entry2 : l.get(i).entrySet())
