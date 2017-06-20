@@ -8,12 +8,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import Model.Diagram;
+import Model.SequenceDiagram;
+import Model.StateDiagram;
 import View.UMLReader;
 import View.UMLReaderGUI;
 
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
+
+import javax.sound.midi.Sequence;
 
 public class PlantReader {
 	
@@ -29,32 +33,19 @@ public class PlantReader {
 
 	
 	public static void main(String[]args){
-//    	traceData = new LinkedHashMap<>();
-//    	allUML = new ArrayList<>();
-//		
-//    	Scanner scanner = new Scanner(System.in);
-//    	System.out.println("Input UML :");
-//    	while (scanner.hasNextLine()) {
-//			String chk = scanner.nextLine();
-//			if (chk.equals("end")) {
-//				break;
-//			}
-//			input+=chk+" ";
-//		}
-//    	
-
-//    	
+ 	
 //    	//Add All UML to ArrayList by separate each state
     	diagrams = new ArrayList<>();
+    	
 //    	System.out.println(input);
 //		allUML = readAllInput(input);
 
-//    	
-//    	for (int i = 0; i < allUML.size(); i++) {
-//    		System.out.println("State "+(i+1));
-//    		translateToDiagram(allUML.get(i));
-//
-//		}
+    	
+    	for (int i = 0; i < allUML.size(); i++) {
+    		System.out.println("State "+(i+1));
+    		translateToDiagram(allUML.get(i));
+
+		}
 //    	
 //
 //    	
@@ -116,12 +107,12 @@ public class PlantReader {
     	for (int i = 0; i < equations.length; i++) {
     		if(equations[i].equals("@startuml")){
     			count+=1;
-    			if (equations[i+1].equals("participant")) {
-//					t = "SQ"+ ++SEQUENCE_DG+names[count-1];
-    				t = "SQ_"+names[count-1];
-				}else {
+    			if (equations[i+1].equals("[*]")) {
 //					t = "M"+ ++STATE_DG+names[count-1];
 					t = "M_"+names[count-1];
+				}else{
+//					t = "SQ"+ ++SEQUENCE_DG+names[count-1];
+    				t = "SQ_"+names[count-1];
 				}
     		}
 
@@ -148,12 +139,25 @@ public class PlantReader {
 
 	public static String[] prepareInput(String s){
 
-		String[] ss = s.replace(":", " : ").replaceAll("->", " -> ").replace("<-", " <- ").split(" ");
+
+		String[] ss = s.replace(">", "> ").replace("<", " <").split(" ");
 
 		ArrayList<String> sl = new ArrayList<>();
 		for (int i = 0; i < ss.length; i++) {
 			if(ss[i].length()!=0)
-			sl.add(ss[i]);
+			if(ss[i].contains(":")){
+				String[] g =ss[i].split(":");
+				if(g.length==0){
+				sl.add(ss[i]);
+				}else if(g.length==2){
+				sl.add(g[0]+":"+g[1]);
+				}
+				else if(g.length==3){
+				sl.add(g[0]);
+				sl.add(":");
+				sl.add(g[1]+":"+g[2]);
+				}
+			}else sl.add(ss[i]);
 			
 		}
 		String[] rs = new String[sl.size()] ;
@@ -164,19 +168,27 @@ public class PlantReader {
 	}
 
 	
-	 public static void translateToDiagram(Map<String,ArrayList<String>> map){
-	    	System.out.println("IN TranslateToDiagram :");
+	 public static  ArrayList<Diagram> translateToDiagram(Map<String,ArrayList<String>> map){
+		 	Diagram diagram;
+		 	System.out.println("IN TranslateToDiagram :");
 	    	ArrayList<String> res = convertToArrayList(map.values().toString().replace("[", "").replace("]", "").split(", "));
 	    	String state = map.keySet().toString().replace("[", "").replace("]", "");
 	    	System.out.println("State :" +state);
 	    	if(state.contains("M")){
-	    		traceData.put(state,processForStateDiagram(res));
-	    		System.out.println(getAllSendAndReceiveMessage(state));
+	    		diagram = new StateDiagram(state);
+	    		diagram.addProcess(processForStateDiagram(res));
+	    		diagrams.add(diagram);
+//	    		traceData.put(state,processForStateDiagram(res));
+//	    		System.out.println(getAllSendAndReceiveMessage(state));
 	    	}else if(state.contains("SQ")){
-	    		System.out.println("PC Sequence");
-	    		traceData.put(state,getResult(res));
+	    		diagram = new SequenceDiagram(state);
+	    		diagram.addProcess(getResult(res));
+	    		diagrams.add(diagram);
+//	    		System.out.println("PC Sequence");
+//	    		traceData.put(state,getResult(res));
 
 	    	}
+	    	return diagrams;
 	 }
 	 
 	 public void showTheRelation(ArrayList<Map<String, LinkedList<String>>> all){
@@ -247,6 +259,7 @@ public class PlantReader {
 
     	for (int i = 0; i < message.length; i++) {
 			if (message[i].length()!=0) {
+				System.out.println("MN :"+message[i]);
 				rs+=message[i];
 				if(i<message.length-1) rs+= " -> ";
 			}
@@ -288,7 +301,7 @@ public class PlantReader {
 			Map<String, LinkedList<String>> map = new LinkedHashMap<>();
     		String msg = res.get(j+3);
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
-
+    		System.out.println("Message :"+msg);
     		map.put(readAction(messageWithStatus(msg)), ll);
 //    		rs.add(map);
     		rs.add(checkMap(map));
@@ -379,14 +392,18 @@ public class PlantReader {
 	 public static LinkedList<String> getLinkedFromtrace(String left,String message) {
 		 LinkedList<String> res = new LinkedList<>();
 //		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
-			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> diagram : traceData.entrySet()) {
-				if(diagram.getKey().equals(left)){
-					System.out.println("Name :"+diagram.getKey());
-					for (int j = 0; j < diagram.getValue().size(); j++) {
-						for (Entry<String, LinkedList<String>> eachentry:diagram.getValue().get(j).entrySet()) {
+			for (int i=0;i<diagrams.size();i++) {
+				System.out.println("Get Link from trace :"+diagrams.get(i).getName());
+				if(diagrams.get(i).getName().contains(left)){
+					System.out.println("Name :"+diagrams.get(i).getName());
+					for (int j = 0; j < diagrams.get(i).getProcesses().size(); j++) {
+						for (Entry<String, LinkedList<String>> eachentry:diagrams.get(i).getProcesses().get(j).entrySet()) {
+							System.out.println("Key :"+eachentry.getKey());
+							System.out.println("LinkList :"+eachentry.getValue());
 							if(!eachentry.getKey().equals("NaN") && eachentry.getKey().contains(message)){
-								for (int i = 0; i < eachentry.getValue().size(); i++) {
-									res.add(eachentry.getValue().get(i));
+								for (int k = 0; k < eachentry.getValue().size(); k++) {
+									res.add(eachentry.getValue().get(k));
+									System.out.println();
 								}
 							}
 
@@ -394,12 +411,9 @@ public class PlantReader {
 
 						
 					}
-					break;
 				}
 
 			}
-			if (res.size()==0)
-				return null;
 			return res;
 	}
 	 
@@ -413,16 +427,24 @@ public class PlantReader {
 	public static String[] messageWithStatus(String s){
 		 String[] res = new String[]{"",""};
 		 if(s.contains(":")){
+			 System.out.println("if has : "+s);
 			 res = s.split(":")[1].split("/");
 		 }
 		 if(s.equals("NaN")) return res;
+		 System.out.println("Res1:"+res[0]);
 		 if(res[0].length()!=0){
 			 res[0]+="r";
 		 }
 		 System.out.println(res.length);
 		 if(res.length==2){
+			 System.out.println("Res2:"+res[1]);
 			 res[1]+="s";
 		 }
+		 
+		 for (int i = 0; i < res.length; i++) {
+				System.out.println("MM :"+res[i]);
+				
+			}
 		 return res;
 	 }
 }

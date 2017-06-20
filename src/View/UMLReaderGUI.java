@@ -48,6 +48,7 @@ public class UMLReaderGUI extends JFrame {
 	private ArrayList<Diagram> diagrams;
 	private PlantReader plantReader;
 	private ArrayList<Map<String, ArrayList<String>>> allUML;
+	ArrayList<Diagram> dg;
 
 	public UMLReaderGUI(UMLReader reader) {
 		this.umlReader = reader;
@@ -188,8 +189,18 @@ public class UMLReaderGUI extends JFrame {
 					}
 					cspFile.append("\n");
 				}
+				dg =  plantReader.translateToDiagram(a.get(i));
 				
 			}
+			
+			System.out.println("DIAGRAM :");
+			for (int i = 0; i < dg.size(); i++) {
+				System.out.print(dg.get(i).getName()+" : ");
+				cspFile.append(dg.get(i).getProcesses()+"\n");
+				
+			}
+			
+			
 
 		}
 	}
