@@ -2,7 +2,9 @@ package View;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -21,6 +23,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -45,6 +48,7 @@ public class UMLReaderGUI extends JFrame {
 	private JPanel panel1;
 	private JPanel panel2;
 	private File file;
+	private JScrollPane scroll1,scroll2;
 	
 	private ArrayList<Diagram> diagrams;
 	private PlantReader plantReader;
@@ -69,18 +73,16 @@ public class UMLReaderGUI extends JFrame {
 		
 		
 		contents = new Container();
+
 		contentResult = new Container();
 		contentNameFile = new Container();
 		contentResultAll = new Container();
-		layout = new BoxLayout(contents, BoxLayout.Y_AXIS);
-		layoutResult = new BoxLayout(contentResult, BoxLayout.Y_AXIS);
-		layoutNameFile = new BoxLayout(contentNameFile, BoxLayout.X_AXIS);
-		layoutResultAll = new BoxLayout(contentResultAll, BoxLayout.X_AXIS);
 		panel1 = new JPanel();
 		panel2 = new JPanel();
-		contents.setLayout(layout);
-		result = new JTextArea(40,40);
-		cspFile = new JTextArea(40,40);
+		contents.setLayout(new BoxLayout(contents, BoxLayout.Y_AXIS));
+//		contents.setPreferredSize(new Dimension(2000, 1000));
+		result = new JTextArea();
+		cspFile = new JTextArea();
 		result.setEditable(false);
 		cspFile.setEditable(false);
 		browseButton = new JButton("Browse");
@@ -90,24 +92,32 @@ public class UMLReaderGUI extends JFrame {
 		convertButton = new JButton("Convert to CSP");
 		filechooser = new JFileChooser();
 		label =new JLabel("File or URL name");
-		inputSource = new JTextField(20);
+		inputSource = new JTextField(100);
 		nameFile = new JTextField(10);
+		scroll1 = new JScrollPane(result);
+		scroll2 = new JScrollPane(cspFile);
 		panel1.add(label);
 		panel1.add(inputSource);
 		panel1.add(browseButton);
 		panel1.add(countButton);
 		panel1.add(clearButton);
-		contentNameFile.setLayout(layoutNameFile);
+		panel1.setPreferredSize(new Dimension(1600,40));
+		contentNameFile.setLayout(new BoxLayout(contentNameFile, BoxLayout.X_AXIS));
 		contentNameFile.add(nameFile);
 		contentNameFile.add(addButton);
 		contentNameFile.add(convertButton);
-		contentResultAll.setLayout(layoutResultAll);
-		contentResultAll.add(result);
-		contentResultAll.add(cspFile);
-		contentResult.setLayout(layoutResult);
+//		contentNameFile.setPreferredSize(new Dimension(100,300));
+		contentResultAll.setLayout(new GridLayout(1, 2));
+		scroll1.setPreferredSize(new Dimension(800,800));
+		scroll2.setPreferredSize(new Dimension(800,800));
+		contentResultAll.add(scroll1);
+		contentResultAll.add(scroll2);
+//		contentResultAll.setPreferredSize(new Dimension(100,200));
+		contentResult.setLayout(new BoxLayout(contentResult, BoxLayout.Y_AXIS));
 		contentResult.add(contentNameFile);
 		contentResult.add(contentResultAll);
 		panel2.add(contentResult);
+		panel2.setPreferredSize(new Dimension(2000,1000));
 		contents.add(panel1);
 		contents.add(panel2);
 
@@ -123,6 +133,7 @@ public class UMLReaderGUI extends JFrame {
 		addButton.addActionListener(listener4);
 		ActionListener listener5 = new ConvertToDiagramListener();
 		convertButton.addActionListener(listener5);
+		nameFile.addActionListener(listener5);
 		
 	}
 	
