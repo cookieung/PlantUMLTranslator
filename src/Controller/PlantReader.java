@@ -338,9 +338,9 @@ public class PlantReader {
 	 
 	 public static LinkedList<Map<String,LinkedList<String>>> processForStateDiagram(ArrayList<String> res) {
 		System.out.println("Process State");
-		char state = 'n';
+		String state = "n";
 		LinkedList<Map<String,LinkedList<String>>> rs = new LinkedList<>();
-		for (int j = 1; j < res.size()-1; j++) {
+		for (int j = 1; j < res.size()-3; j++) {
 			String tmp = res.get(j);
 			LinkedList<String> ll = new LinkedList<>();
 
@@ -348,14 +348,15 @@ public class PlantReader {
 	    		ll.add(res.get(j+1));
 	    		ll.add(tmp.replace("<", "")+">");
 	    		ll.add(res.get(j-1));
-	    		state = 'r';
+	    		state = "r_";
 	    	}else if(tmp.contains(">")){
 	    		ll.add(res.get(j-1));
 	    		ll.add(tmp);
 	    		ll.add(res.get(j+1));
-	    		state = 's';
+	    		state = "s_";
 	    	}
 	    	else continue;
+			System.out.println("Result :"+res.get(j+3));
 			Map<String, LinkedList<String>> map = new LinkedHashMap<>();
     		String msg = res.get(j+3);
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
@@ -403,11 +404,11 @@ public class PlantReader {
 			 if (res.get(i+1).contains(">")) {
 				left = res.get(i);
 				right = res.get(i+2);
-				newMsg = res.get(i+4)+"s";
+				newMsg = "s_"+res.get(i+4);
 			}else if(res.get(i+1).contains("<")){
 				left = res.get(i+2);
 				right = res.get(i);
-				newMsg = res.get(i+4)+"r";
+				newMsg = "r_"+res.get(i+4);
 			}else continue;
 
 			 originalMsg.add(res.get(i+4));
@@ -415,24 +416,24 @@ public class PlantReader {
 			 System.out.println("LEFT -> RIGHT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(left,newMsg));
 			 Map<String, LinkedList<String>> m = new LinkedHashMap<>();
-			 LinkedList<String> leftL = getLinkedFromtrace(left, newMsg.substring(0, newMsg.length()-1));
+			 LinkedList<String> leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()-1));
 
 			 System.out.println("===============================");
 			 System.out.println("RIGHT -> LEFT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(right,newMsg));
-			 LinkedList<String> rightL = getLinkedFromtrace(right, newMsg.substring(0, newMsg.length()-1));
+			 LinkedList<String> rightL = getLinkedFromtrace(right, newMsg.substring(2, newMsg.length()-1));
 
 			 System.out.println("===============================");
 			 
-			 if (newMsg.charAt(newMsg.length()-1)=='s') {
+			 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
 				m.put(newMsg, leftL);
-				m.put(newMsg.substring(0,newMsg.length()-1)+"r", rightL);
+				m.put("r_"+newMsg.substring(2,newMsg.length()), rightL);
 				traceMsg.add(newMsg);
-				traceMsg.add(newMsg.substring(0,newMsg.length()-1)+"r");
-			}else if(newMsg.charAt(newMsg.length()-1)=='r'){
-				m.put(newMsg.substring(0,newMsg.length()-1)+"s", leftL);
+				traceMsg.add("r_"+newMsg.substring(2,newMsg.length()));
+			}else if(newMsg.charAt(0)=='r'&&newMsg.charAt(1)=='_'){
+				m.put("s_"+newMsg.substring(2,newMsg.length()), leftL);
 				m.put(newMsg, rightL);
-				traceMsg.add(newMsg.substring(0,newMsg.length()-1)+"s");
+				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
 				traceMsg.add(newMsg);
 			}
 			 
@@ -499,12 +500,12 @@ public class PlantReader {
 		 if(s.equals("NaN")) return res;
 		 System.out.println("Res1:"+res[0]);
 		 if(res[0].length()!=0){
-			 res[0]+="r";
+			 res[0] = "r_"+res[0];
 		 }
 		 System.out.println(res.length);
 		 if(res.length==2){
 			 System.out.println("Res2:"+res[1]);
-			 res[1]+="s";
+			 res[1] = "s_"+res[1];
 		 }
 		 
 		 for (int i = 0; i < res.length; i++) {
