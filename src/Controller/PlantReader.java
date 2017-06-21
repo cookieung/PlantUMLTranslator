@@ -243,7 +243,7 @@ public class PlantReader {
 		 String s="";
 		 Map<String ,Map<String,String>> map = getRelationWithSMIAndMSG();
 		 for (Entry<String, Map<String, String>> m : map.entrySet()) {
-			s+=m.getKey()+" = "+m.getValue().get("state_diagram")+"|["+m.getValue().get("condition")+"]|"+m.getValue().get("message");
+			s+=m.getKey()+" = "+m.getValue().get("state_diagram")+"[|"+m.getValue().get("condition")+"|]"+m.getValue().get("message");
 		}
 		 return s;
 	 }
