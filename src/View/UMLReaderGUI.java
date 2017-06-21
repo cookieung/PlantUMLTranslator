@@ -218,6 +218,11 @@ public class UMLReaderGUI extends JFrame {
 				cspFile.append(s[i]+"\n");
 			}
 			
+			Object[] s2 = plantReader.showAllSequenceDiagram().toArray();
+			for (int i = 0; i < s2.length; i++) {
+				cspFile.append(s2[i]+"\n");
+			}
+			
 			cspFile.append(plantReader.showRelationOfStateDiagram()+"\n");
 			
 			cspFile.append(plantReader.showAllTraceOfMessage()+"\n");
@@ -225,8 +230,10 @@ public class UMLReaderGUI extends JFrame {
 			cspFile.append(plantReader.showRelationOfAllMessage()+"\n");
 			
 			cspFile.append(plantReader.showRelationWithSMIAndMSG()+"\n");
-
 			
+			cspFile.append(plantReader.showSequenceDiagram()+"\n");
+
+
 
 		}
 	}
