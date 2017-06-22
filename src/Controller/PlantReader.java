@@ -256,8 +256,7 @@ public class PlantReader {
 			s+=mp.getKey()+" = ";
 			for (int i = 0; i < mp.getValue().size(); i++) {
 				s+=mp.getValue().get(i);
-				if(i==mp.getValue().size()-1) s+= "->SKIP";
-				else s+="->";
+				if(i<mp.getValue().size()-1) s+= "->";
 			}
 			s+="\n";
 		}
@@ -267,11 +266,13 @@ public class PlantReader {
 	 
 	 public Map<String, LinkedList<String>> getSequenceDiagram(){
 		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
-
+		 
 		 for (int i=0;i<getAllSequenceDiagram().size();i++) {
 			 String name  = getAllSequenceDiagram().get(i).getName();
 			 LinkedList<Map<String, LinkedList<String>>> procs = getAllSequenceDiagram().get(i).getProcesses();
 			 //All Diagram in ArrayList
+			 System.out.println("Procs "+name+":");
+			 System.out.println(procs);;
 			 for (int j = 0; j < getAllStateDiagram().size(); j++) {
 				 LinkedList<String> ll = new LinkedList<>();
 				 name += getAllStateDiagram().get(j).getName().substring(2);
@@ -282,7 +283,7 @@ public class PlantReader {
 						 //State 
 						 for (int l = 0; l < keys.size(); l++) {
 							 for (Entry<String, LinkedList<String>> map3 : keys.get(l).entrySet()) {
-								 if(!ll.contains(map2.getKey()) && map3.getKey().contains(map2.getKey()))
+								 if(map3.getKey().contains(map2.getKey()))
 								 {
 									 ll.add(map2.getKey());
 								 }
@@ -292,6 +293,7 @@ public class PlantReader {
 					}
 						
 				}
+				 ll.add("SKIP");
 				 map.put(name,ll);
 				 name =getAllSequenceDiagram().get(i).getName();
 			}
@@ -320,7 +322,7 @@ public class PlantReader {
 	 }
 
 	 public Object[] getAllSequenceDiagramName(){
-		Set<String> s = new LinkedHashSet<>();
+		LinkedList<String> s = new LinkedList<>();
 		for (int i = 0; i < getAllSequenceDiagram().size(); i++) {
 			s.add(getAllSequenceDiagram().get(i).getName());
 		}
