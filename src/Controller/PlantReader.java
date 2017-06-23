@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -385,15 +386,19 @@ public class PlantReader {
 			    for (int i = 0; i < l.size(); i++) {
 					for (Entry<String, LinkedList<LinkedList<String>>> entry2 : l.get(i).entrySet())
 					{
-					    for (int j = 0; j < entry2.getValue().size(); j++) {
-							if(j%3==1) res+= "= ";
-							else{
-								if(entry2.getValue().get(j).equals("*")) res += namestate+" ";
-								else res+= entry2.getValue().get(j)+" ";
+						for (int k = 0; k < entry2.getValue().size() ; k++) {
+							LinkedList<String> linklist = entry2.getValue().get(k);
+							for (int j = 0; j < linklist.size(); j++) {
+								if(j%3==1) res+= "= ";
+								else{
+									if(linklist.get(j).equals("*")) res += namestate+" ";
+									else res+= linklist.get(j)+" ";
+								}
+								if(j%3==1 && !entry2.getKey().equals("NaN") ) res+= entry2.getKey()+" -> ";
 							}
-							if(j%3==1 && !entry2.getKey().equals("NaN") ) res+= entry2.getKey()+" -> ";
+						    res += "\n";
 						}
-					    res += "\n";
+						    
 					}
 					
 				}
@@ -432,7 +437,7 @@ public class PlantReader {
 		System.out.println("Process State");
 		String state = "n";
 		LinkedList<Map<String, LinkedList<LinkedList<String>>>> rs = new LinkedList<>();
-		for (int j = 1; j < res.size()-3; j++) {
+		for (int j = 1; j < res.size()-1; j++) {
 			String tmp = res.get(j);
 			LinkedList<String> ll = new LinkedList<>();
 
@@ -448,21 +453,52 @@ public class PlantReader {
 	    		state = "s_";
 	    	}
 	    	else continue;
-			System.out.println("Result :"+res.get(j+3));
+			String msg;
+			if(j+3>=res.size()) msg = "NaN";
+			else msg = res.get(j+3);
+//			System.out.println(j+" Result :"+res.get(j+3));
 			Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
-    		String msg = res.get(j+3);
+    		
     		if(msg.contains("<")|| msg.contains(">") ) msg="NaN";
     		System.out.println("Message :"+readAction(messageWithStatus(msg)));
     		LinkedList<LinkedList<String>> list = new LinkedList<>();
     		list.add(ll);
     		map.put(readAction(messageWithStatus(msg)), list);
+    		System.out.println("Comb :"+combineMessage(map));
     		rs.add(map);
+    		System.out.println("PC for state diagram Map :"+map);
 //    		rs.add(checkMap(map));
 		}
+		
 		
 		return rs;			
 
 	}
+	 
+	 public static LinkedList<LinkedList<String>> getListOfProcessForMessage(String checkLeft,Map<String, LinkedList<LinkedList<String>>> map){
+		 LinkedList<LinkedList<String>> list= new LinkedList<>();
+		 for (Entry<String, LinkedList<LinkedList<String>>> m : map.entrySet()) {
+			 for (int i = 0; i < m.getValue().size(); i++) {
+				 list.add(m.getValue().get(i));
+				
+			}
+
+		}
+		 return list;
+	 }
+	 
+	 public static Map<String, LinkedList<LinkedList<String>>> combineMessage(Map<String, LinkedList<LinkedList<String>>> map){
+		 Map<String, LinkedList<LinkedList<String>>> mp = new LinkedHashMap<>();
+		 List<String> trace = new ArrayList<>();
+		 for (Entry<String, LinkedList<LinkedList<String>>> m : map.entrySet()) {
+			if(!trace.contains(m.getKey())){
+				mp.put(m.getKey(),getListOfProcessForMessage(m.getKey(), map));
+				trace.add(m.getKey());
+			}
+
+		}
+		 return mp;
+	 }
 
 	 public static Map<String, LinkedList<String>> checkMap(Map<String, LinkedList<String>> map){
 		 Map<String, LinkedList<String>> resMap = new LinkedHashMap<>();
