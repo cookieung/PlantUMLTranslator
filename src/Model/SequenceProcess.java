@@ -6,14 +6,17 @@ import java.util.Map;
 
 public class SequenceProcess implements ProcessList {
 	
-	private LinkedList<Map<String,LinkedList<LinkedList<String>>>> process;
+	private LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByName;
+	
+	private LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByState;
 	
 	public SequenceProcess() {
-		process = new LinkedList<>();
+		processMapByName = new LinkedList<>();
+		processMapByState = new LinkedList<>();
 	}
 
 	public SequenceProcess(String name,LinkedList<LinkedList<String>> linkedList) {
-		process = new LinkedList<>();
+		processMapByName = new LinkedList<>();
 		this.addProcess(name, linkedList);
 	}
 	
@@ -23,35 +26,43 @@ public class SequenceProcess implements ProcessList {
 		Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
 		map.put(name, linkedList);
 		System.out.println("Map in Sequence Process Class :"+map);
-		process.add(map);
-		System.out.println("Object in Sequence Process Class :"+process);
+		processMapByName.add(map);
+		System.out.println("Object in Sequence Process Class :"+processMapByName);
 	}
 	
 	@Override
 	public Map<String, LinkedList<LinkedList<String>>> getElement(int index) {
-		return process.get(index);
+		return processMapByName.get(index);
 	}
 
 	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcess() {
-		return process;
+		return processMapByName;
 	}
 
 	public void setProcess(LinkedList<Map<String, LinkedList<LinkedList<String>>>> process) {
-		this.process = process;
+		this.processMapByName = process;
 	}
 
 	@Override
 	public int getLength() {
-		return process.size();
+		return processMapByName.size();
+	}
+
+	
+	
+	public String toString(){
+		return "By Name :"+processMapByName+"/nBy State :"+processMapByState+"\n";
 	}
 
 	@Override
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessList() {
-		return this.getProcess();
+	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByName() {
+		return this.processMapByName;
 	}
-	
-	public String toString(){
-		return process+"";
+
+	@Override
+	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByState() {
+		// TODO Auto-generated method stub
+		return this.processMapByState;
 	}
 	
 

@@ -276,14 +276,14 @@ public class PlantReader {
 		 
 		 for (int i=0;i<getAllSequenceDiagram().size();i++) {
 			 String name  = getAllSequenceDiagram().get(i).getName();
-			 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessList();
+			 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
 			 //All Diagram in ArrayList
 			 System.out.println("Procs "+name+":");
 			 System.out.println(procs);;
 			 for (int j = 0; j < getAllStateDiagram().size(); j++) {
 				 LinkedList<String> ll = new LinkedList<>();
 				 name += getAllStateDiagram().get(j).getName().substring(2);
-				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> keys = getAllStateDiagram().get(j).getProcesses().getProcessList();
+				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> keys = getAllStateDiagram().get(j).getProcesses().getProcessListByName();
 				 //Each Sequence Diagram : format map 
 				 for (int k = 0; k < procs.size(); k++) {
 					 for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(k).entrySet()) {
@@ -348,8 +348,8 @@ public class PlantReader {
 	 public static Set<String> showAllProcess(){
 		 Set<String> processes = new LinkedHashSet<>();
 		 for (int n = 0;n<diagrams.size();n++) {
-	    		for (int i = 0; i < diagrams.get(n).getProcesses().getProcessList().size(); i++) {
-	    			for ( Entry<String, LinkedList<LinkedList<String>>> line : diagrams.get(n).getProcesses().getProcessList().get(i).entrySet()) {
+	    		for (int i = 0; i < diagrams.get(n).getProcesses().getProcessListByName().size(); i++) {
+	    			for ( Entry<String, LinkedList<LinkedList<String>>> line : diagrams.get(n).getProcesses().getProcessListByName().get(i).entrySet()) {
 	        			if(!line.getKey().equals("NaN") && !line.getKey().contains(">"))
 	        				processes.add(line.getKey());
 					}
@@ -363,7 +363,7 @@ public class PlantReader {
 		 Set<String> processes = new LinkedHashSet<>();
 		 for (int i =0;i<diagrams.size();i++) {
 		    	if (diagrams.get(i).getName().contains("M_"))
-		    		processes.add(getAllSendAndReceiveMessage(diagrams.get(i).getName()));	
+		    		processes.add(getAllSendAndReceiveMessageForState(diagrams.get(i).getName()));	
 			}
 		 return processes;
 	 }
@@ -377,8 +377,6 @@ public class PlantReader {
 		 return processes;
 	 }
 	 
-
-	 
 	 public static String getAllSendAndReceiveMessage(String nowstate){
 
 			String res="";
@@ -386,20 +384,25 @@ public class PlantReader {
 			for (int n = 0;n<diagrams.size();n++)
 			{
 				String namestate = diagrams.get(n).getName();
-			    LinkedList<Map<String, LinkedList<LinkedList<String>>>> l = diagrams.get(n).getProcesses().getProcessList();
+			    LinkedList<Map<String, LinkedList<LinkedList<String>>>> l = diagrams.get(n).getProcesses().getProcessListByName();
 			    if(namestate.equals(nowstate))
 			    for (int i = 0; i < l.size(); i++) {
 					for (Entry<String, LinkedList<LinkedList<String>>> entry2 : l.get(i).entrySet())
 					{
+						res+= entry2.getKey()+" = ";
 						for (int k = 0; k < entry2.getValue().size() ; k++) {
-							LinkedList<String> linklist = entry2.getValue().get(k);
-							for (int j = 0; j < linklist.size(); j++) {
-								if(j%3==1) res+= "= ";
-								else{
-									if(linklist.get(j).equals("*")) res += namestate+" ";
-									else res+= linklist.get(j)+" ";
-								}
-								if(j%3==1 && !entry2.getKey().equals("NaN") ) res+= entry2.getKey()+" -> ";
+							for (int j = 0; j < entry2.getValue().get(k).size(); j++) {
+								res += entry2.getValue().get(k).get(j)+"\n";
+//								String[] s = entry2.getValue().get(k).get(j).replace("[", "").replace("]", "").split(", ");
+//								for (int m = 0; m < s.length; m++) {
+//									if(m%3==1) res+= "= ";
+//									else{
+//										if(s[m].equals("*")) res += namestate+" ";
+//										else res+= s[m]+" ";
+//									}
+//									if(m%3==1 && !entry2.getKey().equals("NaN") ) res+= entry2.getKey()+" -> ";
+//								}
+
 							}
 						    res += "\n";
 						}
@@ -411,7 +414,48 @@ public class PlantReader {
 
 			return res;
 	}
+
+	 
+	 public static String getAllSendAndReceiveMessageForState(String nowstate){
+
+			String res="";
+			for (int n = 0;n<diagrams.size();n++)
+			{
+				String namestate = diagrams.get(n).getName();
+			    LinkedList<Map<String, LinkedList<LinkedList<String>>>> l = diagrams.get(n).getProcesses().getProcessListByState();
+			    if(namestate.equals(nowstate))
+			    for (int i = 0; i < l.size(); i++) {
+					for (Entry<String, LinkedList<LinkedList<String>>> entry2 : l.get(i).entrySet())
+					{
+						if(entry2.getKey().equals("*")) res+= namestate+" = ";
+						else res += entry2.getKey()+" = ";
+						for (int j = 0; j < entry2.getValue().size(); j++) {
+							if(entry2.getValue().size()>1)res+="(";
+							for (int k = 0; k < entry2.getValue().get(j).size(); k++) {
+								if(entry2.getValue().get(j).get(k).equals("NaN")){
+									k++;
+									continue;
+								}
+								res += entry2.getValue().get(j).get(k);
+//								if(k%3==1) res += " - >";
+								
+							}
+							if(entry2.getValue().size()>1) res += ") ";
+							if(j<entry2.getValue().size()-1) res+="[] ";
+
+						}
+						res+="\n";
+						    
+					}
+					
+				}
+			}
+
+
+			return res;
+	}
 	
+	 
 
     
     public static String readAction(String[] message){
@@ -592,8 +636,8 @@ public class PlantReader {
 					System.out.println("Name :"+diagrams.get(i).getName());
 					result = new LinkedList<>();
 					res = new LinkedList<>();
-					for (int j = 0; j < diagrams.get(i).getProcesses().getProcessList().size(); j++) {
-						for (Entry<String, LinkedList<LinkedList<String>>> eachentry:diagrams.get(i).getProcesses().getProcessList().get(j).entrySet()) {
+					for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListByName().size(); j++) {
+						for (Entry<String, LinkedList<LinkedList<String>>> eachentry:diagrams.get(i).getProcesses().getProcessListByName().get(j).entrySet()) {
 							System.out.println("Key :"+eachentry.getKey()+" = "+message);
 							System.out.println("LinkList :"+eachentry.getValue());
 							if(!eachentry.getKey().equals("NaN") && eachentry.getKey().contains(message)){

@@ -141,12 +141,17 @@ public class StateProcess implements ProcessList {
 	}
 
 	@Override
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessList() {
-		return this.getProcessMapByName();
+	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByName() {
+		return processMapByName;
 	}
 	
+	@Override
+	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByState() {
+		return processMapByState;
+	}	
+	
 	public String toString(){
-		return processMapByName+"";
+		return "By Name :"+processMapByName+"/nBy State :"+processMapByState+"\n";
 	}
 	
 

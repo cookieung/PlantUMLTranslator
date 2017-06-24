@@ -33,8 +33,6 @@ import Controller.PlantReader;
 import Model.Diagram;
 
 
-
-
 public class UMLReaderGUI extends JFrame {
 	
 	private UMLReader umlReader;
@@ -70,8 +68,6 @@ public class UMLReaderGUI extends JFrame {
 	}
 
 	private void initComponents() {
-
-		
 		
 		contents = new Container();
 
@@ -81,7 +77,6 @@ public class UMLReaderGUI extends JFrame {
 		panel1 = new JPanel();
 		panel2 = new JPanel();
 		contents.setLayout(new BoxLayout(contents, BoxLayout.Y_AXIS));
-//		contents.setPreferredSize(new Dimension(2000, 1000));
 		result = new JTextArea();
 		result.setFont(new Font("Courier", Font.PLAIN,20));
 		cspFile = new JTextArea();
@@ -117,13 +112,11 @@ public class UMLReaderGUI extends JFrame {
 		contentNameFile.add(nameFile);
 		contentNameFile.add(addButton);
 		contentNameFile.add(convertButton);
-//		contentNameFile.setPreferredSize(new Dimension(100,300));
 		contentResultAll.setLayout(new GridLayout(1, 2));
 		scroll1.setPreferredSize(new Dimension(800,800));
 		scroll2.setPreferredSize(new Dimension(800,800));
 		contentResultAll.add(scroll1);
 		contentResultAll.add(scroll2);
-//		contentResultAll.setPreferredSize(new Dimension(100,200));
 		contentResult.setLayout(new BoxLayout(contentResult, BoxLayout.Y_AXIS));
 		contentResult.add(contentNameFile);
 		contentResult.add(contentResultAll);
@@ -133,6 +126,12 @@ public class UMLReaderGUI extends JFrame {
 		contents.add(panel2);
 
 		this.add(contents);
+		initActionListener();
+		
+	}
+	
+	
+	public void initActionListener(){
 		ActionListener listener = new ReadStateDiagramListener();
 		countButton.addActionListener(listener);
 		ActionListener listener2 = new ClearButtonListener();
@@ -145,9 +144,7 @@ public class UMLReaderGUI extends JFrame {
 		ActionListener listener5 = new ConvertToDiagramListener();
 		convertButton.addActionListener(listener5);
 		nameFile.addActionListener(listener5);
-		
 	}
-	
 	
 	
 	public class AddFileListener implements ActionListener {
@@ -204,13 +201,6 @@ public class UMLReaderGUI extends JFrame {
 //			System.out.println(result.getText());
 			ArrayList<Map<String, ArrayList<String>>> a=plantReader.readAllInput(result.getText(),nameFile.getText());
 			for (int i = 0; i < a.size(); i++) {
-//				for (Entry<String, ArrayList<String>> aa : a.get(i).entrySet()) {
-//					cspFile.append(aa.getKey()+"\n");
-//					for (int j = 0; j < aa.getValue().size(); j++) {
-//						cspFile.append(aa.getValue().get(j)+" ");
-//					}
-//					cspFile.append("\n");
-//				}
 				diagrams =  plantReader.translateToDiagram(a.get(i));
 				
 			}
@@ -218,7 +208,7 @@ public class UMLReaderGUI extends JFrame {
 			cspFile.append("DIAGRAM :\n");
 			for (int i = 0; i < diagrams.size(); i++) {
 				cspFile.append(diagrams.get(i).getName()+" : \n");
-				cspFile.append(diagrams.get(i).getProcesses().getProcessList()+"\n");
+				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
 				
 			}
 			

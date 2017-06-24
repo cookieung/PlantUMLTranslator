@@ -11,7 +11,9 @@ public interface ProcessList {
 	
 	public Map<String, LinkedList<LinkedList<String>>> getElement(int index);
 	
-	public LinkedList<Map<String,LinkedList<LinkedList<String>>>> getProcessList();
+	public LinkedList<Map<String,LinkedList<LinkedList<String>>>> getProcessListByName();
+
+	public LinkedList<Map<String,LinkedList<LinkedList<String>>>> getProcessListByState();	
 	
 	public String toString();
 
