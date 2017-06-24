@@ -1,31 +1,33 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class SequenceDiagram implements Diagram {
 	
 	private String name;
-	private LinkedList<Map<String, LinkedList<LinkedList<String>>>> processes;
+	private ProcessList processes;
 
 	public SequenceDiagram(String name){
 		this.name = name;
-		this.processes = new LinkedList<>();
+		this.processes = new SequenceProcess();
 	}
 
 	@Override
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> addProcess(LinkedList<Map<String, LinkedList<LinkedList<String>>>> process) {
+	public void addProcess(ProcessList process) {
 		this.processes = process;
-		return this.processes;
 	}
 
 	@Override
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcesses() {
+	public ProcessList getProcesses() {
 		return processes;
 	}
 
-	public void setProcesses(LinkedList<Map<String, LinkedList<LinkedList<String>>>> processes) {
+	public void setProcesses(ProcessList processes) {
 		this.processes = processes;
 	}
 
@@ -33,5 +35,12 @@ public class SequenceDiagram implements Diagram {
 	public String getName() {
 		return this.name;
 	}
+	
+	public String toString(){
+		return name+" = "+processes.toString()+"\n";
+	}
+	
+
+	
 
 }

@@ -5,9 +5,10 @@ import java.util.Map;
 
 public interface Diagram {
 	
-	public LinkedList<Map<String,LinkedList<LinkedList<String>>>> addProcess(LinkedList<Map<String, LinkedList<LinkedList<String>>>> process);
-	public LinkedList<Map<String,LinkedList<LinkedList<String>>>> getProcesses();
+	public void addProcess(ProcessList process);
+	public ProcessList getProcesses();
 	public String getName();
+	public String toString();
 	
 
 }
