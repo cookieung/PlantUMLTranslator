@@ -468,6 +468,7 @@ public class PlantReader {
     		System.out.println("Message :"+readAction(messageWithStatus(msg)));
     		LinkedList<LinkedList<String>> list = new LinkedList<>();
     		list.add(ll);
+    		System.out.println("TEST0 :"+list);
     		rs.addProcess(readAction(messageWithStatus(msg)),list);
 		}
 		
