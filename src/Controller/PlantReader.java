@@ -271,35 +271,73 @@ public class PlantReader {
 	 }
 
 	 
+//	 public Map<String, LinkedList<String>> getSequenceDiagram(){
+//		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
+//		 
+//		 for (int i=0;i<getAllSequenceDiagram().size();i++) {
+//			 String name  = getAllSequenceDiagram().get(i).getName();
+//			 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
+//			 LinkedList<String> list = new LinkedList<>();
+//			 //All Diagram in ArrayList
+//			 System.out.println("Procs "+name+":");
+//			 System.out.println(procs);
+//			int n =0;
+//			 for (int j = 0; j < procs.size(); j++) {
+//
+//				Map<String, LinkedList<LinkedList<String>>> m = procs.get(j);
+//				for (Entry<String, LinkedList<LinkedList<String>>> mp : m.entrySet()) {
+//						if(n%2==0){
+//							list.add(mp.getKey().substring(2));
+//						}
+//						n++;
+//
+//				}
+//			}
+//			 list.add("SKIP");
+//			 map.put(name, list);
+//		}
+//		 return map;
+//	 }
+	 
 	 public Map<String, LinkedList<String>> getSequenceDiagram(){
 		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
-		 
+		 List<String> ck = new ArrayList<>();
 		 for (int i=0;i<getAllSequenceDiagram().size();i++) {
 			 String name  = getAllSequenceDiagram().get(i).getName();
 			 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
 			 //All Diagram in ArrayList
 			 System.out.println("Procs "+name+":");
-			 System.out.println(procs);;
+			 System.out.println(procs);
 			 for (int j = 0; j < getAllStateDiagram().size(); j++) {
 				 LinkedList<String> ll = new LinkedList<>();
 				 name += getAllStateDiagram().get(j).getName().substring(2);
 				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> keys = getAllStateDiagram().get(j).getProcesses().getProcessListByName();
 				 //Each Sequence Diagram : format map 
+				 System.out.println("======================="+name);
 				 for (int k = 0; k < procs.size(); k++) {
 					 for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(k).entrySet()) {
 						 //State 
+						 System.out.println("<<<<<<<<<<"+map2.getKey());
+						 System.out.println("***************");
+						 
 						 for (int l = 0; l < keys.size(); l++) {
 							 for (Entry<String, LinkedList<LinkedList<String>>> map3 : keys.get(l).entrySet()) {
-								 if(map3.getKey().contains(map2.getKey()))
+								 System.out.println(">>>>>>>>>>"+map3.getKey());
+								 if(map3.getKey().contains(map2.getKey()) && !ck.contains(map2.getKey()))
 								 {
+									 ck.add(map2.getKey());
+									 System.out.println("Keys"+(l+1)+" :"+keys.get(l));
 									 ll.add(map2.getKey());
 								 }
 							}
-							
 						} 
+						 ck = new ArrayList<>();
+						 System.out.println("***************");
+						 
 					}
 						
 				}
+				 System.out.println("=======================");
 				 ll.add("SKIP");
 				 map.put(name,ll);
 				 name =getAllSequenceDiagram().get(i).getName();
@@ -308,7 +346,6 @@ public class PlantReader {
 		}
 		 return map;
 	 }
-	 
 	 
 	 
 	 public Object[] getAllStateDiagramName(){
@@ -336,7 +373,7 @@ public class PlantReader {
 		return s.toArray();
 	 }
 
-	 public ArrayList<Diagram> getAllSequenceDiagram(){
+	 public static ArrayList<Diagram> getAllSequenceDiagram(){
 		ArrayList<Diagram> s = new ArrayList<>();
 		for (int i = 0; i < diagrams.size(); i++) {
 			if(diagrams.get(i).getName().contains("SQ_"))
@@ -378,41 +415,22 @@ public class PlantReader {
 	 }
 	 
 	 public static String getAllSendAndReceiveMessage(String nowstate){
+//			String res="";
+//			for (int i = 0; i < getAllSequenceDiagram().size(); i++) {
+//				String name = getAllSequenceDiagram().get(i).getName();
+//				LinkedList<Map<String , LinkedList<LinkedList<String>>>> processesOfdiagram = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
+//				res+=name+" = ";
+//				for (int j = 0; j < processesOfdiagram.size(); j++) {
+//					for (Map<String, LinkedList<LinkedList<String>>> map : processesOfdiagram) {
+//						for (int k = 0; k < equations.length; k++) {
+//							res+=processesOfdiagram.get(j);
+//						}
+//					}
+//					res+="\n";
+//				}
+//			}
 
-			String res="";
-			
-			for (int n = 0;n<diagrams.size();n++)
-			{
-				String namestate = diagrams.get(n).getName();
-			    LinkedList<Map<String, LinkedList<LinkedList<String>>>> l = diagrams.get(n).getProcesses().getProcessListByName();
-			    if(namestate.equals(nowstate))
-			    for (int i = 0; i < l.size(); i++) {
-					for (Entry<String, LinkedList<LinkedList<String>>> entry2 : l.get(i).entrySet())
-					{
-						res+= entry2.getKey()+" = ";
-						for (int k = 0; k < entry2.getValue().size() ; k++) {
-							for (int j = 0; j < entry2.getValue().get(k).size(); j++) {
-								res += entry2.getValue().get(k).get(j);
-//								String[] s = entry2.getValue().get(k).get(j).replace("[", "").replace("]", "").split(", ");
-//								for (int m = 0; m < s.length; m++) {
-//									if(m%3==1) res+= "= ";
-//									else{
-//										if(s[m].equals("*")) res += namestate+" ";
-//										else res+= s[m]+" ";
-//									}
-//									if(m%3==1 && !entry2.getKey().equals("NaN") ) res+= entry2.getKey()+" -> ";
-//								}
-
-							}
-						    res += "\n";
-						}
-						    
-					}
-					
-				}
-			}
-
-			return res;
+			return "TTTT";
 	}
 
 	 
