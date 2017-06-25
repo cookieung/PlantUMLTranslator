@@ -270,34 +270,7 @@ public class PlantReader {
 		 return s;
 	 }
 
-	 
-//	 public Map<String, LinkedList<String>> getSequenceDiagram(){
-//		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
-//		 
-//		 for (int i=0;i<getAllSequenceDiagram().size();i++) {
-//			 String name  = getAllSequenceDiagram().get(i).getName();
-//			 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
-//			 LinkedList<String> list = new LinkedList<>();
-//			 //All Diagram in ArrayList
-//			 System.out.println("Procs "+name+":");
-//			 System.out.println(procs);
-//			int n =0;
-//			 for (int j = 0; j < procs.size(); j++) {
-//
-//				Map<String, LinkedList<LinkedList<String>>> m = procs.get(j);
-//				for (Entry<String, LinkedList<LinkedList<String>>> mp : m.entrySet()) {
-//						if(n%2==0){
-//							list.add(mp.getKey().substring(2));
-//						}
-//						n++;
-//
-//				}
-//			}
-//			 list.add("SKIP");
-//			 map.put(name, list);
-//		}
-//		 return map;
-//	 }
+
 	 
 	 public Map<String, LinkedList<String>> getSequenceDiagram(){
 		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
@@ -326,7 +299,6 @@ public class PlantReader {
 								 if(map3.getKey().contains(map2.getKey()) && !ck.contains(map2.getKey()))
 								 {
 									 ck.add(map2.getKey());
-									 System.out.println("Keys"+(l+1)+" :"+keys.get(l));
 									 ll.add(map2.getKey());
 								 }
 							}
@@ -405,34 +377,7 @@ public class PlantReader {
 		 return processes;
 	 }
 	 
-	 public static ArrayList<String> showAllSequenceDiagram(){
-		 ArrayList<String> processes = new ArrayList<>();
-		 for (int i =0;i<diagrams.size();i++) {
-		    	if (diagrams.get(i).getName().contains("SQ_"))
-		    		processes.add(getAllSendAndReceiveMessage(diagrams.get(i).getName()));	
-			}
-		 return processes;
-	 }
 	 
-	 public static String getAllSendAndReceiveMessage(String nowstate){
-//			String res="";
-//			for (int i = 0; i < getAllSequenceDiagram().size(); i++) {
-//				String name = getAllSequenceDiagram().get(i).getName();
-//				LinkedList<Map<String , LinkedList<LinkedList<String>>>> processesOfdiagram = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
-//				res+=name+" = ";
-//				for (int j = 0; j < processesOfdiagram.size(); j++) {
-//					for (Map<String, LinkedList<LinkedList<String>>> map : processesOfdiagram) {
-//						for (int k = 0; k < equations.length; k++) {
-//							res+=processesOfdiagram.get(j);
-//						}
-//					}
-//					res+="\n";
-//				}
-//			}
-
-			return "TTTT";
-	}
-
 	 
 	 public static String getAllSendAndReceiveMessageForState(String nowstate){
 
