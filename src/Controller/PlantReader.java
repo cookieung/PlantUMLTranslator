@@ -377,6 +377,52 @@ public class PlantReader {
 		 return processes;
 	 }
 	 
+	 public Map<String, LinkedList<String>> getTheRelationBetweenSequenceDiagramAndMessage(){
+		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
+		 for (int i = 0; i < getAllSequenceDiagramName().length; i++) {
+			String name = getAllSequenceDiagramName()[i].toString();
+			LinkedList<String> linkedlist = new LinkedList<>();
+			for (Entry<String, LinkedList<String>> s : getSequenceDiagram().entrySet()) {
+				if(s.getKey().contains(name)){
+					linkedlist.add(s.getKey());
+				}		
+			}
+			map.put(name+"I", linkedlist);
+			linkedlist = new LinkedList<>();
+		}
+
+		 return map;
+	 }
+	 
+	 public String showAssert(){
+		 String str ="";
+		 Map<String, LinkedList<String>> m = getTheRelationBetweenSequenceDiagramAndMessage();
+		 for (Entry<String, LinkedList<String>> map : m.entrySet()) {
+			str+= "assert SM [T= "+map.getKey().replace("I", "")+"\n";
+		}
+		 return str;
+	 }
+	 
+	 public String showTheRelationBetweenSequenceDiagramAndMessage(){
+		 String str="";
+		 Map<String, LinkedList<String>> map = getTheRelationBetweenSequenceDiagramAndMessage();
+			for (Entry<String, LinkedList<String>> s : map.entrySet()) {
+				str+=s.getKey()+" = ";
+				for (int i = 0; i < s.getValue().size(); i++) {
+					str+=s.getValue().get(i);
+					if(i<s.getValue().size()-1) str+=" ||| ";
+				}
+				str+="\n\n";
+				
+				str+=s.getKey().substring(0,s.getKey().length()-1)+" = "+s.getKey()+"{|";
+				str+=showAllProcess().toString().substring(1, showAllProcess().toString().length()-1);
+				str+="|}"+showRelationOfAllMessage().split(" = ")[0]+"\n\n";
+			}
+			
+			
+
+		 return str;
+	 }
 	 
 	 
 	 public static String getAllSendAndReceiveMessageForState(String nowstate){
