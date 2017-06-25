@@ -392,7 +392,7 @@ public class PlantReader {
 						res+= entry2.getKey()+" = ";
 						for (int k = 0; k < entry2.getValue().size() ; k++) {
 							for (int j = 0; j < entry2.getValue().get(k).size(); j++) {
-								res += entry2.getValue().get(k).get(j)+"\n";
+								res += entry2.getValue().get(k).get(j);
 //								String[] s = entry2.getValue().get(k).get(j).replace("[", "").replace("]", "").split(", ");
 //								for (int m = 0; m < s.length; m++) {
 //									if(m%3==1) res+= "= ";
@@ -642,10 +642,12 @@ public class PlantReader {
 							System.out.println("LinkList :"+eachentry.getValue());
 							if(!eachentry.getKey().equals("NaN") && eachentry.getKey().contains(message)){
 								for (int k = 0; k < eachentry.getValue().size(); k++) {
-//									for (int l = 0; l < eachentry.getValue().get(k).size(); l++) {
-										res.add(eachentry.getValue().get(k)+"");
+									res = new LinkedList<>();
+									for (int l = 0; l < eachentry.getValue().get(k).size(); l++) {
+										res.add(eachentry.getValue().get(k).get(l));
 										
-//									}
+									}
+									result.add(res);
 									
 								}
 	
@@ -655,14 +657,13 @@ public class PlantReader {
 
 						
 					}
-					result.add(res);
-					break;
+//					result.add(res);
+//					break;
 				}
 
 			}
 			return result;
 	}
-	 
 
 
 
