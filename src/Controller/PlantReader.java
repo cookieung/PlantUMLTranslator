@@ -251,7 +251,7 @@ public class PlantReader {
 		 String s="";
 		 Map<String ,Map<String,String>> map = getRelationWithSMIAndMSG();
 		 for (Entry<String, Map<String, String>> m : map.entrySet()) {
-			s+=m.getKey()+" = "+m.getValue().get("state_diagram")+"[|"+m.getValue().get("condition")+"|]"+m.getValue().get("message");
+			s+=m.getKey()+" = "+m.getValue().get("state_diagram")+"[|{"+m.getValue().get("condition")+"}|]"+m.getValue().get("message");
 		}
 		 return s+"\n";
 	 }
@@ -412,11 +412,11 @@ public class PlantReader {
 					str+=s.getValue().get(i);
 					if(i<s.getValue().size()-1) str+=" ||| ";
 				}
-				str+="\n\n";
+				str+="\n";
 				
-				str+=s.getKey().substring(0,s.getKey().length()-1)+" = "+s.getKey()+"{|";
+				str+=s.getKey().substring(0,s.getKey().length()-1)+" = "+s.getKey()+"[|{";
 				str+=showAllProcess().toString().substring(1, showAllProcess().toString().length()-1);
-				str+="|}"+showRelationOfAllMessage().split(" = ")[0]+"\n\n";
+				str+="}|]"+showRelationOfAllMessage().split(" = ")[0]+"\n\n";
 			}
 			
 			

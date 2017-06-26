@@ -213,27 +213,27 @@ public class UMLReaderGUI extends JFrame {
 //			}
 			
 			Set<String> allProcess = plantReader.showAllProcess();
-			cspFile.append("channel : "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n");
+			cspFile.append("channel "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n\n");
 			Object[] s = plantReader.showAllStateDiagram().toArray();
 			for (int i = 0; i < s.length; i++) {
 				cspFile.append(s[i]+"\n");
 			}
 			
 
-			cspFile.append("Show Relation of State Diagram :\n");
+//			cspFile.append("\nShow Relation of State Diagram :\n");
 			cspFile.append(plantReader.showRelationOfStateDiagram()+"\n");
 			
-			cspFile.append("Show All Trace of Message :\n");
+//			cspFile.append("\nShow All Trace of Message :\n");
 			cspFile.append(plantReader.showAllTraceOfMessage()+"\n");
 			
-			cspFile.append("Show Relation of All Message :\n");
+//			cspFile.append("\nShow Relation of All Message :\n");
 			cspFile.append(plantReader.showRelationOfAllMessage()+"\n");
 			
 			cspFile.append(plantReader.showRelationWithSMIAndMSG()+"\n");
 			
 			cspFile.append(plantReader.showSequenceDiagram()+"\n");
 			
-			cspFile.append("Relation between Sequence:\n");
+//			cspFile.append("Relation between Sequence:\n");
 			cspFile.append(plantReader.showTheRelationBetweenSequenceDiagramAndMessage()+"\n");
 
 			cspFile.append(plantReader.showAssert());
