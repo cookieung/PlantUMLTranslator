@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface ProcessList {
 	
-	public void addProcess(String name, LinkedList<LinkedList<String>> linkedList);
+	public void addProcess(String name, LinkedList<LinkedList<String>> linkedList,String typeMap);
 	
 	public int getLength();
 	

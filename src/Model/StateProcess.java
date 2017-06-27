@@ -7,22 +7,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import Model.Proc.ProcessLinkedList;
+
 public class StateProcess implements ProcessList {
 	
-	private LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByName;
+	private ProcessLinkedList processMapByName;
 	
-	private LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByState;
+	private ProcessLinkedList processMapByState;
 	
 	public StateProcess(){
-		processMapByName = new LinkedList<>();
-		processMapByState = new LinkedList<>();
+		processMapByName = new ProcessLinkedList();
+		processMapByState = new ProcessLinkedList();
 	}
 
-	public StateProcess(String name,LinkedList<LinkedList<String>> linkedList){
-		processMapByName = new LinkedList<>();
-		processMapByState = new LinkedList<>();
-		this.addProcess(name, linkedList);
-	}
+//	public StateProcess(String name,LinkedList<LinkedList<String>> linkedList){
+//		processMapByName = new ProcessLinkedList();
+//		processMapByState = new ProcessLinkedList();
+//		this.addProcess(name, linkedList);
+//	}
 	
 	public int getLength() {
 		return processMapByName.size();
@@ -40,13 +42,13 @@ public class StateProcess implements ProcessList {
 //	}
 
 	@Override
-	public void addProcess(String name,LinkedList<LinkedList<String>> linkedList) {
+	public void addProcess(String name,LinkedList<LinkedList<String>> linkedList,String typeName) {
 		Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
 		map.put(name, linkedList);
 		System.out.println("Map in State Process Class :"+map);
-		processMapByName.add(map);
+		processMapByName.addNormal(map,typeName);
 		System.err.println("Object in State Process Class by Name :"+processMapByName);
-		processMapByState = convert(makeMapByState(processMapByName));
+		processMapByState.setNormalProcess(convert(makeMapByState(processMapByName.getNormalProcess())));
 		System.err.println("Object in State Process Class by State :"+processMapByState);
 	}
 	
@@ -119,35 +121,29 @@ public class StateProcess implements ProcessList {
 		return lm;
 	}
 
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessMapByName() {
-		return processMapByName;
-	}
 
 	public void setProcessMapByName(LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByName) {
-		this.processMapByName = processMapByName;
+		this.processMapByName.setNormalProcess(processMapByName);
 	}
 
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessMapByState() {
-		return processMapByState;
-	}
 
 	public void setProcessMapByState(LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByState) {
-		this.processMapByState = processMapByState;
+		this.processMapByState.setNormalProcess(processMapByState);
 	}
 
 	@Override
 	public Map<String, LinkedList<LinkedList<String>>> getElement(int index) {
-		return processMapByName.get(index);
+		return processMapByName.getNormalProcess().get(index);
 	}
 
 	@Override
 	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByName() {
-		return processMapByName;
+		return processMapByName.getNormalProcess();
 	}
 	
 	@Override
 	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByState() {
-		return processMapByState;
+		return processMapByState.getNormalProcess();
 	}	
 	
 	public String toString(){

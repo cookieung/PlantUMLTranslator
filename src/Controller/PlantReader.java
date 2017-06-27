@@ -511,6 +511,8 @@ public class PlantReader {
 	    		state = "s_";
 	    	}
 	    	else continue;
+			
+			String typeMap = res.get(j-1);
 			String msg;
 			if(j+3>=res.size()) msg = "NaN";
 			else msg = res.get(j+3);
@@ -522,7 +524,7 @@ public class PlantReader {
     		LinkedList<LinkedList<String>> list = new LinkedList<>();
     		list.add(ll);
     		System.out.println("TEST0 :"+list);
-    		rs.addProcess(readAction(messageWithStatus(msg)),list);
+    		rs.addProcess(readAction(messageWithStatus(msg)),list,typeMap);
 		}
 		
 		
@@ -595,6 +597,8 @@ public class PlantReader {
 				newMsg = "r_"+res.get(i+4);
 			}else continue;
 
+			 String typeMap = res.get(i-1);
+			 
 			 originalMsg.add(res.get(i+4));
 			 System.out.println(left+" > "+newMsg+" > "+right);
 			 System.out.println("LEFT -> RIGHT by "+newMsg);
@@ -611,13 +615,13 @@ public class PlantReader {
 			 
 			 
 			 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
-				list.addProcess(newMsg,leftL);
-				list.addProcess("r_"+newMsg.substring(2,newMsg.length()), rightL);
+				list.addProcess(newMsg,leftL,typeMap);
+				list.addProcess("r_"+newMsg.substring(2,newMsg.length()), rightL,typeMap);
 				traceMsg.add(newMsg);
 				traceMsg.add("r_"+newMsg.substring(2,newMsg.length()));
 			}else if(newMsg.charAt(0)=='r'&&newMsg.charAt(1)=='_'){
-				list.addProcess("s_"+newMsg.substring(2,newMsg.length()), leftL);
-				list.addProcess(newMsg, rightL);
+				list.addProcess("s_"+newMsg.substring(2,newMsg.length()), leftL,typeMap);
+				list.addProcess(newMsg, rightL,typeMap);
 				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
 				traceMsg.add(newMsg);
 			}

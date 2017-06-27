@@ -1,5 +1,6 @@
 package Model.Proc;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -18,8 +19,11 @@ public class ProcessLinkedList {
 		return normalProcess.size();
 	}
 	
-	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map) {
+	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap) {
 		normalProcess.add(map);
+		Map<String, Map<String, LinkedList<LinkedList<String>>>> m = new LinkedHashMap<>();
+		m.put(typeMap, map);
+		altProcess.add(m);
 	}
 	
 	public void addAlt(Map<String, Map<String, LinkedList<LinkedList<String>>>> map) {
