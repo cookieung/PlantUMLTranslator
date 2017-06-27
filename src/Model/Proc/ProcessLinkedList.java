@@ -45,5 +45,9 @@ public class ProcessLinkedList {
 	public void setAltProcess(LinkedList<Map<String, Map<String, LinkedList<LinkedList<String>>>>> altProcess) {
 		this.altProcess = altProcess;
 	}
+	
+	public void testAlt(){
+		System.err.println("ALT:"+this.altProcess);
+	}
 
 }

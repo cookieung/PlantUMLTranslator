@@ -9,15 +9,11 @@ import java.util.Map.Entry;
 
 import Model.Proc.ProcessLinkedList;
 
-public class StateProcess implements ProcessList {
+public class StateProcess extends ProcessList {
 	
-	private ProcessLinkedList processMapByName;
-	
-	private ProcessLinkedList processMapByState;
 	
 	public StateProcess(){
-		processMapByName = new ProcessLinkedList();
-		processMapByState = new ProcessLinkedList();
+		super();
 	}
 
 //	public StateProcess(String name,LinkedList<LinkedList<String>> linkedList){
@@ -26,13 +22,7 @@ public class StateProcess implements ProcessList {
 //		this.addProcess(name, linkedList);
 //	}
 	
-	public int getLength() {
-		return processMapByName.size();
-	}
-	
-	public int getLenghtByState(){
-		return processMapByState.size();
-	}
+
 	
 	
 	
@@ -42,7 +32,7 @@ public class StateProcess implements ProcessList {
 //	}
 
 	@Override
-	public void addProcess(String name,LinkedList<LinkedList<String>> linkedList,String typeName) {
+	public void addProcess(String name, LinkedList<LinkedList<String>> linkedList,String typeName) {
 		Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
 		map.put(name, linkedList);
 		System.out.println("Map in State Process Class :"+map);
@@ -122,36 +112,7 @@ public class StateProcess implements ProcessList {
 	}
 
 
-	public void setProcessMapByName(LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByName) {
-		this.processMapByName.setNormalProcess(processMapByName);
-	}
 
-
-	public void setProcessMapByState(LinkedList<Map<String, LinkedList<LinkedList<String>>>> processMapByState) {
-		this.processMapByState.setNormalProcess(processMapByState);
-	}
-
-	@Override
-	public Map<String, LinkedList<LinkedList<String>>> getElement(int index) {
-		return processMapByName.getNormalProcess().get(index);
-	}
-
-	@Override
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByName() {
-		return processMapByName.getNormalProcess();
-	}
-	
-	@Override
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByState() {
-		return processMapByState.getNormalProcess();
-	}	
-	
-	public String toString(){
-		return "By Name :"+processMapByName+"/nBy State :"+processMapByState+"\n";
-	}
-	
-
-	
 	
 
 }

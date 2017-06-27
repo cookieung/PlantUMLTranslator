@@ -58,13 +58,11 @@ public class SequenceReader {
 			 
 			 
 			 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
-				list.addProcess(newMsg,leftL,typeMap);
-				list.addProcess("r_"+newMsg.substring(2,newMsg.length()), rightL,typeMap);
+				list.addProcess(newMsg,"r_"+newMsg.substring(2,newMsg.length()),leftL,rightL,typeMap);
 				traceMsg.add(newMsg);
 				traceMsg.add("r_"+newMsg.substring(2,newMsg.length()));
 			}else if(newMsg.charAt(0)=='r'&&newMsg.charAt(1)=='_'){
-				list.addProcess("s_"+newMsg.substring(2,newMsg.length()), leftL,typeMap);
-				list.addProcess(newMsg, rightL,typeMap);
+				list.addProcess("s_"+newMsg.substring(2,newMsg.length()),newMsg, leftL, rightL,typeMap);
 				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
 				traceMsg.add(newMsg);
 			}
@@ -72,6 +70,8 @@ public class SequenceReader {
 		}
 		 
 		 System.out.println("List :"+list);
+		 
+		 list.testAlt();
 		 
 		 return list;
 		 

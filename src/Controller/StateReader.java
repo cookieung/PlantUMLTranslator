@@ -31,7 +31,8 @@ public class StateReader extends UMLReader {
 	    	}
 	    	else continue;
 			
-			String typeMap = res.get(j-1);
+			String typeMap = "NaN";
+			System.out.println("ST TypeMap:"+typeMap);
 			String msg;
 			if(j+3>=res.size()) msg = "NaN";
 			else msg = res.get(j+3);
@@ -46,6 +47,7 @@ public class StateReader extends UMLReader {
    		rs.addProcess(readAction(messageWithStatus(msg)),list,typeMap);
 		}
 		
+		rs.testAlt();
 		
 		return rs;			
 
