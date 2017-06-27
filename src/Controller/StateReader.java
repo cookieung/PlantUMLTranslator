@@ -8,7 +8,7 @@ import java.util.Map;
 import Model.ProcessList;
 import Model.StateProcess;
 
-public class StateReader extends UMLReader {
+public class StateReader extends DiagramReader {
 
 	 public static ProcessList processForStateDiagram(ArrayList<String> res) {
 		System.out.println("Process State");

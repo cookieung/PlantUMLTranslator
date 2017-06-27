@@ -205,12 +205,12 @@ public class UMLReaderGUI extends JFrame {
 				
 			}
 			
-//			cspFile.append("DIAGRAM :\n");
-//			for (int i = 0; i < diagrams.size(); i++) {
-//				cspFile.append(diagrams.get(i).getName()+" : \n");
-//				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
-//				
-//			}
+			cspFile.append("DIAGRAM :\n");
+			for (int i = 0; i < diagrams.size(); i++) {
+				cspFile.append(diagrams.get(i).getName()+" : \n");
+				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
+				
+			}
 			
 			Set<String> allProcess = plantReader.showAllProcess();
 			cspFile.append("channel "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n\n");

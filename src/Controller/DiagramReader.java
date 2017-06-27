@@ -1,6 +1,6 @@
 package Controller;
 
-public class UMLReader {
+public class DiagramReader {
 	
 	 public static String readAction(String[] message){
 	    	String rs="";

@@ -25,7 +25,7 @@ public class SequenceProcess extends ProcessList {
 		map.put(nameR, linkedListR);
 		System.out.println("Map in Sequence Process Class :"+map);
 		processMapByName.addNormal(map,typeName);
-		System.out.println("Object in Sequence Process Class :"+processMapByName);
+		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
 	}
 	
 	 public LinkedList<LinkedList<String>> combineSendAnsReceiveProcess(LinkedList<String> leftL,LinkedList<String> rightL){
