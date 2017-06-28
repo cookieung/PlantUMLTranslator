@@ -44,6 +44,8 @@ public class PlantReader {
 	
 	private static Map<String, LinkedList<String>> traceMessage = new LinkedHashMap<>();
 
+	static SequenceReader sequenceReader;
+	static StateReader stateReader;
 	
 	public static void main(String[]args){
  	
@@ -172,15 +174,15 @@ public class PlantReader {
 	    	System.out.println("State :" +state);
 	    	if(state.contains("M")){
 	    		diagram = new StateDiagram(state);
-	    		StateReader stateReader = new StateReader();
+	    		stateReader = new StateReader();
 	    		diagram.addProcess(stateReader.processForStateDiagram(res));
 	    		diagrams.add(diagram);
 	    		System.out.println("TEST1 :"+diagram.toString());
 	    	}else if(state.contains("SQ")){
 	    		diagram = new SequenceDiagram(state);
-	    		SequenceReader sequenceReader = new SequenceReader(diagrams, originalMsg, traceMsg);
-	    		diagram.addProcess(sequenceReader.getResult(res));
-	    		System.out.println("[******]"+sequenceReader.isIndependentSequence(res));
+	    		sequenceReader = new SequenceReader(res,diagrams, originalMsg, traceMsg);
+	    		diagram.addProcess(sequenceReader.getResult());
+	    		System.out.println("[******]"+sequenceReader.isIndependentSequence());
 	    		diagrams.add(diagram);
 	    		System.out.println("TEST2 :"+diagram.toString());
 	    	}
@@ -274,10 +276,54 @@ public class PlantReader {
 	 }
 
 
+	 public LinkedList<String> getLinkedListForInd(LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs,String name){
+		 LinkedList<String> l= new LinkedList<>();
+		 for (int j = 0; j < procs.size(); j++) {
+			for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(j).entrySet()) {
+				for (int i = 0; i < map2.getValue().size(); i++) {
+					System.err.println("WIN :"+map2.getValue().get(i));
+					System.out.println("LOST :"+map2.getValue().get(i).get(0)+" = "+name);
+					if(map2.getValue().get(i).get(0).equals(name)){
+						l.add(map2.getKey()); 
+						System.out.println("&^&L :"+l);
+					}
+					
+				}
+			}
+			
+		}
+		 return l;
+	 }
 	 
 	 public Map<String, LinkedList<String>> getSequenceDiagram(){
 		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
 		 List<String> ck = new ArrayList<>();
+		 if(sequenceReader.isIndependentSequence()){
+			 for (int i=0;i<getAllSequenceDiagram().size();i++) {
+				 String name  = "";
+				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
+				 //All Diagram in ArrayList
+				 System.out.println("Procs "+name+":");
+				 System.out.println(procs);
+				 LinkedList<String> ll = new LinkedList<>();
+				 for (int j = 0; j < procs.size(); j++) {
+					for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(j).entrySet()) {
+						for (int k = 0; k < map2.getValue().size(); k++) {
+							name = map2.getValue().get(k).get(0);
+							ll = getLinkedListForInd(procs, map2.getValue().get(k).get(0));
+							ll.add("SKIP");
+							map.put(name,ll);
+						}
+
+					}
+
+					
+				}
+				 
+							
+			}
+		 }
+		 else
 		 for (int i=0;i<getAllSequenceDiagram().size();i++) {
 			 String name  = getAllSequenceDiagram().get(i).getName();
 			 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();

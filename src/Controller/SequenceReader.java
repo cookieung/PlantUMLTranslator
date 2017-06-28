@@ -17,15 +17,17 @@ public class SequenceReader {
 	private static ArrayList<Diagram> diagrams;
 	private static Set<String> traceMsg = new LinkedHashSet<>();
 	private static Set<String> originalMsg = new LinkedHashSet<>();
+	static ArrayList<String> res = new ArrayList<>();
 
 	
-	public SequenceReader(ArrayList<Diagram> diagrams,Set<String> originalMessage,Set<String> traceMsg){
+	public SequenceReader(ArrayList<String> res,ArrayList<Diagram> diagrams,Set<String> originalMessage,Set<String> traceMsg){
 		this.diagrams = diagrams;
 		this.originalMsg = originalMessage;
 		this.traceMsg = traceMsg;
+		this.res = res;
 	}
 	
-	 public static ProcessList getResult(ArrayList<String> res){
+	 public static ProcessList getResult(){
 		 String newMsg="",left="",right="",state="";
 		 boolean isWait;
 		 ProcessList list=new SequenceProcess();
@@ -83,7 +85,7 @@ public class SequenceReader {
 		 
 	 }
 	 
-	 public static boolean isIndependentSequence(ArrayList<String> res){
+	 public static boolean isIndependentSequence(){
 		 for (int i = 1; i < res.size()-1; i++) {
 			 if(res.get(i+1).contains(">")||res.get(i+1).contains("<"))
 				if(!haveStateDiagram(res.get(i+4))) return true;
@@ -139,14 +141,13 @@ public class SequenceReader {
 
 						
 					}
-//					result.add(res);
-//					break;
+
 				}
 
 			}
 			if(result.size()==0){
 				LinkedList<String> re = new LinkedList<>();
-				re.add("NaN");
+				re.add(left);
 				result.add(re);
 			}
 			System.err.println("<<Result :"+result);
