@@ -180,6 +180,7 @@ public class PlantReader {
 	    		diagram = new SequenceDiagram(state);
 	    		SequenceReader sequenceReader = new SequenceReader(diagrams, originalMsg, traceMsg);
 	    		diagram.addProcess(sequenceReader.getResult(res));
+	    		System.out.println("[******]"+sequenceReader.isIndependentSequence(res));
 	    		diagrams.add(diagram);
 	    		System.out.println("TEST2 :"+diagram.toString());
 	    	}

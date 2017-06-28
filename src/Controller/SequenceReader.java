@@ -42,18 +42,24 @@ public class SequenceReader {
 
 			 String typeMap = res.get(i-1);
 			 
+			 String mmm = newMsg.substring(2);
+			 
+			 System.err.println(mmm+" : "+haveStateDiagram(mmm));
+			 
 			 originalMsg.add(res.get(i+4));
 			 System.out.println(left+" > "+newMsg+" > "+right);
 			 System.out.println("LEFT -> RIGHT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(left,newMsg));
 			 Map<String, LinkedList<LinkedList<String>>> m = new LinkedHashMap<>();
-			 LinkedList<LinkedList<String>> leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()));
-
+			 LinkedList<LinkedList<String>> leftL;
+				 leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()));
+				 
 			 System.out.println("===============================");
 			 System.out.println("RIGHT -> LEFT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(right,newMsg));
-			 LinkedList<LinkedList<String>> rightL = getLinkedFromtrace(right, newMsg.substring(2, newMsg.length()));
-
+			 LinkedList<LinkedList<String>> rightL;
+			 rightL = getLinkedFromtrace(right, newMsg.substring(2, newMsg.length()));
+			 
 			 System.out.println("===============================");
 			 
 			 
@@ -75,6 +81,30 @@ public class SequenceReader {
 		 
 		 return list;
 		 
+	 }
+	 
+	 public static boolean isIndependentSequence(ArrayList<String> res){
+		 for (int i = 1; i < res.size()-1; i++) {
+			 if(res.get(i+1).contains(">")||res.get(i+1).contains("<"))
+				if(!haveStateDiagram(res.get(i+4))) return true;
+		 }
+		 return false;
+	 }
+	 
+	 public static boolean haveStateDiagram(String msg){
+		 boolean result = false;
+		 for (int i = 0; i < diagrams.size(); i++) {
+			if(diagrams.get(i).getName().contains("M_")){
+				for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListByName().size(); j++) {
+					for (Entry<String, LinkedList<LinkedList<String>>> di : diagrams.get(i).getProcesses().getProcessListByName().get(j).entrySet()) {
+						if(di.getKey().contains(msg)) result=true;
+						
+					}
+					
+				}
+			}
+		}
+		 return result;
 	 }
 	 
 	 public static LinkedList<LinkedList<String>> getLinkedFromtrace(String left,String message) {
@@ -114,8 +144,16 @@ public class SequenceReader {
 				}
 
 			}
+			if(result.size()==0){
+				LinkedList<String> re = new LinkedList<>();
+				re.add("NaN");
+				result.add(re);
+			}
+			System.err.println("<<Result :"+result);
 			return result;
 	}
 
 
+
+	 
 }
