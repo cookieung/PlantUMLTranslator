@@ -99,7 +99,7 @@ public class SequenceReader {
 			if(diagrams.get(i).getName().contains("M_")){
 				for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListByName().size(); j++) {
 					for (Entry<String, LinkedList<LinkedList<String>>> di : diagrams.get(i).getProcesses().getProcessListByName().get(j).entrySet()) {
-						if(di.getKey().contains(msg)) result=true;
+						if(di.getKey().contains(msg) && !di.getKey().equals("NaN")) result=true;
 						
 					}
 					

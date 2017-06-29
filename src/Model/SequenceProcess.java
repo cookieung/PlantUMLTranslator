@@ -1,10 +1,13 @@
 package Model;
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import Model.Proc.ProcessLinkedList;
 
@@ -60,8 +63,10 @@ public class SequenceProcess extends ProcessList {
 				System.out.println("F_e :"+end);
 			}
 		}
-		 if(frames.size()>0)
-		 System.out.println("Frame :"+frames.get(0).toString());
+		 if(frames.size()>0){
+			 System.out.println("Frame :"+frames.get(0).toString());
+		 }
+
 	 }
 	 
 	 
@@ -71,23 +76,81 @@ public class SequenceProcess extends ProcessList {
 }
 
 class SqFrame{
-	Map<String, LinkedList<LinkedList<String>>> beginList;
-	Map<String, LinkedList<LinkedList<String>>> endList;
+	static Map<String, LinkedList<LinkedList<String>>> beginList;
+	static Map<String, LinkedList<LinkedList<String>>> endList;
+	LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
 	
 	public SqFrame(Map<String, LinkedList<LinkedList<String>>> beginList,Map<String, LinkedList<LinkedList<String>>> endList){
 		System.out.println("begin :"+beginList);
 		System.out.println("end :"+endList);
 		this.beginList = beginList;
 		this.endList = endList;
+		this.processFrame = getAllFrameProc();
 	}
 	
 	public String toString(){
-		return this.beginList+"\n"+this.endList;
+		return "FrameChannel "+FrameChannel()+"\n"+this.processFrame+"";
 	}
 	
-//	public LinkedList<String> processName(){
-//		
-//	}
+	
+	public static Map<String, LinkedList<LinkedList<String>>> processName(String m){
+		LinkedList<String> resultBegin= new LinkedList<>();
+		LinkedList<String> resultEnd= new LinkedList<>();
+		resultBegin.add("f1_b");
+		resultBegin.add("f1_alt1");
+		for (Entry<String, LinkedList<LinkedList<String>>> bg : beginList.entrySet()) {
+			if(bg.getValue().get(0).get(0).equals(m))
+			resultBegin.add(bg.getKey());
+		}
+		resultEnd.add("f1_alt2");
+		for (Entry<String, LinkedList<LinkedList<String>>> en : endList.entrySet()) {
+			if(en.getValue().get(0).get(0).equals(m))
+			resultEnd.add(en.getKey());
+		}
+		resultEnd.add("f1_e");
+		LinkedList<LinkedList<String>> result = new LinkedList<>();
+		result.add(resultBegin);
+		result.add(resultEnd);
+		Map<String, LinkedList<LinkedList<String>>> mRes = new LinkedHashMap<>();
+		mRes.put("F1_"+m, result);
+		return mRes;
+	}
+	
+	public static Object[] getAllState(){
+		Set<String> setState = new LinkedHashSet<>();
+		for (Entry<String, LinkedList<LinkedList<String>>> bg : beginList.entrySet()) {
+			setState.add(bg.getValue().get(0).get(0));
+		}
+		for (Entry<String, LinkedList<LinkedList<String>>> en : endList.entrySet()) {
+			setState.add(en.getValue().get(0).get(0));
+		}
+		System.out.println("Set :"+setState);
+		return setState.toArray();
+	}
+	
+	public static LinkedList<Map<String, LinkedList<LinkedList<String>>>> getAllFrameProc() {
+		LinkedList<Map<String, LinkedList<LinkedList<String>>>> listM = new LinkedList<>();
+		for (int i = 0; i < getAllState().length; i++) {
+			listM.add(processName(getAllState()[i]+""));
+		}
+		return listM;
+	}
+	
+	public static ArrayList<String> FrameChannel() {
+		ArrayList<String> s = new ArrayList<>();
+		LinkedList<Map<String, LinkedList<LinkedList<String>>>> m = getAllFrameProc();
+		for (int i = 0; i < m.size(); i++) {
+			for (Entry<String, LinkedList<LinkedList<String>>> map : m.get(i).entrySet()) {
+				for (int j = 0; j < map.getValue().get(0).size(); j++) {
+					if(map.getValue().get(0).get(j).contains("f1_"))
+					{
+						s.add(map.getValue().get(0).get(j));
+					}
+				}
+			}
+		}
+		return s;
+	}
 	
 	
 }
