@@ -280,6 +280,7 @@ public class PlantReader {
 		 LinkedList<String> l= new LinkedList<>();
 		 for (int j = 0; j < procs.size(); j++) {
 			for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(j).entrySet()) {
+				System.err.println("&Key :"+map2.getKey());
 				for (int i = 0; i < map2.getValue().size(); i++) {
 					System.err.println("WIN :"+map2.getValue().get(i));
 					System.out.println("LOST :"+map2.getValue().get(i).get(0)+" = "+name);

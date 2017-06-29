@@ -92,6 +92,7 @@ class SqFrame{
 		return "FrameChannel "+FrameChannel()+"\n"+this.processFrame+"";
 	}
 	
+//	public Map<String, LinkedList<String>> getTheSequenceDescrip
 	
 	public static Map<String, LinkedList<LinkedList<String>>> processName(String m){
 		LinkedList<String> resultBegin= new LinkedList<>();

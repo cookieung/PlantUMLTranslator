@@ -44,6 +44,10 @@ public class ProcessList {
 		return processMapByName.getNormalProcess();
 	}
 	
+	public LinkedList<Map<String, Map<String, LinkedList<LinkedList<String>>>>> getProcessListAlt() {
+		return processMapByName.getAltProcess();
+	}
+	
 
 	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessListByState() {
 		return processMapByState.getNormalProcess();

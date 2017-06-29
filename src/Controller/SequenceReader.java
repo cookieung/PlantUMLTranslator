@@ -54,7 +54,7 @@ public class SequenceReader {
 			 System.out.println(getLinkedFromtrace(left,newMsg));
 			 Map<String, LinkedList<LinkedList<String>>> m = new LinkedHashMap<>();
 			 LinkedList<LinkedList<String>> leftL;
-				 leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()));
+			leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()));
 				 
 			 System.out.println("===============================");
 			 System.out.println("RIGHT -> LEFT by "+newMsg);
