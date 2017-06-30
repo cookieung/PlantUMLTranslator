@@ -35,9 +35,33 @@ public class SequenceProcess extends ProcessList {
 		processMapByName.addNormal(map,typeName);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
 		checkFrame();
+		compareNormalWithFrame();
 	}
 	
-	 public LinkedList<LinkedList<String>> combineSendAnsReceiveProcess(LinkedList<String> leftL,LinkedList<String> rightL){
+	public void compareNormalWithFrame(){
+		for (int i = 0; i < processMapByName.getAltProcess().size(); i++) {
+			for (Entry<String, Map<String, LinkedList<LinkedList<String>>>> s:processMapByName.getAltProcess().get(i).entrySet()) {
+				System.out.println("OUT :"+s.getKey());
+				
+				for (int j = 0; j < getFrames().size(); j++) {
+					System.out.println("FRAME :"+getFrames().get(j));
+				}
+			}
+
+		}
+		System.out.println("***END****");
+	}
+		
+	
+	 public ArrayList<SqFrame> getFrames() {
+		return frames;
+	}
+
+	public void setFrames(ArrayList<SqFrame> frames) {
+		this.frames = frames;
+	}
+
+	public LinkedList<LinkedList<String>> combineSendAnsReceiveProcess(LinkedList<String> leftL,LinkedList<String> rightL){
 		 LinkedList<LinkedList<String>> appender = new LinkedList<>();
 		 appender.add(leftL);
 		 appender.add(rightL);
@@ -63,9 +87,9 @@ public class SequenceProcess extends ProcessList {
 				System.out.println("F_e :"+end);
 			}
 		}
-		 if(frames.size()>0){
-			 System.out.println("Frame :"+frames.get(0).toString());
-		 }
+//		 if(frames.size()>0){
+//			 System.out.println("Frame :"+frames.get(0).toString());
+//		 }
 
 	 }
 	 
@@ -89,7 +113,7 @@ class SqFrame{
 	}
 	
 	public String toString(){
-		return "FrameChannel "+FrameChannel()+"\n"+this.processFrame+"";
+		return this.processFrame+"";
 	}
 	
 //	public Map<String, LinkedList<String>> getTheSequenceDescrip

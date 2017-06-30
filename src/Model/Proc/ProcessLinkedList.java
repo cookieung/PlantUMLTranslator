@@ -3,6 +3,7 @@ package Model.Proc;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class ProcessLinkedList {
 	
@@ -22,8 +23,36 @@ public class ProcessLinkedList {
 	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap) {
 		normalProcess.add(map);
 		Map<String, Map<String, LinkedList<LinkedList<String>>>> m = new LinkedHashMap<>();
-		m.put(typeMap, map);
+		if(!typeMap.equals("alt") && !typeMap.equals("else")) m.put("NaN", getForAlt(map, typeMap));
+		else m.put(typeMap, getForAlt(map, typeMap));
+		System.out.println(typeMap +"Add Normal Map :"+map+">>"+m);
 		altProcess.add(m);
+	}
+	
+	public Map<String, LinkedList<LinkedList<String>>> getForAlt(Map<String,LinkedList<LinkedList<String>>> map,String typeMap){
+		Map<String, LinkedList<LinkedList<String>>> mm = new LinkedHashMap<>();
+		if(typeMap.equals("alt")){
+			LinkedList<LinkedList<String>> l  = new LinkedList<>();
+			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {
+				LinkedList<String> ll = new LinkedList<>();
+				ll.add(s.getKey());
+				l.add(ll);
+			}
+			mm.put("f1_b", l);
+		}else if(typeMap.equals("else")){
+			LinkedList<LinkedList<String>> l  = new LinkedList<>();
+			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {
+				LinkedList<String> ll = new LinkedList<>();
+				ll.add(s.getKey());
+				l.add(ll);
+			}
+			mm.put("f1_e", l);
+		}else{
+			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {
+				mm.put(s.getKey(), s.getValue());
+			}
+		}
+		return mm;
 	}
 	
 	public void addAlt(Map<String, Map<String, LinkedList<LinkedList<String>>>> map) {
