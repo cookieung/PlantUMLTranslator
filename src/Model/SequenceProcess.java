@@ -29,21 +29,13 @@ public class SequenceProcess extends ProcessList {
 		processMapByName.addNormal(map,typeName);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
 		checkFrame();
-		compareNormalWithFrame();
 	}
 	
-	public void compareNormalWithFrame(){
-		for (int i = 0; i < processMapByName.getOptProcess().size(); i++) {
-			for (Entry<String, Map<String, Map<String, String>>> s:processMapByName.getOptProcess().get(i).entrySet()) {
-				System.out.println("OUT :"+s.getKey());
-				
-				for (int j = 0; j < getFrames().size(); j++) {
-					System.out.println("FRAME :"+getFrames().get(j));
-				}
-			}
-
+	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getSequenceFrame(){
+		for (int j = 0; j < getFrames().size(); j++) {
+			return getFrames().get(j).getAllFrameProc();
 		}
-		System.out.println("***END****");
+		return null;
 	}
 		
 	
@@ -118,63 +110,52 @@ class SqFrame{
 		return "###"+processFrame;
 	}
 	
-//	public Map<String, LinkedList<String>> getTheSequenceDescrip
 	
 	public static Map<String, LinkedList<LinkedList<String>>> processName(String m){
-		LinkedList<String> resultBegin= new LinkedList<>();
-		LinkedList<String> resultEnd= new LinkedList<>();
-//		resultBegin.add("f1_b");
-//		resultBegin.add("f1_alt1");
+		LinkedList<String> res= new LinkedList<>();
 		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
-//			if(bg.getValue().get(0).get(0).equals(m))
-			System.out.println("<<|"+bg);
-//			for (int i = 0; i < bg.getValue().size(); i++) {
-//				for (int j = 0; j < bg.getValue().get(i).size(); j++) {
-//					resultBegin.add(bg.getValue().get(i).get(j));
-//				}
-//			}
-
+			for (Entry<String, String> string : bg.getValue().entrySet()) {
+				if(string.getKey().equals(m))
+				res.add(string.getValue());
+			}
 		}
-//		resultEnd.add("f1_alt2");
 		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
-//			if(en.getValue().get(0).get(0).equals(m))
-			System.out.println("<<|"+en);
-//			for (int i = 0; i < en.getValue().size(); i++) {
-//				for (int j = 0; j < en.getValue().get(i).size(); j++) {
-//					resultEnd.add(en.getValue().get(i).get(j));
-//				}
-//			}
+			for (Entry<String, String> string : en.getValue().entrySet()) {
+				if(string.getKey().equals(m))
+				res.add(string.getValue());
+			}
 		}
-//		resultEnd.add("f1_e");
 		LinkedList<LinkedList<String>> result = new LinkedList<>();
-		result.add(resultBegin);
-		result.add(resultEnd);
+		result.add(res);
 		Map<String, LinkedList<LinkedList<String>>> mRes = new LinkedHashMap<>();
 		mRes.put("F1_"+m, result);
 		return mRes;
 	}
 	
-//	public static Object[] getAllState(){
-//		Set<String> setState = new LinkedHashSet<>();
-//		int count=1;
-//		for (Entry<String, LinkedList<LinkedList<String>>> bg : beginList.entrySet()) {
-//			setState.add("M"+count++);
-//		}
-//		
-//		for (Entry<String, LinkedList<LinkedList<String>>> en : endList.entrySet()) {
-//			setState.add(en.getValue().get(0).get(0));
-//		}
-//		System.out.println("Set :"+setState);
-//		return setState.toArray();
-//	}
+	public static Object[] getAllState(){
+		Set<String> setState = new LinkedHashSet<>();
+		int count=1;
+		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
+			for (Entry<String, String> string : bg.getValue().entrySet()) {
+				setState.add(string.getKey());
+			}
+		}
+		
+		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+			for (Entry<String, String> string : en.getValue().entrySet()) {
+				setState.add(string.getKey());
+			}
+		}
+		System.out.println("Set :"+setState);
+		return setState.toArray();
+	}
 	
 	public static LinkedList<Map<String, LinkedList<LinkedList<String>>>> getAllFrameProc() {
 		LinkedList<Map<String, LinkedList<LinkedList<String>>>> listM = new LinkedList<>();
-//		for (int i = 0; i < getAllState().length; i++) {
-			listM.add(processName("M1"));
-			listM.add(processName("M2"));
-			
-//		}
+		for (int i = 0; i < getAllState().length; i++) {
+			listM.add(processName(getAllState()[i]+""));
+		}
+		System.out.println("ListM :"+listM);
 		return listM;
 	}
 	
