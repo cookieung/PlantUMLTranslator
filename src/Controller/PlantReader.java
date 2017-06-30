@@ -89,7 +89,6 @@ public class PlantReader {
 		ArrayList<Map<String, ArrayList<String>>> allUML =  new ArrayList<>();
 		equations = prepareInput(input.replace("\n", " "));
 		String[] names = name.split(",");
-    	System.out.println("EQ :"+equations.length);
     	Map<String,ArrayList<String>> map = new LinkedHashMap<>();
     	ArrayList<String> tmp = new ArrayList<>();
     	String t= "";
@@ -106,14 +105,9 @@ public class PlantReader {
     		}
 
     		tmp.add(equations[i]);
-    		System.err.println("EQ"+i+" : "+equations[i] + equations[i].length());
     		if(equations[i].equals("@enduml")){
     			map.put(t,tmp);
-    			System.out.println("Map :"+map);
-    			System.out.println("AllUML :"+allUML);
-    			System.out.println();
     			allUML.add(map);
-    			System.out.println("ALL :"+allUML);
     			map = new LinkedHashMap<>();
     			tmp = new ArrayList<>();
     		}
@@ -281,8 +275,6 @@ public class PlantReader {
 		 for (int j = 0; j < procs.size(); j++) {
 			for (Entry<String, Map<String, LinkedList<LinkedList<String>>>> string : procs.get(j).entrySet()) {
 				for (Entry<String, LinkedList<LinkedList<String>>> map2 : string.getValue().entrySet()) {
-					System.err.println("&Key :"+map2.getKey()+",name :"+name);
-					System.err.println(procs);
 					for (int i = 0; i < map2.getValue().size(); i++) {
 						System.out.println(map2.getKey()+"LOST :"+map2.getValue().get(i).get(0)+" = "+name);
 						if(map2.getValue().get(i).get(0).equals(name)){
@@ -352,12 +344,12 @@ public class PlantReader {
 				 for (int k = 0; k < procs.size(); k++) {
 					 for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(k).entrySet()) {
 						 //State 
-						 System.out.println("<<<<<<<<<<"+map2.getKey());
-						 System.out.println("***************");
+//						 System.out.println("<<<<<<<<<<"+map2.getKey());
+//						 System.out.println("***************");
 						 
 						 for (int l = 0; l < keys.size(); l++) {
 							 for (Entry<String, LinkedList<LinkedList<String>>> map3 : keys.get(l).entrySet()) {
-								 System.out.println(">>>>>>>>>>"+map3.getKey());
+//								 System.out.println(">>>>>>>>>>"+map3.getKey());
 								 if(map3.getKey().contains(map2.getKey()) && !ck.contains(map2.getKey()))
 								 {
 									 ck.add(map2.getKey());
@@ -366,12 +358,12 @@ public class PlantReader {
 							}
 						} 
 						 ck = new ArrayList<>();
-						 System.out.println("***************");
+//						 System.out.println("***************");
 						 
 					}
 						
 				}
-				 System.out.println("=======================");
+//				 System.out.println("=======================");
 				 ll.add("SKIP");
 				 map.put(name,ll);
 				 name =getAllSequenceDiagram().get(i).getName();

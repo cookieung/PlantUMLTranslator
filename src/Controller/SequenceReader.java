@@ -122,8 +122,6 @@ public class SequenceReader {
 					res = new LinkedList<>();
 					for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListByName().size(); j++) {
 						for (Entry<String, LinkedList<LinkedList<String>>> eachentry:diagrams.get(i).getProcesses().getProcessListByName().get(j).entrySet()) {
-							System.out.println("Key :"+eachentry.getKey()+" = "+message);
-							System.out.println("LinkList :"+eachentry.getValue());
 							if(!eachentry.getKey().equals("NaN") && eachentry.getKey().contains(message)){
 								for (int k = 0; k < eachentry.getValue().size(); k++) {
 									res = new LinkedList<>();
