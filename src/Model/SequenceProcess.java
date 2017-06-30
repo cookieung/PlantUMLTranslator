@@ -19,12 +19,6 @@ public class SequenceProcess extends ProcessList {
 		super();
 		frames = new ArrayList<>();
 	}
-
-//	public SequenceProcess(String name,LinkedList<LinkedList<String>> linkedList) {
-//		processMapByName = new ProcessLinkedList();
-//		processMapByState = new ProcessLinkedList();
-//		this.addProcess(name, linkedList);
-//	}
 	
 	@Override
 	public void addProcess(String nameL,String nameR ,LinkedList<LinkedList<String>> linkedListL,LinkedList<LinkedList<String>> linkedListR,String typeName) {
@@ -40,7 +34,7 @@ public class SequenceProcess extends ProcessList {
 	
 	public void compareNormalWithFrame(){
 		for (int i = 0; i < processMapByName.getAltProcess().size(); i++) {
-			for (Entry<String, Map<String, LinkedList<LinkedList<String>>>> s:processMapByName.getAltProcess().get(i).entrySet()) {
+			for (Entry<String, Map<String, Map<String, String>>> s:processMapByName.getAltProcess().get(i).entrySet()) {
 				System.out.println("OUT :"+s.getKey());
 				
 				for (int j = 0; j < getFrames().size(); j++) {
@@ -69,11 +63,11 @@ public class SequenceProcess extends ProcessList {
 	 }
 	 
 	 public void checkFrame(){
-		 Map<String, LinkedList<LinkedList<String>>> begin = new LinkedHashMap<>();
-		 Map<String, LinkedList<LinkedList<String>>> end = new LinkedHashMap<>();
-		 LinkedList<Map<String, Map<String, LinkedList<LinkedList<String>>>>> l = processMapByName.getAltProcess();
+		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
+		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
+		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getAltProcess();
 		 for (int i = 0; i < l.size(); i++) {
-			for (Entry<String, Map<String, LinkedList<LinkedList<String>>>> map : l.get(i).entrySet()) {
+			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
 				System.out.println("CV Frame :"+map.getKey());
 				if(map.getKey().equals("alt")){
 					begin = map.getValue();
@@ -87,9 +81,6 @@ public class SequenceProcess extends ProcessList {
 				System.out.println("F_e :"+end);
 			}
 		}
-//		 if(frames.size()>0){
-//			 System.out.println("Frame :"+frames.get(0).toString());
-//		 }
 
 	 }
 	 
@@ -100,11 +91,11 @@ public class SequenceProcess extends ProcessList {
 }
 
 class SqFrame{
-	static Map<String, LinkedList<LinkedList<String>>> beginList;
-	static Map<String, LinkedList<LinkedList<String>>> endList;
+	static Map<String, Map<String, String>> beginList;
+	static Map<String, Map<String, String>> endList;
 	LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
 	
-	public SqFrame(Map<String, LinkedList<LinkedList<String>>> beginList,Map<String, LinkedList<LinkedList<String>>> endList){
+	public SqFrame(Map<String, Map<String, String>> beginList,Map<String, Map<String, String>> endList){
 		System.out.println("begin :"+beginList);
 		System.out.println("end :"+endList);
 		this.beginList = beginList;
@@ -113,7 +104,18 @@ class SqFrame{
 	}
 	
 	public String toString(){
-		return this.processFrame+"";
+		String s ="###";
+		for (int i = 0; i < processFrame.size(); i++) {
+			for (Entry<String, LinkedList<LinkedList<String>>> map : processFrame.get(i).entrySet()) {
+				s+=map.getKey()+" = ";
+				for (int j = 0; j < map.getValue().size(); j++) {
+					for (int k = 0; k < map.getValue().get(j).size(); k++) {
+						s+=map.getValue().get(j).get(k);
+					}
+				}
+			}
+		}
+		return "###"+processFrame;
 	}
 	
 //	public Map<String, LinkedList<String>> getTheSequenceDescrip
@@ -121,18 +123,29 @@ class SqFrame{
 	public static Map<String, LinkedList<LinkedList<String>>> processName(String m){
 		LinkedList<String> resultBegin= new LinkedList<>();
 		LinkedList<String> resultEnd= new LinkedList<>();
-		resultBegin.add("f1_b");
-		resultBegin.add("f1_alt1");
-		for (Entry<String, LinkedList<LinkedList<String>>> bg : beginList.entrySet()) {
-			if(bg.getValue().get(0).get(0).equals(m))
-			resultBegin.add(bg.getKey());
+//		resultBegin.add("f1_b");
+//		resultBegin.add("f1_alt1");
+		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
+//			if(bg.getValue().get(0).get(0).equals(m))
+			System.out.println("<<|"+bg);
+//			for (int i = 0; i < bg.getValue().size(); i++) {
+//				for (int j = 0; j < bg.getValue().get(i).size(); j++) {
+//					resultBegin.add(bg.getValue().get(i).get(j));
+//				}
+//			}
+
 		}
-		resultEnd.add("f1_alt2");
-		for (Entry<String, LinkedList<LinkedList<String>>> en : endList.entrySet()) {
-			if(en.getValue().get(0).get(0).equals(m))
-			resultEnd.add(en.getKey());
+//		resultEnd.add("f1_alt2");
+		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+//			if(en.getValue().get(0).get(0).equals(m))
+			System.out.println("<<|"+en);
+//			for (int i = 0; i < en.getValue().size(); i++) {
+//				for (int j = 0; j < en.getValue().get(i).size(); j++) {
+//					resultEnd.add(en.getValue().get(i).get(j));
+//				}
+//			}
 		}
-		resultEnd.add("f1_e");
+//		resultEnd.add("f1_e");
 		LinkedList<LinkedList<String>> result = new LinkedList<>();
 		result.add(resultBegin);
 		result.add(resultEnd);
@@ -141,23 +154,27 @@ class SqFrame{
 		return mRes;
 	}
 	
-	public static Object[] getAllState(){
-		Set<String> setState = new LinkedHashSet<>();
-		for (Entry<String, LinkedList<LinkedList<String>>> bg : beginList.entrySet()) {
-			setState.add(bg.getValue().get(0).get(0));
-		}
-		for (Entry<String, LinkedList<LinkedList<String>>> en : endList.entrySet()) {
-			setState.add(en.getValue().get(0).get(0));
-		}
-		System.out.println("Set :"+setState);
-		return setState.toArray();
-	}
+//	public static Object[] getAllState(){
+//		Set<String> setState = new LinkedHashSet<>();
+//		int count=1;
+//		for (Entry<String, LinkedList<LinkedList<String>>> bg : beginList.entrySet()) {
+//			setState.add("M"+count++);
+//		}
+//		
+//		for (Entry<String, LinkedList<LinkedList<String>>> en : endList.entrySet()) {
+//			setState.add(en.getValue().get(0).get(0));
+//		}
+//		System.out.println("Set :"+setState);
+//		return setState.toArray();
+//	}
 	
 	public static LinkedList<Map<String, LinkedList<LinkedList<String>>>> getAllFrameProc() {
 		LinkedList<Map<String, LinkedList<LinkedList<String>>>> listM = new LinkedList<>();
-		for (int i = 0; i < getAllState().length; i++) {
-			listM.add(processName(getAllState()[i]+""));
-		}
+//		for (int i = 0; i < getAllState().length; i++) {
+			listM.add(processName("M1"));
+			listM.add(processName("M2"));
+			
+//		}
 		return listM;
 	}
 	

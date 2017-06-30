@@ -270,14 +270,14 @@ public class PlantReader {
 	 }
 
 
-	 public LinkedList<String> getLinkedListForInd(LinkedList<Map<String, Map<String, LinkedList<LinkedList<String>>>>> procs,String name){
+	 public LinkedList<String> getLinkedListForInd(LinkedList<Map<String, Map<String, Map<String, String>>>> procs,String name){
 		 LinkedList<String> l= new LinkedList<>();
 		 for (int j = 0; j < procs.size(); j++) {
-			for (Entry<String, Map<String, LinkedList<LinkedList<String>>>> string : procs.get(j).entrySet()) {
-				for (Entry<String, LinkedList<LinkedList<String>>> map2 : string.getValue().entrySet()) {
-					for (int i = 0; i < map2.getValue().size(); i++) {
-						System.out.println(map2.getKey()+"LOST :"+map2.getValue().get(i).get(0)+" = "+name);
-						if(map2.getValue().get(i).get(0).equals(name)){
+			for (Entry<String, Map<String, Map<String, String>>> string : procs.get(j).entrySet()) {
+				for (Entry<String, Map<String, String>> map2 : string.getValue().entrySet()) {
+					for (Entry<String, String> s :map2.getValue().entrySet()) {
+						System.out.println(map2.getKey()+"LOST :"+s.getKey()+" = "+name);
+						if(s.getKey().equals(name)){
 							l.add(map2.getKey()); 
 							System.out.println("&^&L :"+l);
 						}
@@ -304,16 +304,16 @@ public class PlantReader {
 				 //All Diagram in ArrayList
 //				 System.out.println("Procs "+name+":");
 //				 System.out.println(procs);
-				 LinkedList<Map<String, Map<String, LinkedList<LinkedList<String>>>>> s = getAllSequenceDiagram().get(i).getProcesses().getProcessListAlt();
+				 LinkedList<Map<String, Map<String, Map<String, String>>>> s = getAllSequenceDiagram().get(i).getProcesses().getProcessListAlt();
 				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
 				 LinkedList<String> ll = new LinkedList<>();
 				 for (int j = 0; j < s.size(); j++) {
-					for (Entry<String, Map<String, LinkedList<LinkedList<String>>>> string : s.get(i).entrySet()) {
+					for (Entry<String, Map<String, Map<String, String>>> string : s.get(i).entrySet()) {
 //						Map<String, LinkedList<LinkedList<String>>> m = string.getValue();
-						for (Entry<String, LinkedList<LinkedList<String>>> map2 : string.getValue().entrySet()) {
-							for (int k = 0; k < map2.getValue().size(); k++) {
-								name = map2.getValue().get(k).get(0);
-								ll = getLinkedListForInd(s, map2.getValue().get(k).get(0));
+						for (Entry<String, Map<String, String>> map2 : string.getValue().entrySet()) {
+							for ( Entry<String, String> mm :map2.getValue().entrySet()) {
+								name = mm.getKey();
+								ll = getLinkedListForInd(s, mm.getKey());
 								ll.add("SKIP");
 								map.put(name,ll);
 							}

@@ -27,6 +27,8 @@ public class SequenceReader {
 		this.res = res;
 	}
 	
+
+	
 	 public static ProcessList getResult(){
 		 String newMsg="",left="",right="",state="";
 		 boolean isWait;
@@ -53,14 +55,25 @@ public class SequenceReader {
 			 System.out.println("LEFT -> RIGHT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(left,newMsg));
 			 Map<String, LinkedList<LinkedList<String>>> m = new LinkedHashMap<>();
-			 LinkedList<LinkedList<String>> leftL;
-			leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()));
+			 LinkedList<LinkedList<String>> leftL = new LinkedList<>();
+			 LinkedList<String> l = new LinkedList<>();
+			 l.add(left);
+			 l.add("->");
+			 l.add(right);
+			 leftL.add(l);
+			 
+//			leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()));
 				 
 			 System.out.println("===============================");
 			 System.out.println("RIGHT -> LEFT by "+newMsg);
 			 System.out.println(getLinkedFromtrace(right,newMsg));
-			 LinkedList<LinkedList<String>> rightL;
-			 rightL = getLinkedFromtrace(right, newMsg.substring(2, newMsg.length()));
+			 LinkedList<LinkedList<String>> rightL = new LinkedList<>();
+			 LinkedList<String> r = new LinkedList<>();
+			 r.add(right);
+			 r.add("->");
+			 r.add(left);
+			 rightL.add(r);
+//			 rightL = getLinkedFromtrace(right, newMsg.substring(2, newMsg.length()));
 			 
 			 System.out.println("===============================");
 			 
