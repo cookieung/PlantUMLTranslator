@@ -294,38 +294,50 @@ public class PlantReader {
 		 return l;
 	 }
 	 
+	 public LinkedList<String> getLinkedListForSq(LinkedList<Map<String, Map<String, Map<String, String>>>> procs,String state){
+		 LinkedList<String> ll = new LinkedList<>();
+		 for (int j = 0; j < procs.size(); j++) {
+			for (Entry<String, Map<String, Map<String, String>>> map2 : procs.get(j).entrySet()) {
+				for (Entry<String, Map<String, String>> string : map2.getValue().entrySet()) {
+					System.err.println("State :"+state+" = "+string);
+					if(string.getKey().contains("f1_")){
+						ll.add(string.getKey());
+					}else{
+						for (Entry<String, String> l : string.getValue().entrySet()) {
+							if(l.getKey().equals(state)){
+								ll.add(l.getValue());
+							}
+						}
+					}
+				}
+			}
+		}
+		 return ll;
+	 }
+	 
 	 public Map<String, LinkedList<String>> getSequenceDiagram(){
 		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
 		 List<String> ck = new ArrayList<>();
 		 if(sequenceReader.isIndependentSequence()){
 			 for (int i=0;i<getAllSequenceDiagram().size();i++) {
 				 String name  = "";
-//				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
-				 //All Diagram in ArrayList
-//				 System.out.println("Procs "+name+":");
-//				 System.out.println(procs);
-				 LinkedList<Map<String, Map<String, Map<String, String>>>> s = getAllSequenceDiagram().get(i).getProcesses().getProcessListAlt();
+				 System.out.println("GET ALL SQ SIZE :"+getAllSequenceDiagram().size());
 				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
-				 LinkedList<String> ll = new LinkedList<>();
-				 for (int j = 0; j < s.size(); j++) {
-					for (Entry<String, Map<String, Map<String, String>>> string : s.get(i).entrySet()) {
-//						Map<String, LinkedList<LinkedList<String>>> m = string.getValue();
-						for (Entry<String, Map<String, String>> map2 : string.getValue().entrySet()) {
-							for ( Entry<String, String> mm :map2.getValue().entrySet()) {
-								name = mm.getKey();
-								ll = getLinkedListForInd(s, mm.getKey());
-								ll.add("SKIP");
-								map.put(name,ll);
-							}
-
+				 //All Diagram in ArrayList
+				 for (int j = 0; j < procs.size(); j++) {
+					 String curr="";
+					 System.out.println("Procs SIZE :"+procs.size());
+					LinkedList<String> ll = new LinkedList<>();
+					for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(j).entrySet()) {
+						System.out.println("<Map2> :"+map2);
+						for (int k = 0; k < map2.getValue().size(); k++) {
+							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListAlt(),map2.getValue().get(k).get(0));
+							ll.add("SKIP");
+							map.put(map2.getValue().get(0).get(0), ll);
 						}
+						
 					}
-
-
-					
 				}
-				 
-							
 			}
 		 }
 		 else

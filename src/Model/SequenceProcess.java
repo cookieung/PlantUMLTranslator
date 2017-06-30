@@ -33,8 +33,8 @@ public class SequenceProcess extends ProcessList {
 	}
 	
 	public void compareNormalWithFrame(){
-		for (int i = 0; i < processMapByName.getAltProcess().size(); i++) {
-			for (Entry<String, Map<String, Map<String, String>>> s:processMapByName.getAltProcess().get(i).entrySet()) {
+		for (int i = 0; i < processMapByName.getOptProcess().size(); i++) {
+			for (Entry<String, Map<String, Map<String, String>>> s:processMapByName.getOptProcess().get(i).entrySet()) {
 				System.out.println("OUT :"+s.getKey());
 				
 				for (int j = 0; j < getFrames().size(); j++) {
@@ -65,7 +65,7 @@ public class SequenceProcess extends ProcessList {
 	 public void checkFrame(){
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
-		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getAltProcess();
+		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getOptProcess();
 		 for (int i = 0; i < l.size(); i++) {
 			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
 				System.out.println("CV Frame :"+map.getKey());

@@ -51,9 +51,6 @@ public class SequenceReader {
 			 System.err.println(mmm+" : "+haveStateDiagram(mmm));
 			 
 			 originalMsg.add(res.get(i+4));
-			 System.out.println(left+" > "+newMsg+" > "+right);
-			 System.out.println("LEFT -> RIGHT by "+newMsg);
-			 System.out.println(getLinkedFromtrace(left,newMsg));
 			 Map<String, LinkedList<LinkedList<String>>> m = new LinkedHashMap<>();
 			 LinkedList<LinkedList<String>> leftL = new LinkedList<>();
 			 LinkedList<String> l = new LinkedList<>();
@@ -62,28 +59,20 @@ public class SequenceReader {
 			 l.add(right);
 			 leftL.add(l);
 			 
-//			leftL = getLinkedFromtrace(left, newMsg.substring(2, newMsg.length()));
-				 
-			 System.out.println("===============================");
-			 System.out.println("RIGHT -> LEFT by "+newMsg);
-			 System.out.println(getLinkedFromtrace(right,newMsg));
 			 LinkedList<LinkedList<String>> rightL = new LinkedList<>();
 			 LinkedList<String> r = new LinkedList<>();
 			 r.add(right);
 			 r.add("->");
 			 r.add(left);
 			 rightL.add(r);
-//			 rightL = getLinkedFromtrace(right, newMsg.substring(2, newMsg.length()));
-			 
-			 System.out.println("===============================");
-			 
+ 
 			 
 			 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
 				list.addProcess(newMsg,"r_"+newMsg.substring(2,newMsg.length()),leftL,rightL,typeMap);
 				traceMsg.add(newMsg);
 				traceMsg.add("r_"+newMsg.substring(2,newMsg.length()));
 			}else if(newMsg.charAt(0)=='r'&&newMsg.charAt(1)=='_'){
-				list.addProcess("s_"+newMsg.substring(2,newMsg.length()),newMsg, leftL, rightL,typeMap);
+				list.addProcess(newMsg,"s_"+newMsg.substring(2,newMsg.length()), leftL, rightL,typeMap);
 				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
 				traceMsg.add(newMsg);
 			}
@@ -122,50 +111,6 @@ public class SequenceReader {
 		 return result;
 	 }
 	 
-	 public static LinkedList<LinkedList<String>> getLinkedFromtrace(String left,String message) {
-		 LinkedList<String> res;
-		 LinkedList<LinkedList<String>> result = new LinkedList<>();
-//		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
-			for (int i=0;i<diagrams.size();i++) {
-				System.out.println("Get Link from trace :"+diagrams.get(i).getName());
-				System.out.println("Message in SQ :");
-				if(diagrams.get(i).getName().contains(left)){
-					System.out.println("Name :"+diagrams.get(i).getName());
-					result = new LinkedList<>();
-					res = new LinkedList<>();
-					for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListByName().size(); j++) {
-						for (Entry<String, LinkedList<LinkedList<String>>> eachentry:diagrams.get(i).getProcesses().getProcessListByName().get(j).entrySet()) {
-							if(!eachentry.getKey().equals("NaN") && eachentry.getKey().contains(message)){
-								for (int k = 0; k < eachentry.getValue().size(); k++) {
-									res = new LinkedList<>();
-									for (int l = 0; l < eachentry.getValue().get(k).size(); l++) {
-										res.add(eachentry.getValue().get(k).get(l));
-										
-									}
-									result.add(res);
-									
-								}
-	
-							}
-
-						}
-
-						
-					}
-
-				}
-
-			}
-			if(result.size()==0){
-				LinkedList<String> re = new LinkedList<>();
-				re.add(left);
-				result.add(re);
-			}
-			System.err.println("<<Result :"+result);
-			return result;
-	}
-
-
 
 	 
 }

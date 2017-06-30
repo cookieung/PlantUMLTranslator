@@ -45,7 +45,7 @@ public class ProcessList {
 	}
 	
 	public LinkedList<Map<String, Map<String, Map<String, String>>>> getProcessListAlt() {
-		return processMapByName.getAltProcess();
+		return processMapByName.getOptProcess();
 	}
 	
 
@@ -58,7 +58,7 @@ public class ProcessList {
 	}
 	
 	public void testAlt() {
-		this.processMapByName.testAlt();
+		this.processMapByName.testOpt();
 
 	}
 
