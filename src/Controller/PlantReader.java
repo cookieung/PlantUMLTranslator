@@ -175,10 +175,12 @@ public class PlantReader {
 	    	}else if(state.contains("SQ")){
 	    		diagram = new SequenceDiagram(state);
 	    		sequenceReader = new SequenceReader(res,diagrams, originalMsg, traceMsg);
-	    		diagram.addProcess(sequenceReader.getResult());
+	    		ProcessList procSequence = sequenceReader.getResult();
+	    		diagram.addProcess(procSequence);
 	    		System.out.println("[******]"+sequenceReader.isIndependentSequence());
 	    		diagrams.add(diagram);
 	    		System.out.println("TEST2 :"+diagram.toString());
+	    		System.out.println("7/2/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
 	    	}
 
 	    	return diagrams;
@@ -220,6 +222,27 @@ public class PlantReader {
 		return map;
 	 }
 	 
+	 public static String getRelationFrameWithSequenceDiagram(SequenceProcess proc){
+		 String s ="";
+		 System.out.println("7/2/2017 :"+proc);
+		 for (int i = 0; i < proc.getFrames().size(); i++) {
+			LinkedList<Map<String, LinkedList<LinkedList<String>>>> elem = proc.getFrames().get(i);
+			System.out.println("7/2/2017 :"+elem);
+			for (int j = 0; j < elem.size(); j++) {
+				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
+					s += map.getKey()+" = ";
+					for (int k = 0; k < map.getValue().size(); k++) {
+						for (int k2 = 0; k2 < map.getValue().get(k).size(); k2++) {
+							s += map.getValue().get(k).get(k2);
+							if(k2<map.getValue().get(k).size()-1) s+=" -> ";
+						}
+					}
+					s+="\n";
+				}
+			}
+		 }
+		 return s;
+	 }
 
 	 public String showRelationOfAllMessage(){
 		 String str = "";

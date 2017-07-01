@@ -31,16 +31,21 @@ public class SequenceProcess extends ProcessList {
 		checkFrame();
 	}
 	
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getSequenceFrame(){
-		for (int j = 0; j < getFrames().size(); j++) {
-			return getFrames().get(j).getAllFrameProc();
-		}
-		return null;
-	}
+//	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getSequenceFrame(){
+//		for (int j = 0; j < getFrames().size(); j++) {
+//			return getFrames().get(j).getAllFrameProc();
+//		}
+//		return null;
+//	}
 		
 	
-	 public ArrayList<SqFrame> getFrames() {
-		return frames;
+	 public ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> getFrames() {
+		 ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> r = new ArrayList<>();
+		 for (int i=0; i< frames.size(); i++) {
+			 System.err.println("Check "+frames.get(i)+" :"+frames.get(i).getAllFrameProc());
+			r.add(frames.get(i).getAllFrameProc());
+		}
+		return r;
 	}
 
 	public void setFrames(ArrayList<SqFrame> frames) {
@@ -132,6 +137,7 @@ class SqFrame{
 		return mRes;
 	}
 	
+	//Recent
 	public static Object[] getAllState(){
 		Set<String> setState = new LinkedHashSet<>();
 		int count=1;
@@ -150,6 +156,7 @@ class SqFrame{
 		return setState.toArray();
 	}
 	
+	//Recent
 	public static LinkedList<Map<String, LinkedList<LinkedList<String>>>> getAllFrameProc() {
 		LinkedList<Map<String, LinkedList<LinkedList<String>>>> listM = new LinkedList<>();
 		for (int i = 0; i < getAllState().length; i++) {

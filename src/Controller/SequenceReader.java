@@ -27,6 +27,10 @@ public class SequenceReader {
 		this.res = res;
 	}
 	
+	public ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> getRelationFrameWithSequenceDiagram(SequenceProcess process){		
+		return process.getFrames();
+	}
+	
 
 	
 	 public static ProcessList getResult(){
