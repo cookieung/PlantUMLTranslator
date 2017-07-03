@@ -237,9 +237,10 @@ public class PlantReader {
 				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
 					s += map.getKey()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
+						s += "f"+(k+1)+"_e -> ";
 						for (int k2 = 0; k2 < map.getValue().get(k).size(); k2++) {
-							s += map.getValue().get(k).get(k2);
-							if(k2<map.getValue().get(k).size()-1) s+=" -> ";
+							s += formatFrame(map.getValue().get(k).get(k2),k2+1);
+							if(k2<map.getValue().get(k).size()-1) s+=" [] ";
 						}
 					}
 					s+="\n";
@@ -247,6 +248,10 @@ public class PlantReader {
 			}
 		 }
 		 return s;
+	 }
+	 
+	 public static String formatFrame(String msg,int i){
+		 return "(f1_alt"+i+" -> "+msg+" -> "+"f1_e"+" -> SKIP)";
 	 }
 
 	 public String showRelationOfAllMessage(){
