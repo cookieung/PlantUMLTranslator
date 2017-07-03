@@ -68,6 +68,9 @@ public class ProcessList {
 		
 	}
 	
+	public void checkFrame(){
+		
+	}
 
 	public void addProcess(String name, LinkedList<LinkedList<String>> linkedList,String typeName) {
 

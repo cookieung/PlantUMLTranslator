@@ -46,6 +46,7 @@ public class PlantReader {
 
 	static SequenceReader sequenceReader;
 	static StateReader stateReader;
+	private static ProcessList procSequence;
 	
 	public static void main(String[]args){
  	
@@ -175,7 +176,7 @@ public class PlantReader {
 	    	}else if(state.contains("SQ")){
 	    		diagram = new SequenceDiagram(state);
 	    		sequenceReader = new SequenceReader(res,diagrams, originalMsg, traceMsg);
-	    		ProcessList procSequence = sequenceReader.getResult();
+	    		procSequence = sequenceReader.getResult();
 	    		diagram.addProcess(procSequence);
 	    		System.out.println("[******]"+sequenceReader.isIndependentSequence());
 	    		diagrams.add(diagram);
@@ -185,6 +186,10 @@ public class PlantReader {
 
 	    	return diagrams;
 	 }
+	 
+	public String getRelationFrameWithSequenceDiagram() {
+		return getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence);
+	}
 	 
 	 
 	 public Map<String, LinkedList<String>> getRelationOfStateDiagram(){

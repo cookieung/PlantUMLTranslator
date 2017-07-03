@@ -28,7 +28,8 @@ public class SequenceProcess extends ProcessList {
 		System.out.println("Map in Sequence Process Class :"+map);
 		processMapByName.addNormal(map,typeName);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
-		checkFrame();
+		System.out.println("$E$:"+nameL+" "+nameR);
+//		checkFrame();
 	}
 	
 //	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getSequenceFrame(){
@@ -59,13 +60,15 @@ public class SequenceProcess extends ProcessList {
 		 return appender;
 	 }
 	 
+	@Override
 	 public void checkFrame(){
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
 		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getOptProcess();
+		 System.out.println("L before check frame :"+l);
 		 for (int i = 0; i < l.size(); i++) {
 			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
-				System.out.println("CV Frame :"+map.getKey());
+				System.out.println("CV Frame :"+map);
 				if(map.getKey().equals("alt")){
 					begin = map.getValue();
 				}
@@ -74,6 +77,7 @@ public class SequenceProcess extends ProcessList {
 					SqFrame frame = new SqFrame(begin,end);
 					frames.add(frame);
 				}
+				System.out.println("Update"+map.getKey()+" :"+frames);
 				System.out.println("F_b :"+begin);
 				System.out.println("F_e :"+end);
 			}

@@ -47,6 +47,7 @@ public class SequenceReader {
 				right = res.get(i);
 				newMsg = "r_"+res.get(i+4);
 			}else continue;
+			 
 
 			 String typeMap = res.get(i-1);
 			 
@@ -80,6 +81,8 @@ public class SequenceReader {
 				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
 				traceMsg.add(newMsg);
 			}
+			 
+			 if(res.get(i+5).equals("@enduml")) list.checkFrame();
 			 
 		}
 		 
