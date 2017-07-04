@@ -237,9 +237,9 @@ public class PlantReader {
 				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
 					s += map.getKey()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
-						s += "f"+(k+1)+"_e -> ";
+						s += map.getKey().split("_")[0].toLowerCase()+"_e -> ";
 						for (int k2 = 0; k2 < map.getValue().get(k).size(); k2++) {
-							s += formatFrame(map.getValue().get(k).get(k2),k2+1);
+							s += formatFrame(map.getValue().get(k).get(k2),k2+1,map.getKey().split("_")[0].toLowerCase());
 							if(k2<map.getValue().get(k).size()-1) s+=" [] ";
 						}
 					}
@@ -250,8 +250,8 @@ public class PlantReader {
 		 return s;
 	 }
 	 
-	 public static String formatFrame(String msg,int i){
-		 return "(f1_alt"+i+" -> "+msg+" -> "+"f1_e"+" -> SKIP)";
+	 public static String formatFrame(String msg,int i,String name){
+		 return "("+name+"_alt"+i+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
 	 }
 
 	 public String showRelationOfAllMessage(){
@@ -329,6 +329,7 @@ public class PlantReader {
 	 
 	 public LinkedList<String> getLinkedListForSq(LinkedList<Map<String, Map<String, Map<String, String>>>> procs,String state){
 		 LinkedList<String> ll = new LinkedList<>();
+		 System.out.println("Check for F1 bug :"+procs);
 		 for (int j = 0; j < procs.size(); j++) {
 			for (Entry<String, Map<String, Map<String, String>>> map2 : procs.get(j).entrySet()) {
 				for (Entry<String, Map<String, String>> string : map2.getValue().entrySet()) {

@@ -13,10 +13,12 @@ import Model.Proc.ProcessLinkedList;
 
 public class SequenceProcess extends ProcessList {
 		
+	//A frame storage that will store all frame
 	public ArrayList<SqFrame> frames;
 	
 	public SequenceProcess() {
 		super();
+		//Initial Storage
 		frames = new ArrayList<>();
 	}
 	
@@ -29,26 +31,19 @@ public class SequenceProcess extends ProcessList {
 		processMapByName.addNormal(map,typeName);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
 		System.out.println("$E$:"+nameL+" "+nameR);
-//		checkFrame();
 	}
 	
-//	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getSequenceFrame(){
-//		for (int j = 0; j < getFrames().size(); j++) {
-//			return getFrames().get(j).getAllFrameProc();
-//		}
-//		return null;
-//	}
-		
-	
+	//Get All frame in this sequence to printout
 	 public ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> getFrames() {
 		 ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> r = new ArrayList<>();
 		 for (int i=0; i< frames.size(); i++) {
-			 System.err.println("Check "+frames.get(i)+" :"+frames.get(i).getAllFrameProc());
-			r.add(frames.get(i).getAllFrameProc());
+			 System.err.println("Check "+frames.get(i).name+" :"+frames.get(i).getProcessFrame());
+			r.add(frames.get(i).getProcessFrame());
 		}
 		return r;
 	}
 
+	//Change the frame by the new series of frame
 	public void setFrames(ArrayList<SqFrame> frames) {
 		this.frames = frames;
 	}
@@ -60,12 +55,14 @@ public class SequenceProcess extends ProcessList {
 		 return appender;
 	 }
 	 
+	//Update the frame
 	@Override
 	 public void checkFrame(){
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
 		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getOptProcess();
 		 System.out.println("L before check frame :"+l);
+		 int counter = 0;
 		 for (int i = 0; i < l.size(); i++) {
 			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
 				System.out.println("CV Frame :"+map);
@@ -74,7 +71,7 @@ public class SequenceProcess extends ProcessList {
 				}
 				else if(map.getKey().equals("else")){
 					end = map.getValue();
-					SqFrame frame = new SqFrame(begin,end);
+					SqFrame frame = new SqFrame("F"+ ++counter,begin,end);
 					frames.add(frame);
 				}
 				System.out.println("Update"+map.getKey()+" :"+frames);
@@ -95,15 +92,25 @@ class SqFrame{
 	static Map<String, Map<String, String>> beginList;
 	static Map<String, Map<String, String>> endList;
 	LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
+	static String name = "";
 	
-	public SqFrame(Map<String, Map<String, String>> beginList,Map<String, Map<String, String>> endList){
+	public SqFrame(String name,Map<String, Map<String, String>> beginList,Map<String, Map<String, String>> endList){
 		System.out.println("begin :"+beginList);
 		System.out.println("end :"+endList);
 		this.beginList = beginList;
 		this.endList = endList;
+		this.name = name;
 		this.processFrame = getAllFrameProc();
 	}
 	
+
+	
+	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessFrame() {
+		return processFrame;
+	}
+
+
+
 	public String toString(){
 		String s ="###";
 		for (int i = 0; i < processFrame.size(); i++) {
@@ -137,7 +144,7 @@ class SqFrame{
 		LinkedList<LinkedList<String>> result = new LinkedList<>();
 		result.add(res);
 		Map<String, LinkedList<LinkedList<String>>> mRes = new LinkedHashMap<>();
-		mRes.put("F1_"+m, result);
+		mRes.put(name+"_"+m, result);
 		return mRes;
 	}
 	
@@ -176,7 +183,7 @@ class SqFrame{
 		for (int i = 0; i < m.size(); i++) {
 			for (Entry<String, LinkedList<LinkedList<String>>> map : m.get(i).entrySet()) {
 				for (int j = 0; j < map.getValue().get(0).size(); j++) {
-					if(map.getValue().get(0).get(j).contains("f1_"))
+					if(map.getValue().get(0).get(j).contains(name+"_"))
 					{
 						s.add(map.getValue().get(0).get(j));
 					}
