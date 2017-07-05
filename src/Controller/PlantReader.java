@@ -316,7 +316,7 @@ public class PlantReader {
 						}
 						
 					}
-					if(map2.getKey().contains("f1_")){
+					if(map2.getKey().charAt(0)=='f' && (map2.getKey().contains("_e") ||map2.getKey().contains("_b"))){
 						l.add(map2.getKey());
 					}
 				}
@@ -334,7 +334,7 @@ public class PlantReader {
 			for (Entry<String, Map<String, Map<String, String>>> map2 : procs.get(j).entrySet()) {
 				for (Entry<String, Map<String, String>> string : map2.getValue().entrySet()) {
 					System.err.println("State :"+state+" = "+string);
-					if(string.getKey().contains("f1_")){
+					if(string.getKey().charAt(0)=='f' && (string.getKey().contains("_e") ||string.getKey().contains("_b"))){
 						ll.add(string.getKey());
 					}else{
 						for (Entry<String, String> l : string.getValue().entrySet()) {

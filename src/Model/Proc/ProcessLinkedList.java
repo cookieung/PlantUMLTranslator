@@ -20,16 +20,16 @@ public class ProcessLinkedList {
 		return normalProcess.size();
 	}
 	
-	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap) {
+	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nameframe) {
 		normalProcess.add(map);
 		Map<String, Map<String, Map<String, String>>> m = new LinkedHashMap<>();
-		if(!typeMap.equals("alt") && !typeMap.equals("else")) m.put("NaN", getForOpt(map, typeMap));
-		else m.put(typeMap, getForOpt(map, typeMap));
+		if(!typeMap.equals("alt") && !typeMap.equals("else")) m.put("NaN", getForOpt(map, typeMap,nameframe));
+		else m.put(typeMap, getForOpt(map, typeMap,nameframe));
 		System.out.println(typeMap +"Add Normal Map :"+map+">>"+m);
 		optProcess.add(m);
 	}
 	
-	public Map<String, Map<String, String>> getForOpt(Map<String,LinkedList<LinkedList<String>>> map,String typeMap){
+	public Map<String, Map<String, String>> getForOpt(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nameframe){
 		Map<String, Map<String, String>> mm = new LinkedHashMap<>();
 		if(typeMap.equals("alt")){
 			Map<String, String> l  = new LinkedHashMap<>();
@@ -38,7 +38,7 @@ public class ProcessLinkedList {
 					l.put(s.getValue().get(i).get(0),s.getKey());
 				}
 			}
-			mm.put("f1_b", l);
+			mm.put(nameframe+"_b", l);
 		}else if(typeMap.equals("else")){
 			Map<String, String> l  = new LinkedHashMap<>();
 			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {
@@ -46,7 +46,7 @@ public class ProcessLinkedList {
 					l.put(s.getValue().get(i).get(0),s.getKey());
 				}
 			}
-			mm.put("f1_e", l);
+			mm.put(nameframe+"_e", l);
 		}else{
 			Map<String, String> l  = new LinkedHashMap<>();
 			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {

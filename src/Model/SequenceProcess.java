@@ -15,6 +15,7 @@ public class SequenceProcess extends ProcessList {
 		
 	//A frame storage that will store all frame
 	public ArrayList<SqFrame> frames;
+	int frameCounter = 0;
 	
 	public SequenceProcess() {
 		super();
@@ -28,7 +29,8 @@ public class SequenceProcess extends ProcessList {
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
 		System.out.println("Map in Sequence Process Class :"+map);
-		processMapByName.addNormal(map,typeName);
+		if(typeName.equals("alt")) frameCounter++;
+		processMapByName.addNormal(map,typeName,"f"+frameCounter);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
 		System.out.println("$E$:"+nameL+" "+nameR);
 	}
