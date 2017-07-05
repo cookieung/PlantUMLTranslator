@@ -223,6 +223,8 @@ public class PlantReader {
 		 
 	 }
 
+	 
+
 	 public String showRelationOfSequenceWithAllState(){
 		 String s = "";
 		 Map<String, Map<String,LinkedList<String>>> map = getRelationOfSequenceWithAllState();
@@ -254,7 +256,7 @@ public class PlantReader {
 		return getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence);
 	}
 	
-	public Set<String> getFrameChannel() {
+	public static Set<String> getFrameChannel() {
 		 return frameChannel;
 	}
 	
@@ -325,6 +327,54 @@ public class PlantReader {
 		 return s;
 	 }
 	 
+	 public static Map<String ,Map<String,LinkedList<String>>> getRelationWithFrame(SequenceProcess proc){
+		 String s ="";
+		 Map<String ,Map<String,LinkedList<String>>> m = new LinkedHashMap<>();
+		 System.out.println("TRACKER :"+proc.getFrames());
+		 for (int i = 0; i < proc.getFrames().size(); i++) {
+			String n=""; 
+			LinkedList<Map<String, LinkedList<LinkedList<String>>>> elem = proc.getFrames().get(i);
+			System.out.println("7/2/2017 :"+elem);
+			LinkedList<String> state = new LinkedList<>();
+			for (int j = 0; j < elem.size(); j++) {
+				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
+					n = map.getKey().split("_")[0];
+					state.add(map.getKey());
+				}
+			}
+			Map<String,LinkedList<String>> ml = new LinkedHashMap<>();
+			ml.put("state", state);
+			LinkedList<String> process = new LinkedList<>();
+			Object[] o = getFrameChannel().toArray();
+			for (int j = 0; j < o.length; j++) {
+				process.add(o[j]+"");
+			}
+			ml.put("condition", process);
+			m.put(n, ml);
+		 }
+		 return m;
+	 }
+	 
+		 public String showRelationWithFrame(){
+			 String s = "";
+			 Map<String, Map<String,LinkedList<String>>> map = getRelationWithFrame((SequenceProcess)procSequence);
+			 for (Entry<String, Map<String, LinkedList<String>>> mp : map.entrySet()) {
+				s+= mp.getKey()+" = ";
+				Map<String, LinkedList<String>> m = mp.getValue();
+				LinkedList<String> st = m.get("state");
+				s+=st.get(0)+"[|{";
+				LinkedList<String> cond = m.get("condition");
+				for (int i = 0; i < cond.size(); i++) {
+					s+=cond.get(i);
+					if(i<cond.size()-1) s+=",";
+				}
+				s+="}|]"+st.get(st.size()-1);
+			}
+			 return s;
+			 
+		 }
+		
+		
 	 public static String formatFrame(String msg,int i,String name){
 		 frameChannel.add(name+"_alt"+i);
 		 frameChannel.add(name+"_e");
