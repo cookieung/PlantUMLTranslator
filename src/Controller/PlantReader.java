@@ -181,7 +181,7 @@ public class PlantReader {
 	    		System.out.println("[******]"+sequenceReader.isIndependentSequence());
 	    		diagrams.add(diagram);
 	    		System.out.println("TEST2 :"+diagram.toString());
-	    		System.out.println("7/2/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
+	    		System.out.println("7/5/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
 	    	}
 
 	    	return diagrams;
@@ -229,7 +229,7 @@ public class PlantReader {
 	 
 	 public static String getRelationFrameWithSequenceDiagram(SequenceProcess proc){
 		 String s ="";
-		 System.out.println("7/2/2017 :"+proc);
+		 System.out.println("TRACKER :"+proc.getFrames());
 		 for (int i = 0; i < proc.getFrames().size(); i++) {
 			LinkedList<Map<String, LinkedList<LinkedList<String>>>> elem = proc.getFrames().get(i);
 			System.out.println("7/2/2017 :"+elem);

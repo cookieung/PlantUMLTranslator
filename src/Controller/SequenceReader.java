@@ -81,8 +81,12 @@ public class SequenceReader {
 				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
 				traceMsg.add(newMsg);
 			}
-			 
-			 if(res.get(i+5).equals("@enduml")) list.checkFrame();
+
+			 System.out.println("BF CHECK FINISH");
+			 if(res.get(i+5).equals("@enduml") || res.get(i+6).equals("@enduml")){
+				 System.out.println("DO CHECKFRAME !!");
+				 list.checkFrame();
+			 }
 			 
 		}
 		 
