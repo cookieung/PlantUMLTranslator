@@ -44,6 +44,28 @@ public class SequenceProcess extends ProcessList {
 		}
 		return r;
 	}
+	 
+		public Set<Diagram> getAllTempStateDiagram(){
+			Set<Diagram> s  =new LinkedHashSet<>();
+			for (int i = 0; i < frames.size(); i++) {
+				Object[] o = frames.get(i).getAllStateDiagram().toArray();
+				for (int j = 0; j < o.length; j++) {
+					s.add((Diagram)o[j]);
+				}
+			}
+			return s;
+		}
+		
+		 //For Print alt
+		 public String getRelationOfSequenceWithAllState(){
+			 String s= "";
+			 for (int i = 0; i < frames.size(); i++) {
+				
+			}
+			 return s;
+			 
+		 }
+		
 
 	//Change the frame by the new series of frame
 	public void setFrames(ArrayList<SqFrame> frames) {
@@ -83,6 +105,8 @@ public class SequenceProcess extends ProcessList {
 		}
 
 	 }
+	
+
 	 
 	 
 	
@@ -150,6 +174,27 @@ class SqFrame{
 		return mRes;
 	}
 	
+
+	public Set<StateDiagram> getAllStateDiagram(){
+		Set<StateDiagram> s = new LinkedHashSet<>();
+		int count=1;
+		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
+			for (Entry<String, String> string : bg.getValue().entrySet()) {
+				StateDiagram stateDiagram = new StateDiagram(string.getKey());
+				s.add(stateDiagram);
+			}
+		}
+		
+		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+			for (Entry<String, String> string : en.getValue().entrySet()) {
+				StateDiagram stateDiagram = new StateDiagram(string.getKey());
+				s.add(stateDiagram);
+			}
+		}
+		System.out.println("Set :"+s);
+		return s;
+	}
+	
 	//Recent
 	public static Object[] getAllState(){
 		Set<String> setState = new LinkedHashSet<>();
@@ -179,21 +224,6 @@ class SqFrame{
 		return listM;
 	}
 	
-	public static ArrayList<String> FrameChannel() {
-		ArrayList<String> s = new ArrayList<>();
-		LinkedList<Map<String, LinkedList<LinkedList<String>>>> m = getAllFrameProc();
-		for (int i = 0; i < m.size(); i++) {
-			for (Entry<String, LinkedList<LinkedList<String>>> map : m.get(i).entrySet()) {
-				for (int j = 0; j < map.getValue().get(0).size(); j++) {
-					if(map.getValue().get(0).get(j).contains(name+"_"))
-					{
-						s.add(map.getValue().get(0).get(j));
-					}
-				}
-			}
-		}
-		return s;
-	}
 	
 	
 }

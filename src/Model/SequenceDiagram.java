@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class SequenceDiagram implements Diagram {
 	
@@ -20,6 +21,11 @@ public class SequenceDiagram implements Diagram {
 	@Override
 	public void addProcess(ProcessList process) {
 		this.processes = process;
+	}
+	
+	public Set<Diagram> getAllTempStateDiagram(){
+		SequenceProcess s = (SequenceProcess)processes;
+		return s.getAllTempStateDiagram();
 	}
 
 	@Override

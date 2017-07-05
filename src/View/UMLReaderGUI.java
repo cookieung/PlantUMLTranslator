@@ -214,10 +214,16 @@ public class UMLReaderGUI extends JFrame {
 			
 			Set<String> allProcess = plantReader.showAllProcess();
 			cspFile.append("channel "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n\n");
+			
+			Set<String> allFrameProcess = plantReader.getFrameChannel();
+			cspFile.append("channel "+allFrameProcess.toString().substring(1, allFrameProcess.toString().length()-1)+"\n\n");
+			
 			Object[] s = plantReader.showAllStateDiagram().toArray();
 			for (int i = 0; i < s.length; i++) {
 				cspFile.append(s[i]+"\n");
 			}
+			
+
 			
 
 //			cspFile.append("\nShow Relation of State Diagram :\n");
@@ -239,6 +245,8 @@ public class UMLReaderGUI extends JFrame {
 			cspFile.append(plantReader.showAssert());
 			
 			cspFile.append(plantReader.getRelationFrameWithSequenceDiagram());
+			
+
 
 		}
 	}

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import Model.Diagram;
 import Model.ProcessList;
+import Model.SequenceDiagram;
 import Model.SequenceProcess;
 
 public class SequenceReader {
@@ -25,6 +26,17 @@ public class SequenceReader {
 		this.originalMsg = originalMessage;
 		this.traceMsg = traceMsg;
 		this.res = res;
+	}
+	
+	public Set<Diagram> getAllTempStateDiagram(){
+		Set<Diagram> s  =new LinkedHashSet<>();
+		for (int i = 0; i < diagrams.size(); i++) {
+			Object[] o = ((SequenceDiagram)diagrams.get(i)).getAllTempStateDiagram().toArray();
+			for (int j = 0; j < o.length; j++) {
+				s.add((Diagram)o[j]);
+			}
+		}
+		return s;
 	}
 	
 	public ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> getRelationFrameWithSequenceDiagram(SequenceProcess process){		
@@ -82,9 +94,7 @@ public class SequenceReader {
 				traceMsg.add(newMsg);
 			}
 
-			 System.out.println("BF CHECK FINISH");
 			 if(res.get(i+5).equals("@enduml") || res.get(i+6).equals("@enduml")){
-				 System.out.println("DO CHECKFRAME !!");
 				 list.checkFrame();
 			 }
 			 
@@ -105,6 +115,8 @@ public class SequenceReader {
 		 }
 		 return false;
 	 }
+	 
+
 	 
 	 public static boolean haveStateDiagram(String msg){
 		 boolean result = false;

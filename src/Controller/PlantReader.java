@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -47,6 +48,8 @@ public class PlantReader {
 	static SequenceReader sequenceReader;
 	static StateReader stateReader;
 	private static ProcessList procSequence;
+	
+	private static Set<String> frameChannel = new HashSet<>();
 	
 	public static void main(String[]args){
  	
@@ -178,8 +181,15 @@ public class PlantReader {
 	    		sequenceReader = new SequenceReader(res,diagrams, originalMsg, traceMsg);
 	    		procSequence = sequenceReader.getResult();
 	    		diagram.addProcess(procSequence);
-	    		System.out.println("[******]"+sequenceReader.isIndependentSequence());
 	    		diagrams.add(diagram);
+	    		if(sequenceReader.isIndependentSequence()){
+	    			Object[] tmp = sequenceReader.getAllTempStateDiagram().toArray();
+	    			for (int i = 0; i < tmp.length; i++) {
+	    				if(!findThisStateDiagram(((Diagram)tmp[i]).getName()))
+			    		diagrams.add((Diagram)tmp[i]);
+					}
+	    			System.out.println("TEST STATE IND:"+diagrams);
+	    		}
 	    		System.out.println("TEST2 :"+diagram.toString());
 	    		System.out.println("7/5/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
 	    	}
@@ -189,6 +199,17 @@ public class PlantReader {
 	 
 	public String getRelationFrameWithSequenceDiagram() {
 		return getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence);
+	}
+	
+	public Set<String> getFrameChannel() {
+		 return frameChannel;
+	}
+	
+	public static boolean findThisStateDiagram(String name){
+		for (int i = 0; i < diagrams.size(); i++) {
+			if(diagrams.get(i).getName().equals(name)) return true;
+		}
+		return false;
 	}
 	 
 	 
@@ -237,7 +258,8 @@ public class PlantReader {
 				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
 					s += map.getKey()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
-						s += map.getKey().split("_")[0].toLowerCase()+"_e -> ";
+						s += map.getKey().split("_")[0].toLowerCase()+"_b -> ";
+						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
 						for (int k2 = 0; k2 < map.getValue().get(k).size(); k2++) {
 							s += formatFrame(map.getValue().get(k).get(k2),k2+1,map.getKey().split("_")[0].toLowerCase());
 							if(k2<map.getValue().get(k).size()-1) s+=" [] ";
@@ -251,6 +273,8 @@ public class PlantReader {
 	 }
 	 
 	 public static String formatFrame(String msg,int i,String name){
+		 frameChannel.add(name+"_alt"+i);
+		 frameChannel.add(name+"_e");
 		 return "("+name+"_alt"+i+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
 	 }
 
@@ -368,6 +392,17 @@ public class PlantReader {
 							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListAlt(),map2.getValue().get(k).get(0));
 							ll.add("SKIP");
 							map.put(map2.getValue().get(0).get(0), ll);
+							for (int k2 = 0; k2 < diagrams.size(); k2++) {
+								System.err.println("What the res:"+diagrams.get(k2)+" = "+(map2.getValue().get(0).get(0)));
+								if(diagrams.get(k2).getName().equals(map2.getValue().get(0).get(0))){
+									ProcessList pc = new StateProcess();
+									LinkedList<LinkedList<String>> r = new LinkedList<>();
+									r.add(ll);
+									pc.addProcess("from_sq", r, "");
+									diagrams.get(k2).addProcess(pc);
+								}
+							}
+							System.out.println("Update diagrams :"+diagrams);
 						}
 						
 					}
