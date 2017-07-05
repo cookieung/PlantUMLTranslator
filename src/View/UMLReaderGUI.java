@@ -246,6 +246,8 @@ public class UMLReaderGUI extends JFrame {
 			
 			cspFile.append(plantReader.getRelationFrameWithSequenceDiagram());
 			
+			cspFile.append(plantReader.showRelationOfSequenceWithAllState());
+			
 
 
 		}

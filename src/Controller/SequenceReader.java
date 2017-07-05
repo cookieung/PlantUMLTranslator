@@ -116,6 +116,7 @@ public class SequenceReader {
 		 return false;
 	 }
 	 
+	 
 
 	 
 	 public static boolean haveStateDiagram(String msg){

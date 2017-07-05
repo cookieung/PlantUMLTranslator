@@ -192,9 +192,62 @@ public class PlantReader {
 	    		}
 	    		System.out.println("TEST2 :"+diagram.toString());
 	    		System.out.println("7/5/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
+	    		System.out.println("RESULT SQIM1M2 :"+getRelationOfSequenceWithAllState()+"ENDD");
 	    	}
 
 	    	return diagrams;
+	 }
+	 
+	 //For Print alt
+	 public static Map<String, Map<String,LinkedList<String>>> getRelationOfSequenceWithAllState(){
+		 Map<String, Map<String,LinkedList<String>>> result = new LinkedHashMap<>();
+		 for (int a = 0; a < getAllSequenceDiagramName().length; a++) {
+			 String s = "";
+			 s+=getAllSequenceDiagramName()[a];
+			 Map<String,LinkedList<String>> map = new LinkedHashMap<>();
+			 LinkedList<String> listAllState = new LinkedList<>();
+			 for (int i = 0; i < getAllStateDiagramName().length ; i++) {
+				listAllState.add(getAllStateDiagramName()[i]+"");
+				s+=getAllStateDiagramName()[i];
+			}
+			 map.put("states", listAllState);
+			 LinkedList<String> listAllProcess = new LinkedList<>();
+			 Object[] fchannel = frameChannel.toArray();
+			 for (int i = 0; i < fchannel.length ; i++) {
+				listAllProcess.add(fchannel[i]+"");
+			}
+			 map.put("condition", listAllProcess);
+			 result.put(s, map);
+		}
+		 return result;
+		 
+	 }
+
+	 public String showRelationOfSequenceWithAllState(){
+		 String s = "";
+		 Map<String, Map<String,LinkedList<String>>> map = getRelationOfSequenceWithAllState();
+		 for (Entry<String, Map<String, LinkedList<String>>> mp : map.entrySet()) {
+			s+= mp.getKey()+" = ";
+			Map<String, LinkedList<String>> m = mp.getValue();
+			LinkedList<String> st = m.get("states");
+			s+=st.get(0)+"[|{";
+			LinkedList<String> cond = getOnlyFrameProcessBoundary(m.get("condition"));
+			for (int i = 0; i < cond.size(); i++) {
+				s+=cond.get(i);
+				if(i<cond.size()-1) s+=",";
+			}
+			s+="}|]"+st.get(st.size()-1);
+		}
+		 return s;
+		 
+	 }
+	 
+	 public LinkedList<String> getOnlyFrameProcessBoundary(LinkedList<String> cond){
+		LinkedList<String> ll =new LinkedList<>();
+			for (int i = 0; i < cond.size(); i++) {
+				 if(cond.get(i).contains("_b") || cond.get(i).contains("_e")) ll.add(cond.get(i));
+			}
+		return ll;
 	 }
 	 
 	public String getRelationFrameWithSequenceDiagram() {
@@ -456,7 +509,7 @@ public class PlantReader {
 	 }
 	 
 	 
-	 public Object[] getAllStateDiagramName(){
+	 public static Object[] getAllStateDiagramName(){
 		Set<String> s = new LinkedHashSet<>();
 		for (int i = 0; i < getAllStateDiagram().size(); i++) {
 			s.add(getAllStateDiagram().get(i).getName());
@@ -464,7 +517,7 @@ public class PlantReader {
 		return s.toArray();
 	 }
 	 
-	 public ArrayList<Diagram> getAllStateDiagram(){
+	 public static ArrayList<Diagram> getAllStateDiagram(){
 		ArrayList<Diagram> s = new ArrayList<>();
 		for (int i = 0; i < diagrams.size(); i++) {
 			if(diagrams.get(i).getName().contains("M_"))
@@ -473,7 +526,7 @@ public class PlantReader {
 		return s;
 	 }
 
-	 public Object[] getAllSequenceDiagramName(){
+	 public static Object[] getAllSequenceDiagramName(){
 		LinkedList<String> s = new LinkedList<>();
 		for (int i = 0; i < getAllSequenceDiagram().size(); i++) {
 			s.add(getAllSequenceDiagram().get(i).getName());

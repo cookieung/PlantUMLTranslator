@@ -56,15 +56,6 @@ public class SequenceProcess extends ProcessList {
 			return s;
 		}
 		
-		 //For Print alt
-		 public String getRelationOfSequenceWithAllState(){
-			 String s= "";
-			 for (int i = 0; i < frames.size(); i++) {
-				
-			}
-			 return s;
-			 
-		 }
 		
 
 	//Change the frame by the new series of frame
@@ -180,14 +171,14 @@ class SqFrame{
 		int count=1;
 		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
 			for (Entry<String, String> string : bg.getValue().entrySet()) {
-				StateDiagram stateDiagram = new StateDiagram(string.getKey());
+				StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
 				s.add(stateDiagram);
 			}
 		}
 		
 		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
 			for (Entry<String, String> string : en.getValue().entrySet()) {
-				StateDiagram stateDiagram = new StateDiagram(string.getKey());
+				StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
 				s.add(stateDiagram);
 			}
 		}
