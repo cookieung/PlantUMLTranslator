@@ -116,6 +116,8 @@ class SqFrame{
 		System.out.println("end :"+endList);
 		this.beginList = beginList;
 		this.endList = endList;
+		System.out.println("BEGIN :"+beginList);
+		System.out.println("END :"+endList);
 		this.name = name;
 		this.processFrame = getAllFrameProc();
 	}

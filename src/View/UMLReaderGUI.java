@@ -211,13 +211,10 @@ public class UMLReaderGUI extends JFrame {
 //				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
 //				
 //			}
-			
-			Set<String> allProcess = plantReader.showAllProcess();
-			cspFile.append("channel "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n\n");
-			
-			Set<String> allFrameProcess = plantReader.getFrameChannel();
-			cspFile.append("channel "+allFrameProcess.toString().substring(1, allFrameProcess.toString().length()-1)+"\n\n");
-			
+
+
+			cspFile.append(plantReader.showChannel());
+
 			Object[] s = plantReader.showAllStateDiagram().toArray();
 			for (int i = 0; i < s.length; i++) {
 				cspFile.append(s[i]+"\n");

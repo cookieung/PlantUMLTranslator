@@ -314,11 +314,13 @@ public class PlantReader {
 				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
 					s += map.getKey()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
+						System.out.println("DEBUG :"+map.getValue());
 						s += map.getKey().split("_")[0].toLowerCase()+"_b -> ";
 						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
-						for (int k2 = 0; k2 < map.getValue().get(k).size(); k2++) {
-							s += formatFrame(map.getValue().get(k).get(k2),k2+1,map.getKey().split("_")[0].toLowerCase());
-							if(k2<map.getValue().get(k).size()-1) s+=" [] ";
+						LinkedList<String> tl = makeForBlankSpaceProc(map.getValue().get(k));
+						for (int k2 = 0; k2 < tl.size(); k2++) {
+							s += formatFrame(tl.get(k2),k2+1,map.getKey().split("_")[0].toLowerCase());
+							if(k2<tl.size()-1) s+=" [] ";
 						}
 					}
 					s+="\n";
@@ -327,6 +329,13 @@ public class PlantReader {
 		 }
 		 return s;
 	 }
+	 
+	 private static LinkedList<String> makeForBlankSpaceProc(LinkedList<String> ll) {
+		 if(ll.size()==1){
+			ll.add("");
+		}
+		return ll;
+	}
 	 
 	 public static Map<String ,Map<String,LinkedList<String>>> getRelationWithFrame(SequenceProcess proc){
 		 String s ="";
@@ -384,6 +393,7 @@ public class PlantReader {
 	 public static String formatFrame(String msg,int i,String name){
 		 frameChannel.add(name+"_alt"+i);
 		 frameChannel.add(name+"_e");
+		 if(msg.length()==0) return "("+name+"_alt"+i+" -> "+name+"_e"+" -> SKIP)";
 		 return "("+name+"_alt"+i+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
 	 }
 
@@ -612,6 +622,18 @@ public class PlantReader {
 				}
 			}
 		 return processes;
+	 }
+	 
+	 public static String showChannel(){
+		 	String s = "";
+			Set<String> allProcess = showAllProcess();
+			s+="channel "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n\n";
+			
+			if(sequenceReader.isIndependentSequence()){
+			Set<String> allFrameProcess = getFrameChannel();
+			s+="channel "+allFrameProcess.toString().substring(1, allFrameProcess.toString().length()-1)+"\n\n";
+			}
+			return s;
 	 }
 
 	 public static Set<String> showAllStateDiagram(){
