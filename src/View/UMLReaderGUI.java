@@ -205,12 +205,12 @@ public class UMLReaderGUI extends JFrame {
 				
 			}
 			
-			cspFile.append("DIAGRAM :\n");
-			for (int i = 0; i < diagrams.size(); i++) {
-				cspFile.append(diagrams.get(i).getName()+" : \n");
-				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
-				
-			}
+//			cspFile.append("DIAGRAM :\n");
+//			for (int i = 0; i < diagrams.size(); i++) {
+//				cspFile.append(diagrams.get(i).getName()+" : \n");
+//				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
+//				
+//			}
 			
 			Set<String> allProcess = plantReader.showAllProcess();
 			cspFile.append("channel "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n\n");
@@ -223,9 +223,12 @@ public class UMLReaderGUI extends JFrame {
 				cspFile.append(s[i]+"\n");
 			}
 			
-
 			
+			cspFile.append(plantReader.showSequenceDiagram()+"\n");
 
+			cspFile.append("Frame :\n");
+			cspFile.append(plantReader.getRelationFrameWithSequenceDiagram());
+			
 //			cspFile.append("\nShow Relation of State Diagram :\n");
 			cspFile.append(plantReader.showRelationOfStateDiagram()+"\n");
 			
@@ -236,22 +239,22 @@ public class UMLReaderGUI extends JFrame {
 			cspFile.append(plantReader.showRelationOfAllMessage()+"\n");
 			
 			cspFile.append(plantReader.showRelationWithSMIAndMSG()+"\n");
-			
-			cspFile.append(plantReader.showSequenceDiagram()+"\n");
+
 			
 			cspFile.append("Relation between Sequence:\n");
 			cspFile.append(plantReader.showTheRelationBetweenSequenceDiagramAndMessage()+"\n");
 
+
+//			
+//			cspFile.append(plantReader.showRelationOfSequenceWithAllState()+"\n");
+//			
+//			cspFile.append(plantReader.showRelationWithFrame()+"");
+//			
+//			cspFile.append("Relation between Frame Sequence:\n");
+//			cspFile.append(plantReader.showTheRelationBetweenFrameSequenceDiagramAndMessage()+"\n");
+			
+			
 			cspFile.append(plantReader.showAssert());
-			
-			cspFile.append(plantReader.getRelationFrameWithSequenceDiagram());
-			
-			cspFile.append(plantReader.showRelationOfSequenceWithAllState()+"\n");
-			
-			cspFile.append(plantReader.showRelationWithFrame()+"");
-			
-			cspFile.append("Relation between Frame Sequence:\n");
-			cspFile.append(plantReader.showTheRelationBetweenFrameSequenceDiagramAndMessage()+"\n");
 
 
 		}
