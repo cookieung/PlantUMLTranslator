@@ -357,6 +357,7 @@ public class PlantReader {
 			LinkedList<String> process = new LinkedList<>();
 			Object[] o = getFrameChannel().toArray();
 			for (int j = 0; j < o.length; j++) {
+				if(o[j].toString().contains(n.toLowerCase()))
 				process.add(o[j]+"");
 			}
 			ml.put("condition", process);
