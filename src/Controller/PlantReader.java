@@ -233,13 +233,21 @@ public class PlantReader {
 			s+= mp.getKey()+" = ";
 			Map<String, LinkedList<String>> m = mp.getValue();
 			LinkedList<String> st = m.get("states");
-			s+=st.get(0)+"[|{";
+			s+=st.get(0);
 			LinkedList<String> cond = getOnlyFrameProcessBoundary(m.get("condition"));
+			String c = "[|{";
 			for (int i = 0; i < cond.size(); i++) {
-				s+=cond.get(i);
-				if(i<cond.size()-1) s+=",";
+				c+=cond.get(i);
+				if(i<cond.size()-1) c+=",";
 			}
-			s+="}|]"+st.get(st.size()-1);
+			c+="}|]";
+			s+=c;
+			for (int i = 1; i < st.size(); i++) {
+				if(i==1) s+="(";
+				s+=st.get(i);
+				if(i<st.size()-1)s+=c;
+				if(i==st.size()-1) s+=")";
+			}
 		}
 		 return s;
 		 
@@ -380,13 +388,26 @@ public class PlantReader {
 				LinkedList<String> st = m.get("state");
 				s+=st.get(0)+"[|{";
 				LinkedList<String> cond = m.get("condition");
+				String c = "[|{";
 				for (int i = 0; i < cond.size(); i++) {
-					s+=cond.get(i);
-					if(i<cond.size()-1) s+=",";
+					c+=cond.get(i);
+					if(i<cond.size()-1) c+=",";
 				}
-				s+="}|]"+st.get(st.size()-1)+"\n";
+				c+="}|]";
+				s+=c;
+				for (int i = 1; i < st.size(); i++) {
+					if(i==1) s+="(";
+					s+=st.get(i);
+					if(i<st.size()-1)s+=c;
+					if(i==st.size()-1) s+=")";
+				}
+//				for (int i = 0; i < cond.size(); i++) {
+//					s+=cond.get(i);
+//					if(i<cond.size()-1) s+=",";
+//				}
+//				s+="}|]"+st.get(st.size()-1)+"\n";
 			}
-			 return s;
+			 return s+"\n";
 			 
 		 }
 		
