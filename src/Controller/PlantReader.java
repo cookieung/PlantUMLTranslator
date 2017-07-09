@@ -241,16 +241,22 @@ public class PlantReader {
 				if(i<cond.size()-1) c+=",";
 			}
 			c+="}|]";
-			s+=c;
-			for (int i = 1; i < st.size(); i++) {
-				if(i==1) s+="(";
-				s+=st.get(i);
-				if(i<st.size()-1)s+=c;
-				if(i==st.size()-1) s+=")";
-			}
+			s+=c+getRightStateForPrint(st, 1, c);
 		}
 		 return s;
 		 
+	 }
+	 
+	 public String getRightStateForPrint(LinkedList<String> s, int i,String con){
+		 String r = "";
+		 for (int j = i; j < s.size(); j++) {
+			if(j==s.size()-1) r+=s.get(j); 
+			else{
+				r+="("+s.get(j)+con+getRightStateForPrint(s, j+1, con)+")";
+				break;
+			}
+		}
+		 return r;
 	 }
 	 
 	 public LinkedList<String> getOnlyFrameProcessBoundary(LinkedList<String> cond){
@@ -394,13 +400,13 @@ public class PlantReader {
 					if(i<cond.size()-1) c+=",";
 				}
 				c+="}|]";
-				s+=c;
-				for (int i = 1; i < st.size(); i++) {
-					if(i==1) s+="(";
-					s+=st.get(i);
-					if(i<st.size()-1)s+=c;
-					if(i==st.size()-1) s+=")";
-				}
+				s+=c+getRightStateForPrint(st, 1, c);
+//				for (int i = 1; i < st.size(); i++) {
+//					if(i==1) s+="(";
+//					s+=st.get(i);
+//					if(i<st.size()-1)s+=c;
+//					if(i==st.size()-1) s+=")";
+//				}
 //				for (int i = 0; i < cond.size(); i++) {
 //					s+=cond.get(i);
 //					if(i<cond.size()-1) s+=",";
