@@ -400,9 +400,9 @@ public class PlantReader {
 					if(i<cond.size()-1) c+=",";
 				}
 				c+="}|]";
-				s+=c+getRightStateForPrint(st, 1, c);
+				s+=c+getRightStateForPrint(st, 1, c)+"\n";
 			}
-			 return s+"\n";
+			 return s;
 			 
 		 }
 		
@@ -828,26 +828,54 @@ public class PlantReader {
 		 return resMap;
 	 }
 
-	public Map<String, String> getTheRelationBetweenFrameSequenceDiagramAndMessage() {
-		Map<String, String> resM = new LinkedHashMap<>();
+	public Map<String, LinkedList<String>> getTheRelationBetweenFrameSequenceDiagramAndMessage() {
+		Map<String, LinkedList<String>> resM = new LinkedHashMap<>();
 		Map<String, Map<String,LinkedList<String>>> map = getRelationOfSequenceWithAllState();
 		Map<String, Map<String,LinkedList<String>>> map2 = getRelationWithFrame((SequenceProcess)procSequence);
+		LinkedList<String> l1 = new LinkedList<>();
+		LinkedList<String> l2 = new LinkedList<>();
 		for (Entry<String, Map<String, LinkedList<String>>> m : map.entrySet()) {
-			resM.put("squenceFrame", m.getKey());
-			resM.put("name", m.getKey().split("I")[0]);
+			l1.add(m.getKey());
+			l2.add(m.getKey().split("I")[0]);
 		}
+		resM.put("squenceFrame",l1 );
+		resM.put("name",l2);
+		System.out.println("2 BUG :"+map2);
+		LinkedList<String> l3 = new LinkedList<>();
+		Set<String> l4 = new LinkedHashSet<>();
 		for (Entry<String, Map<String, LinkedList<String>>> m2 : map2.entrySet()) {
-			resM.put("sequenceState", m2.getKey());
+			l3.add(m2.getKey());
 			for (Entry<String, LinkedList<String>> mm : m2.getValue().entrySet()) {
-				resM.put("condition", mm.getValue()+"");
+				if(mm.getKey().equals("condition"))
+				for (int i = 0; i < mm.getValue().size(); i++) {
+					l4.add(mm.getValue().get(i));
+					System.err.println(mm.getValue().get(i));
+				}
 			}
 		}
+		Object[] s = l4.toArray();
+		LinkedList<String> l5 = new LinkedList<>();
+ 		for (int i = 0; i < s.length; i++) {
+			l5.add(s[i]+"");
+		}
+		resM.put("sequenceState", l3);
+		resM.put("condition", l5);
 		return resM;
 	}
 	 
 	public String showTheRelationBetweenFrameSequenceDiagramAndMessage() {
-		Map<String, String> resM = getTheRelationBetweenFrameSequenceDiagramAndMessage();
-		return resM.get("name")+" = "+resM.get("squenceFrame")+"[|{"+resM.get("condition")+resM.get("sequenceState");
+		Map<String, LinkedList<String>> resM = getTheRelationBetweenFrameSequenceDiagramAndMessage();
+		String s = resM.get("name").get(0)+" = "+resM.get("squenceFrame").get(0);
+		String c = "[|{";
+		LinkedList<String> l = resM.get("condition");
+		for (int i = 0; i < l.size(); i++) {
+			c+=l.get(i);
+			if(i<l.size()-1)c+=",";
+		}
+		c+="}|]";
+		s+=c+getRightStateForPrint(resM.get("sequenceState"), 1,c );
+		
+		return s;
 	}
 	 
 	 
