@@ -29,7 +29,7 @@ public class SequenceProcess extends ProcessList {
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
 		System.out.println("Map in Sequence Process Class :"+map);
-		if(typeName.equals("alt")) frameCounter++;
+		if(typeName.equals("alt") || typeName.equals("opt")) frameCounter++;
 		processMapByName.addNormal(map,typeName,"f"+frameCounter);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
 		System.out.println("$E$:"+nameL+" "+nameR);

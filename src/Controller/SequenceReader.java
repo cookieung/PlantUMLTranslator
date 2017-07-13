@@ -65,6 +65,7 @@ public class SequenceReader {
 			 
 			 String mmm = newMsg.substring(2);
 			 
+			 System.out.println("Type Map :"+typeMap);
 			 System.err.println(mmm+" : "+haveStateDiagram(mmm));
 			 
 			 originalMsg.add(res.get(i+4));
