@@ -292,6 +292,7 @@ public class PlantReader {
 		
 		string += showSequenceDiagram()+"\n";
 
+		if(getFrameChannel().size()>0)
 		string += getRelationFrameWithSequenceDiagram();
 
 		string += showRelationOfStateDiagram()+"\n";
@@ -302,8 +303,8 @@ public class PlantReader {
 		
 		string += showRelationWithSMIAndMSG()+"\n";
 
-		string += "Relation between Sequence:\n";
-		
+//		string += "Relation between Sequence:\n";
+		if(getFrameChannel().size()>0)
 		string += showTheRelationBetweenSequenceDiagramAndMessage()+"\n";
 		return string;
 	}
@@ -683,7 +684,7 @@ public class PlantReader {
 			Set<String> allProcess = showAllProcess();
 			s+="channel "+allProcess.toString().substring(1, allProcess.toString().length()-1)+"\n\n";
 			
-			if(sequenceReader.isIndependentSequence()){
+			if(getFrameChannel().size()>0){
 			Set<String> allFrameProcess = getFrameChannel();
 			s+="channel "+allFrameProcess.toString().substring(1, allFrameProcess.toString().length()-1)+"\n\n";
 			}
