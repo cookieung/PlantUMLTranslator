@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import Model.Diagram;
-import Model.ProcessList;
-import Model.SequenceDiagram;
-import Model.SequenceProcess;
+import Model.oop.Diagram;
+import Model.oop.ProcessList;
+import Model.sequence.SequenceDiagram;
+import Model.sequence.SequenceProcess;
 
 public class SequenceReader {
 	

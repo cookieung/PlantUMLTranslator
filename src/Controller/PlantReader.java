@@ -12,12 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import Model.Diagram;
-import Model.SequenceDiagram;
-import Model.SequenceProcess;
-import Model.StateDiagram;
-import Model.StateProcess;
-import Model.ProcessList;
 import View.UMLReader;
 import View.UMLReaderGUI;
 
@@ -28,6 +22,13 @@ import java.util.LinkedHashSet;
 
 import javax.naming.spi.DirStateFactory.Result;
 import javax.sound.midi.Sequence;
+
+import Model.oop.Diagram;
+import Model.oop.ProcessList;
+import Model.sequence.SequenceDiagram;
+import Model.sequence.SequenceProcess;
+import Model.state.StateDiagram;
+import Model.state.StateProcess;
 
 public class PlantReader {
 	
@@ -182,6 +183,7 @@ public class PlantReader {
 	    		procSequence = sequenceReader.getResult();
 	    		diagram.addProcess(procSequence);
 	    		diagrams.add(diagram);
+	    		System.out.println("Check is Ind :"+sequenceReader.isIndependentSequence());
 	    		if(sequenceReader.isIndependentSequence()){
 	    			Object[] tmp = sequenceReader.getAllTempStateDiagram().toArray();
 	    			for (int i = 0; i < tmp.length; i++) {
@@ -229,9 +231,11 @@ public class PlantReader {
 	 public String showRelationOfSequenceWithAllState(){
 		 String s = "";
 		 Map<String, Map<String,LinkedList<String>>> map = getRelationOfSequenceWithAllState();
+		 System.err.println("MAP :"+map);
 		 for (Entry<String, Map<String, LinkedList<String>>> mp : map.entrySet()) {
 			s+= mp.getKey()+" = ";
 			Map<String, LinkedList<String>> m = mp.getValue();
+			System.err.println("Test m :"+mp);
 			LinkedList<String> st = m.get("states");
 			s+=st.get(0);
 			LinkedList<String> cond = getOnlyFrameProcessBoundary(m.get("condition"));

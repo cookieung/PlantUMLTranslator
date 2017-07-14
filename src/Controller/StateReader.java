@@ -1,12 +1,13 @@
 package Controller;
 
 import java.util.ArrayList;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import Model.ProcessList;
-import Model.StateProcess;
+import Model.oop.ProcessList;
+import Model.state.StateProcess;
 
 public class StateReader extends DiagramReader {
 

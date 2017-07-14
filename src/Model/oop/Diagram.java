@@ -1,4 +1,4 @@
-package Model;
+package Model.oop;
 
 import java.util.LinkedList;
 import java.util.Map;

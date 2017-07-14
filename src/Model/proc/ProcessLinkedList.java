@@ -1,4 +1,4 @@
-package Model.Proc;
+package Model.proc;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

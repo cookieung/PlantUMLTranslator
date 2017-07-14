@@ -1,4 +1,4 @@
-package Model;
+package Model.sequence;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import Model.oop.Diagram;
+import Model.oop.ProcessList;
+
 import java.util.Set;
 
 public class SequenceDiagram implements Diagram {

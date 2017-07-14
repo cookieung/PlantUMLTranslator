@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import Controller.PlantReader;
-import Model.Diagram;
+import Model.oop.Diagram;
 
 
 public class UMLReaderGUI extends JFrame {
@@ -51,7 +51,7 @@ public class UMLReaderGUI extends JFrame {
 	
 	private ArrayList<Diagram> diagrams;
 	private PlantReader plantReader;
-	private ArrayList<Map<String, ArrayList<String>>> allUML;
+//	private ArrayList<Map<String, ArrayList<String>>> allUML;
 
 	public UMLReaderGUI(UMLReader reader) {
 		this.umlReader = reader;
@@ -59,6 +59,7 @@ public class UMLReaderGUI extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		initController();
 		initComponents();
+		initActionListener();
 		this.pack();
 	}
 	
@@ -126,7 +127,7 @@ public class UMLReaderGUI extends JFrame {
 		contents.add(panel2);
 
 		this.add(contents);
-		initActionListener();
+
 		
 	}
 	
@@ -205,12 +206,12 @@ public class UMLReaderGUI extends JFrame {
 				
 			}
 			
-//			cspFile.append("DIAGRAM :\n");
-//			for (int i = 0; i < diagrams.size(); i++) {
-//				cspFile.append(diagrams.get(i).getName()+" : \n");
-//				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
-//				
-//			}
+			cspFile.append("DIAGRAM :\n");
+			for (int i = 0; i < diagrams.size(); i++) {
+				cspFile.append(diagrams.get(i).getName()+" : \n");
+				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
+				
+			}
 
 
 			cspFile.append(plantReader.showChannel());
@@ -260,6 +261,7 @@ public class UMLReaderGUI extends JFrame {
 			result.setText("");
 			nameFile.setText("");
 			cspFile.setText("");
+
 		}
 	}
 	
