@@ -35,9 +35,9 @@ public class PlantReader {
 //	private static Map<String,LinkedList<Map<String,LinkedList<String>>>> traceData;
 	private static String input="";
 	private static String[] equations;
-	private static int count=0;
-	private static Integer STATE_DG=0;
-	private static Integer SEQUENCE_DG=0;
+	private static int count;
+	private static Integer STATE_DG;
+	private static Integer SEQUENCE_DG;
 	private static ArrayList<Map<String,ArrayList<String>>> allUML = new ArrayList<>();
 	
 	private static ArrayList<Diagram> diagrams;
@@ -51,6 +51,12 @@ public class PlantReader {
 	private static ProcessList procSequence;
 	
 	private static Set<String> frameChannel = new HashSet<>();
+	
+	public PlantReader(){
+		count=0;
+		STATE_DG=0;
+		SEQUENCE_DG=0;
+	}
 	
 	public static void main(String[]args){
  	
@@ -273,6 +279,33 @@ public class PlantReader {
 	 
 	public String getRelationFrameWithSequenceDiagram() {
 		return getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence);
+	}
+	
+	public String getCSP(){
+		String string = "";
+		string += showChannel();
+
+		Object[] s = showAllStateDiagram().toArray();
+		for (int i = 0; i < s.length; i++) {
+			string += s[i]+"\n";
+		}
+		
+		string += showSequenceDiagram()+"\n";
+
+		string += getRelationFrameWithSequenceDiagram();
+
+		string += showRelationOfStateDiagram()+"\n";
+
+		string += showAllTraceOfMessage()+"\n";
+
+		string += showRelationOfAllMessage()+"\n";
+		
+		string += showRelationWithSMIAndMSG()+"\n";
+
+		string += "Relation between Sequence:\n";
+		
+		string += showTheRelationBetweenSequenceDiagramAndMessage()+"\n";
+		return string;
 	}
 	
 	public static Set<String> getFrameChannel() {

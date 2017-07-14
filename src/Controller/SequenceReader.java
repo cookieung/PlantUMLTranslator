@@ -31,9 +31,11 @@ public class SequenceReader {
 	public Set<Diagram> getAllTempStateDiagram(){
 		Set<Diagram> s  =new LinkedHashSet<>();
 		for (int i = 0; i < diagrams.size(); i++) {
-			Object[] o = ((SequenceDiagram)diagrams.get(i)).getAllTempStateDiagram().toArray();
-			for (int j = 0; j < o.length; j++) {
-				s.add((Diagram)o[j]);
+			if(diagrams.get(i).getClass().equals(SequenceDiagram.class)){
+				Object[] o = ((SequenceDiagram)diagrams.get(i)).getAllTempStateDiagram().toArray();
+				for (int j = 0; j < o.length; j++) {
+					s.add((Diagram)o[j]);
+				}
 			}
 		}
 		return s;
