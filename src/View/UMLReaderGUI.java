@@ -214,34 +214,7 @@ public class UMLReaderGUI extends JFrame {
 			}
 
 
-			cspFile.append(plantReader.showChannel());
-
-			Object[] s = plantReader.showAllStateDiagram().toArray();
-			for (int i = 0; i < s.length; i++) {
-				cspFile.append(s[i]+"\n");
-			}
-			
-			
-			cspFile.append(plantReader.showSequenceDiagram()+"\n");
-
-//			cspFile.append("Frame :\n");
-			cspFile.append(plantReader.getRelationFrameWithSequenceDiagram());
-			
-//			cspFile.append("\nShow Relation of State Diagram :\n");
-			cspFile.append(plantReader.showRelationOfStateDiagram()+"\n");
-			
-//			cspFile.append("\nShow All Trace of Message :\n");
-			cspFile.append(plantReader.showAllTraceOfMessage()+"\n");
-			
-//			cspFile.append("\nShow Relation of All Message :\n");
-			cspFile.append(plantReader.showRelationOfAllMessage()+"\n");
-			
-			cspFile.append(plantReader.showRelationWithSMIAndMSG()+"\n");
-
-			
-			cspFile.append("Relation between Sequence:\n");
-			cspFile.append(plantReader.showTheRelationBetweenSequenceDiagramAndMessage()+"\n");
-
+			cspFile.append(plantReader.getCSP());
 	
 			cspFile.append(plantReader.showAssert());
 
@@ -261,7 +234,7 @@ public class UMLReaderGUI extends JFrame {
 			result.setText("");
 			nameFile.setText("");
 			cspFile.setText("");
-
+			initController();
 		}
 	}
 	
