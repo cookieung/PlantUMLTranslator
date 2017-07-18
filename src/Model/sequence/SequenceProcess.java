@@ -55,6 +55,7 @@ public class SequenceProcess extends ProcessList {
 		private void addStateToSet(LinkedList<LinkedList<String>> linkedList){
 			for (int i = 0; i < linkedList.size(); i++) {
 				for (int j = 0; j < linkedList.get(i).size(); j++) {
+					if(!linkedList.get(i).get(j).contains(">"))
 					states.add(new StateDiagram("M_"+linkedList.get(i).get(j)));
 					
 				}
@@ -67,11 +68,13 @@ public class SequenceProcess extends ProcessList {
 				Object[] o = frames.get(i).getAllStateDiagram().toArray();
 				for (int j = 0; j < o.length; j++) {
 					s.add((Diagram)o[j]);
+					System.err.println("P1 :"+(Diagram)o[j]+"");
 				}
 			}
 			Object[] ss  = states.toArray();
 			for (int i = 0; i < ss.length; i++) {
 				s.add((Diagram)ss[i]);
+				System.err.println("P2 :"+(Diagram)ss[i]);
 			}
 			System.out.println("All Temp State :"+s);
 			return s;
