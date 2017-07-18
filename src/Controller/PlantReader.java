@@ -75,23 +75,46 @@ public class PlantReader {
     		
     	    	
 	}
-	
-	public static String showAllTraceOfMessage() {
+
+	public static Map<String,LinkedList<String>> getAllTraceOfMessage() {
+		Map<String,LinkedList<String>> result= new LinkedHashMap<>();
 		String str="";
 		Object[] o = traceMsg.toArray();
 		Object[] allM = originalMsg.toArray();
 		for (int i = 0; i < allM.length; i++) {
-			LinkedList<String> linklist = new LinkedList<>();
-			str+= allM[i].toString().toUpperCase()+" = ";
+			LinkedList<String> list = new LinkedList<>();
+			Set<String> linklist = new LinkedHashSet<>();
 			for (int j = 0; j < o.length; j++) {
-					if(o[j].toString().contains(allM[i].toString()))
-					{
-						str+=o[j]+"->";
-						linklist.add(o[j]+"");
+				if(o[j].toString().contains("->")) {
+					String[] s= o[j].toString().split("->");
+					for (int k = 0; k < s.length; k++) {
+						System.out.println(s[k]+" 1contains "+(allM[i].toString()));
+						if(s[k].contains(allM[i].toString()))
+						linklist.add(s[k].replace(" ", ""));
 					}
+				}else {
+					System.out.println(o[j].toString()+" 2contains "+(allM[i].toString()));
+					if(o[j].toString().contains(allM[i].toString()))
+					linklist.add(o[j].toString().replace(" ", ""));
+				}
 			}
-			str+= allM[i].toString().toUpperCase()+"\n";
-			traceMessage.put(allM[i]+"", linklist);
+			for (int j = 0; j < linklist.toArray().length; j++) {
+				list.add(linklist.toArray()[j].toString());
+			}
+			result.put(allM[i].toString().toUpperCase(), list);
+		}
+		return result;
+	}
+	
+	public static String showAllTraceOfMessage() {
+		String str="";
+		Map<String, LinkedList<String>> m = getAllTraceOfMessage();
+		for (Entry<String, LinkedList<String>> map : m.entrySet()) {
+			str += map.getKey()+" = ";
+			for (int i = 0; i < map.getValue().size(); i++) {
+				str+=map.getValue().get(i)+"->";
+			}
+			str += map.getKey()+"\n";
 		}
 		return str;
 	}
@@ -179,7 +202,7 @@ public class PlantReader {
 	    	System.out.println("State :" +state);
 	    	if(state.contains("M")){
 	    		diagram = new StateDiagram(state);
-	    		stateReader = new StateReader();
+	    		stateReader = new StateReader(originalMsg, traceMsg);
 	    		diagram.addProcess(stateReader.processForStateDiagram(res));
 	    		diagrams.add(diagram);
 	    		System.out.println("TEST1 :"+diagram.toString());
@@ -297,9 +320,10 @@ public class PlantReader {
 
 		string += showRelationOfStateDiagram()+"\n";
 
+		
 		string += showAllTraceOfMessage()+"\n";
 
-		string += showRelationOfAllMessage()+"\n";
+		string += "ABC :"+showRelationOfAllMessage()+"\n";
 		
 		string += showRelationWithSMIAndMSG()+"\n";
 
@@ -349,7 +373,7 @@ public class PlantReader {
 	 public Map<String,LinkedList<String>> getRelationOfAllMessage(){
 		 LinkedList<String> str= new LinkedList<>();
 		 Map<String, LinkedList<String>> map = new LinkedHashMap<>();
-		 for (Entry<String, LinkedList<String>> eachLine : traceMessage.entrySet()) {
+		 for (Entry<String, LinkedList<String>> eachLine : getAllTraceOfMessage().entrySet()) {
 			 str.add(eachLine.getKey().toUpperCase());
 		}
 		map.put("MSG", str); 
@@ -457,6 +481,7 @@ public class PlantReader {
 		 Map<String, LinkedList<String>> map = getRelationOfAllMessage();
 		 for (Entry<String, LinkedList<String>> eachLine:map.entrySet()) {
 			 str+=eachLine.getKey()+" = ";
+			 if(eachLine.getValue().size()==0) return "";
 			 for (int i = 0; i < eachLine.getValue().size(); i++) {
 				 str+=eachLine.getValue().get(i);
 				 if(i<eachLine.getValue().size()-1) str+=" ||| ";
