@@ -13,9 +13,9 @@ class SequenceFrame{
 	static Map<String, Map<String, String>> beginList;
 	static Map<String, Map<String, String>> endList;
 	LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
-	static String name = "";
+	static String name = "",typeFrame = "";
 	
-	public SequenceFrame(String name,Map<String, Map<String, String>> beginList,Map<String, Map<String, String>> endList){
+	public SequenceFrame(String name,String typeFrame,Map<String, Map<String, String>> beginList,Map<String, Map<String, String>> endList){
 		System.out.println("begin :"+beginList);
 		System.out.println("end :"+endList);
 		this.beginList = beginList;
@@ -23,6 +23,7 @@ class SequenceFrame{
 		System.out.println("BEGIN :"+beginList);
 		System.out.println("END :"+endList);
 		this.name = name;
+		this.typeFrame = typeFrame;
 		this.processFrame = getAllFrameProc();
 	}
 	
@@ -31,22 +32,26 @@ class SequenceFrame{
 	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessFrame() {
 		return processFrame;
 	}
+	
+	public String getTypeFrame() {
+		return this.typeFrame;
+	}
 
 
 
 	public String toString(){
-		String s ="###";
-		for (int i = 0; i < processFrame.size(); i++) {
-			for (Entry<String, LinkedList<LinkedList<String>>> map : processFrame.get(i).entrySet()) {
-				s+=map.getKey()+" = ";
-				for (int j = 0; j < map.getValue().size(); j++) {
-					for (int k = 0; k < map.getValue().get(j).size(); k++) {
-						s+=map.getValue().get(j).get(k);
-					}
-				}
-			}
-		}
-		return "###"+processFrame;
+		String s ="###"+typeFrame;
+//		for (int i = 0; i < processFrame.size(); i++) {
+//			for (Entry<String, LinkedList<LinkedList<String>>> map : processFrame.get(i).entrySet()) {
+//				s+=map.getKey()+" = ";
+//				for (int j = 0; j < map.getValue().size(); j++) {
+//					for (int k = 0; k < map.getValue().get(j).size(); k++) {
+//						s+=map.getValue().get(j).get(k);
+//					}
+//				}
+//			}
+//		}
+		return s+processFrame;
 	}
 	
 	
@@ -68,6 +73,7 @@ class SequenceFrame{
 		result.add(res);
 		Map<String, LinkedList<LinkedList<String>>> mRes = new LinkedHashMap<>();
 		mRes.put(name+"_"+m, result);
+		System.out.println("Process Name M :"+name);
 		return mRes;
 	}
 	

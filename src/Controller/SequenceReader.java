@@ -105,7 +105,7 @@ public class SequenceReader {
 		 
 		 System.out.println("List :"+list);
 		 
-		 list.testAlt();
+		 list.testOpt();
 		 
 		 return list;
 		 

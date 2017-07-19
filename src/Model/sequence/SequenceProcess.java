@@ -42,6 +42,10 @@ public class SequenceProcess extends ProcessList {
 		System.out.println("$E$:"+nameL+" "+nameR);
 	}
 	
+	public String getFrameTypeName(int i) {
+		return frames.get(i).getTypeFrame();
+	}
+	
 	//Get All frame in this sequence to printout
 	 public ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> getFrames() {
 		 ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> r = new ArrayList<>();
@@ -97,6 +101,7 @@ public class SequenceProcess extends ProcessList {
 	//Update the frame
 	@Override
 	 public void checkFrame(){
+		 String nameKey = "";
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
 		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getOptProcess();
@@ -105,12 +110,13 @@ public class SequenceProcess extends ProcessList {
 		 for (int i = 0; i < l.size(); i++) {
 			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
 				System.out.println("CV Frame :"+map);
-				if(map.getKey().equals("alt")){
+				if(map.getKey().equals("alt") || map.getKey().equals("opt")){
 					begin = map.getValue();
+					nameKey = map.getKey();
 				}
 				else if(map.getKey().equals("else")){
 					end = map.getValue();
-					SequenceFrame frame = new SequenceFrame("F"+ ++counter,begin,end);
+					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,begin,end);
 					frames.add(frame);
 				}
 				System.out.println("Update"+map.getKey()+" :"+frames);

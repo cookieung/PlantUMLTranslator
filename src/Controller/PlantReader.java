@@ -229,7 +229,7 @@ public class PlantReader {
 	    	return diagrams;
 	 }
 	 
-	 //For Print alt
+	 //For Print opt
 	 public static Map<String, Map<String,LinkedList<String>>> getRelationOfSequenceWithAllState(){
 		 Map<String, Map<String,LinkedList<String>>> result = new LinkedHashMap<>();
 		 for (int a = 0; a < getAllSequenceDiagramName().length; a++) {
@@ -385,17 +385,18 @@ public class PlantReader {
 		 System.out.println("TRACKER :"+proc.getFrames());
 		 for (int i = 0; i < proc.getFrames().size(); i++) {
 			LinkedList<Map<String, LinkedList<LinkedList<String>>>> elem = proc.getFrames().get(i);
+			String nameTypeFrame = proc.getFrameTypeName(i);
 			System.out.println("7/2/2017 :"+elem);
 			for (int j = 0; j < elem.size(); j++) {
 				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
-					s += map.getKey()+" = "+map.getKey()+"_ALT"+"\n"+map.getKey()+"_ALT = ";
+					s += map.getKey()+" = "+map.getKey()+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
 						System.out.println("DEBUG :"+map.getValue());
 						s += map.getKey().split("_")[0].toLowerCase()+"_b -> ";
 						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
 						LinkedList<String> tl = makeForBlankSpaceProc(map.getValue().get(k));
 						for (int k2 = 0; k2 < tl.size(); k2++) {
-							s += formatFrame(tl.get(k2),k2+1,map.getKey().split("_")[0].toLowerCase());
+							s += formatFrame(nameTypeFrame,tl.get(k2),k2+1,map.getKey().split("_")[0].toLowerCase());
 							if(k2<tl.size()-1) s+=" [] ";
 						}
 					}
@@ -469,11 +470,11 @@ public class PlantReader {
 		 }
 		
 		
-	 public static String formatFrame(String msg,int i,String name){
-		 frameChannel.add(name+"_alt"+i);
+	 public static String formatFrame(String typeframe,String msg,int i,String name){
+		 frameChannel.add(name+"_"+typeframe+i);
 		 frameChannel.add(name+"_e");
-		 if(msg.length()==0) return "("+name+"_alt"+i+" -> "+name+"_e"+" -> SKIP)";
-		 return "("+name+"_alt"+i+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
+		 if(msg.length()==0) return "("+name+"_"+typeframe+i+" -> "+name+"_e"+" -> SKIP)";
+		 return "("+name+"_"+typeframe+i+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
 	 }
 
 	 public String showRelationOfAllMessage(){
@@ -589,7 +590,7 @@ public class PlantReader {
 					for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(j).entrySet()) {
 						System.out.println("<Map2> :"+map2);
 						for (int k = 0; k < map2.getValue().size(); k++) {
-							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListAlt(),map2.getValue().get(k).get(0));
+							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListOpt(),map2.getValue().get(k).get(0));
 							ll.add("SKIP");
 							map.put(name+"_"+map2.getValue().get(0).get(0), ll);
 							for (int k2 = 0; k2 < diagrams.size(); k2++) {

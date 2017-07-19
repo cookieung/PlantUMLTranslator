@@ -71,7 +71,7 @@ public class StateReader extends DiagramReader {
    		traceMsg.add(message);
 		}
 		
-		rs.testAlt();
+		rs.testOpt();
 		
 		return rs;			
 
