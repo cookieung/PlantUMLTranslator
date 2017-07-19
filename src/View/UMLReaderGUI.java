@@ -64,6 +64,7 @@ public class UMLReaderGUI extends JFrame {
 	}
 	
 	private void initController(){
+		refresh();
 		diagrams = new ArrayList<>();
 		plantReader = new PlantReader();
 	}
@@ -249,6 +250,11 @@ public class UMLReaderGUI extends JFrame {
 	
 	public void run() {
 		this.setVisible(true);
+
+	}
+	
+	public void refresh() {
+		this.revalidate();
 
 	}
 	
