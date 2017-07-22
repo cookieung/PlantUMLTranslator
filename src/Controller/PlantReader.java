@@ -121,7 +121,7 @@ public class PlantReader {
 	
 	public static ArrayList<Map<String, ArrayList<String>>> readAllInput(String input,String name) {
 		ArrayList<Map<String, ArrayList<String>>> allUML =  new ArrayList<>();
-		equations = prepareInput(input.replace("\n", " "));
+		equations = prepareInput2(input.replace("\n", " "));
 		String[] names = name.split(",");
     	Map<String,ArrayList<String>> map = new LinkedHashMap<>();
     	ArrayList<String> tmp = new ArrayList<>();
@@ -152,7 +152,74 @@ public class PlantReader {
     	return allUML;
 	}
 	
+	public static String[] prepareInput2(String s){
+		String[] ss = s.replace(">", "> ").replace("<", " <").split(" ");
+		ArrayList<String> sl = new ArrayList<>();
+		Map<String,String> countFrame = new LinkedHashMap<>();
+		Map<String,String> updateFrame = new LinkedHashMap<>();
+		
+		for (int i = 0; i < ss.length; i++) {
+			if(ss[i].length()!=0)
+			if(ss[i].contains(":")){
+				if(sl.get(sl.size()-1).contains(">")||sl.get(sl.size()-1).contains("<")){
+					String[] g =ss[i].split(":");
+					if(g.length==0){// this is :
+						sl.add(ss[i]);
+					}else if(g.length==2){// this is send and receive message
+						sl.add(g[0]);
+						sl.add(":");
+						sl.add(g[1]);
+					}
+					else if(g.length==3){// this is send and receive message with name process
+						sl.add(g[0]);
+						sl.add(":");
+						sl.add(g[1]+":"+g[2]);
+					}
+				}else{
+					sl.add(ss[i]);
+					System.out.println("Out :"+ss[i]);
+				}
 
+			}else {
+				
+				if(ss[i].equals("alt")||ss[i].equals("loop")) {
+//						countFrame.replace(ss[i]+"2", (Integer.parseInt(countFrame.get(ss[i]))+1)+""); 
+					for (Entry<String, String> string : countFrame.entrySet()) {
+						System.out.println("Key :"+string.getKey()+"/Value :"+string.getValue());
+						if(string.getKey().contains(ss[i])) {
+							System.out.println(ss[i]+(Integer.parseInt(string.getKey().replaceAll("\\D+", ""))+1));
+							updateFrame.put(ss[i]+(Integer.parseInt(string.getKey().replaceAll("\\D+", ""))+1),0+"");
+//							sl.add(ss[i]+(Integer.parseInt(string.getKey().replaceAll("\\D+", ""))+1));
+						}
+					}
+					updateFrame.put(ss[i]+"1", 0+"");
+					countFrame.put(ss[i]+"1", 0+"");
+					if(sl.contains(ss[i]+"1")) sl.add(ss[i]+"2");
+					else sl.add(ss[i]+"1");
+				}else if(ss[i].equals("end")) {
+					ArrayList<String> l = new ArrayList<String>(updateFrame.keySet());
+					for (int j = l.size()-1; j >= 0; j--) {
+						if(updateFrame.get(l.get(j)).equals("0")) {
+							updateFrame.replace(l.get(j), "1");
+							if(!sl.contains("end"+l.get(j).replaceAll("\\D+", ""))) sl.add("end"+l.get(j).replaceAll("\\D+", ""));
+							System.out.println("End :"+updateFrame.get(l.get(j)));
+						}
+					}
+					System.out.println(countFrame+"At end :"+updateFrame);
+				}else {
+					sl.add(ss[i]);
+				}
+			}
+			
+		}
+		String[] rs = new String[sl.size()] ;
+		
+		rs = sl.toArray(rs);
+		
+		System.out.println("Frame :"+countFrame);
+		System.out.println("Update :"+updateFrame);
+		return rs;
+	}
 
 	public static String[] prepareInput(String s){
 
@@ -199,7 +266,7 @@ public class PlantReader {
 		 	System.out.println("IN TranslateToDiagram :");
 	    	ArrayList<String> res = convertToArrayList(map.values().toString().replace("[", "").replace("]", "").split(", "));
 	    	String state = map.keySet().toString().replace("[", "").replace("]", "");
-	    	System.out.println("State :" +state);
+	    	System.out.println("State :" +state+res);
 	    	if(state.contains("M")){
 	    		diagram = new StateDiagram(state);
 	    		stateReader = new StateReader(originalMsg, traceMsg);
@@ -212,6 +279,7 @@ public class PlantReader {
 	    		procSequence = sequenceReader.getResult();
 	    		diagram.addProcess(procSequence);
 	    		diagrams.add(diagram);
+	    		System.out.println("Proc Sequence :"+procSequence);
 	    		System.out.println("Check is Ind :"+sequenceReader.isIndependentSequence());
 	    		if(sequenceReader.isIndependentSequence()){
 	    			Object[] tmp = sequenceReader.getAllTempStateDiagram().toArray();

@@ -101,9 +101,12 @@ public class SequenceReader {
 				 list.checkFrame();
 			 }
 			 
+			 System.out.println("Type Map"+typeMap);
+			 
 		}
 		 
 		 System.out.println("List :"+list);
+
 		 
 		 list.testOpt();
 		 

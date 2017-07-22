@@ -34,11 +34,12 @@ public class SequenceProcess extends ProcessList {
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
 		System.out.println("Map in Sequence Process Class :"+map);
-		if(typeName.equals("alt") || typeName.equals("opt")) frameCounter++;
+		if(typeName.contains("alt") || typeName.contains("opt")) frameCounter++;
 		processMapByName.addNormal(map,typeName,"f"+frameCounter);
 		addStateToSet(linkedListL);
 		addStateToSet(linkedListR);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());
+		System.out.println("Opt Object in Sequence Process Class :"+processMapByName.getOptProcess());
 		System.out.println("$E$:"+nameL+" "+nameR);
 	}
 	
@@ -110,16 +111,19 @@ public class SequenceProcess extends ProcessList {
 		 for (int i = 0; i < l.size(); i++) {
 			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
 				System.out.println("CV Frame :"+map);
-				if(map.getKey().equals("alt") || map.getKey().equals("opt")){
+				if(map.getKey().contains("alt") || map.getKey().contains("opt")){
+					begin = map.getValue();
+					nameKey = map.getKey();
+				}else if(map.getKey().contains("loop")) {
 					begin = map.getValue();
 					nameKey = map.getKey();
 				}
-				else if(map.getKey().equals("else")){
+				else if(map.getKey().equals("else") || nameKey.contains("loop")){
 					end = map.getValue();
 					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,begin,end);
 					frames.add(frame);
 				}
-				System.out.println("Update"+map.getKey()+" :"+frames);
+				System.out.println("<Update>"+map.getKey()+" :"+frames);
 				System.out.println("F_b :"+begin);
 				System.out.println("F_e :"+end);
 			}
