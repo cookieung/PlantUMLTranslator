@@ -37,7 +37,7 @@ public class StateProcess extends ProcessList {
 		Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
 		map.put(name, linkedList);
 		System.out.println("Map in State Process Class :"+map);
-		processMapByName.addNormal(map,typeName,"");
+		processMapByName.addNormal(map,typeName,"","");
 		System.err.println("Object in State Process Class by Name :"+processMapByName);
 		processMapByState.setNormalProcess(convert(makeMapByState(processMapByName.getNormalProcess())));
 		System.err.println("Object in State Process Class by State :"+processMapByState);
