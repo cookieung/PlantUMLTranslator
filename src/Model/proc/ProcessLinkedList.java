@@ -23,11 +23,15 @@ public class ProcessLinkedList {
 	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
 		normalProcess.add(map);
 		Map<String, Map<String, Map<String, String>>> m = new LinkedHashMap<>();
-		if( !nextTypeName.contains("end") && !typeMap.contains("alt") && !typeMap.contains("opt") && !typeMap.contains("else") && !typeMap.contains("loop")) {
+		if( typeMap.contains("end") || (!nextTypeName.contains("end") && !typeMap.contains("alt") && !typeMap.contains("opt") && !typeMap.contains("else") && !typeMap.contains("loop"))) {
 			m.put("NaN", getForOpt(map, typeMap,nameframe));
 		}
 		else {
-			if(typeMap.contains("else")) typeMap = "end"+typeMap.replaceAll("\\D+", "");
+			if(typeMap.contains("else")) {
+				typeMap = "end"+typeMap.replaceAll("\\D+", "");
+			}else if(nextTypeName.contains("end")) {
+				typeMap = nextTypeName;
+			}
 			m.put(typeMap, getForOpt(map, typeMap,nameframe));
 		}
 		System.out.println(typeMap +"Add Normal Map :"+map+">>"+m);

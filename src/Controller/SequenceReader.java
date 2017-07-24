@@ -68,7 +68,10 @@ public class SequenceReader {
 			 
 			 String mmm = newMsg.substring(2);
 			 
+			 if(!(typeMap.contains("alt")||typeMap.contains("opt")||typeMap.contains("loop")||typeMap.contains("else")||typeMap.contains("end"))) typeMap = "NaN";
+			 
 			 System.out.println("Type Map :"+typeMap);
+			 
 			 System.out.println("Next Type :"+nextType);
 			 System.err.println(mmm+" : "+haveStateDiagram(mmm));
 			 
