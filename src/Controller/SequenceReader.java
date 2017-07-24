@@ -64,10 +64,15 @@ public class SequenceReader {
 			 
 
 			 String typeMap = res.get(i-1);
+			 String nextType = res.get(i+5);
 			 
 			 String mmm = newMsg.substring(2);
 			 
+			 if(!(typeMap.contains("alt")||typeMap.contains("opt")||typeMap.contains("loop")||typeMap.contains("else")||typeMap.contains("end"))) typeMap = "NaN";
+			 
 			 System.out.println("Type Map :"+typeMap);
+			 
+			 System.out.println("Next Type :"+nextType);
 			 System.err.println(mmm+" : "+haveStateDiagram(mmm));
 			 
 			 originalMsg.add(res.get(i+4));
@@ -88,11 +93,11 @@ public class SequenceReader {
  
 			 
 			 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
-				list.addProcess(newMsg,"r_"+newMsg.substring(2,newMsg.length()),leftL,rightL,typeMap);
+				list.addProcess(newMsg,"r_"+newMsg.substring(2,newMsg.length()),leftL,rightL,typeMap,nextType);
 				traceMsg.add(newMsg);
 				traceMsg.add("r_"+newMsg.substring(2,newMsg.length()));
 			}else if(newMsg.charAt(0)=='r'&&newMsg.charAt(1)=='_'){
-				list.addProcess(newMsg,"s_"+newMsg.substring(2,newMsg.length()), leftL, rightL,typeMap);
+				list.addProcess(newMsg,"s_"+newMsg.substring(2,newMsg.length()), leftL, rightL,typeMap,nextType);
 				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
 				traceMsg.add(newMsg);
 			}
@@ -101,9 +106,12 @@ public class SequenceReader {
 				 list.checkFrame();
 			 }
 			 
+			 System.out.println("Type Map"+typeMap);
+			 
 		}
 		 
 		 System.out.println("List :"+list);
+
 		 
 		 list.testOpt();
 		 

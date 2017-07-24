@@ -207,6 +207,8 @@ public class UMLReaderGUI extends JFrame {
 				
 			}
 			
+			cspFile.append(a+"");
+			
 			cspFile.append("DIAGRAM :\n");
 			for (int i = 0; i < diagrams.size(); i++) {
 				cspFile.append(diagrams.get(i).getName()+" : \n");
