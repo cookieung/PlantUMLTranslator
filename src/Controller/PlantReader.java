@@ -182,7 +182,7 @@ public class PlantReader {
 
 			}else {
 				
-				if(ss[i].equals("alt")||ss[i].equals("loop")) {
+				if(ss[i].equals("alt")||ss[i].equals("opt")||ss[i].equals("loop")) {
 //						countFrame.replace(ss[i]+"2", (Integer.parseInt(countFrame.get(ss[i]))+1)+""); 
 					for (Entry<String, String> string : countFrame.entrySet()) {
 						System.out.println("Key :"+string.getKey()+"/Value :"+string.getValue());
@@ -381,7 +381,7 @@ public class PlantReader {
 			string += s[i]+"\n";
 		}
 		
-		string += showSequenceDiagram()+"\n";
+		string += "Show Sequence Diagram:\n"+showSequenceDiagram()+"\n";
 
 		if(getFrameChannel().size()>0)
 		string += getRelationFrameWithSequenceDiagram();

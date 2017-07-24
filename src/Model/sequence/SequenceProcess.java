@@ -34,7 +34,7 @@ public class SequenceProcess extends ProcessList {
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
 		System.out.println("Map in Sequence Process Class :"+map);
-		if(typeName.contains("alt") || typeName.contains("opt")) frameCounter++;
+		if(typeName.contains("alt") || typeName.contains("opt") || typeName.contains("loop")) frameCounter++;
 		processMapByName.addNormal(map,typeName,"f"+frameCounter);
 		addStateToSet(linkedListL);
 		addStateToSet(linkedListR);
@@ -118,7 +118,7 @@ public class SequenceProcess extends ProcessList {
 					begin = map.getValue();
 					nameKey = map.getKey();
 				}
-				else if(map.getKey().equals("else") || nameKey.contains("loop")){
+				else if(map.getKey().equals("else")){
 					end = map.getValue();
 					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,begin,end);
 					frames.add(frame);
