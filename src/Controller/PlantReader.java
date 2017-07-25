@@ -181,7 +181,7 @@ public class PlantReader {
 				}
 
 			}else {
-				
+				System.out.println("Check ss[i] :"+ss[i]);
 				if(ss[i].equals("alt")||ss[i].equals("opt")||ss[i].equals("loop")) {
 //						countFrame.replace(ss[i]+"2", (Integer.parseInt(countFrame.get(ss[i]))+1)+""); 
 					for (Entry<String, String> string : countFrame.entrySet()) {
@@ -196,13 +196,15 @@ public class PlantReader {
 					countFrame.put(ss[i]+"1", 0+"");
 					if(sl.contains(ss[i]+"1")) sl.add(ss[i]+"2");
 					else sl.add(ss[i]+"1");
-				}else if(ss[i].equals("end")) {
+				}else if(ss[i].equals("end") || ss[i].equals("else")) {
 					ArrayList<String> l = new ArrayList<String>(updateFrame.keySet());
 					for (int j = l.size()-1; j >= 0; j--) {
-						if(updateFrame.get(l.get(j)).equals("0")) {
+						if(updateFrame.get(l.get(j)).equals("0") && ss[i].equals("end")) {
 							updateFrame.replace(l.get(j), "1");
 							if(!sl.contains("end"+l.get(j).replaceAll("\\D+", ""))) sl.add("end"+l.get(j).replaceAll("\\D+", ""));
 							System.out.println("End :"+updateFrame.get(l.get(j)));
+						}else {
+							sl.add(ss[i]+l.get(j).replaceAll("\\D+", ""));
 						}
 					}
 					System.out.println(countFrame+"At end :"+updateFrame);
@@ -383,6 +385,7 @@ public class PlantReader {
 		
 		string += "Show Sequence Diagram:\n"+showSequenceDiagram()+"\n";
 
+		string += "Frame Channel :\n";
 		if(getFrameChannel().size()>0)
 		string += getRelationFrameWithSequenceDiagram();
 

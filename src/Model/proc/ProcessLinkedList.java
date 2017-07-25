@@ -48,7 +48,7 @@ public class ProcessLinkedList {
 				}
 			}
 			mm.put(nameframe+"_b", l);
-		}else if(typeMap.contains("else")){
+		}else if(typeMap.contains("end")){
 			Map<String, String> l  = new LinkedHashMap<>();
 			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {
 				for (int i = 0; i < s.getValue().size(); i++) {

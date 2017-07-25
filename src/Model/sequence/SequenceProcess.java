@@ -112,20 +112,18 @@ public class SequenceProcess extends ProcessList {
 		 for (int i = 0; i < l.size(); i++) {
 			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
 				System.out.println("CV Frame :"+map);
+				System.out.println("Map get Key :"+map.getKey()+" = "+nameKey);
 				if(map.getKey().contains("alt") || map.getKey().contains("opt") || map.getKey().contains("loop")){
 					begin = map.getValue();
 					allFrameProcess.add(map.getValue());
 					nameKey = map.getKey();
-				}else if(map.getKey().equals("else")){
+				}else if(map.getKey().contains("end")) {
 					end = map.getValue();
 					allFrameProcess.add(map.getValue());
-					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,begin,end);
-					frames.add(frame);
-				}else if(map.getKey().contains("end") && nameKey.contains("loop")) {
-					end = map.getValue();
-					allFrameProcess.add(map.getValue());
-					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,begin,end);
+					if(nameKey.contains("alt") || nameKey.contains("opt") || nameKey.contains("loop")) {
+					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,allFrameProcess);
 					frames.add(frame);	
+					}
 				}
 				System.out.println("All Frame Proc :"+allFrameProcess);
 				System.err.println("NameKey :"+nameKey+","+map.getKey());
