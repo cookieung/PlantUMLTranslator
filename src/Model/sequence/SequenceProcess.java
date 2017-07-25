@@ -120,8 +120,10 @@ public class SequenceProcess extends ProcessList {
 				}else if(map.getKey().contains("end")) {
 					end = map.getValue();
 					allFrameProcess.add(map.getValue());
-					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,begin,end);
+					if(nameKey.contains("alt") || nameKey.contains("opt") || nameKey.contains("loop")) {
+					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,allFrameProcess);
 					frames.add(frame);	
+					}
 				}
 				System.out.println("All Frame Proc :"+allFrameProcess);
 				System.err.println("NameKey :"+nameKey+","+map.getKey());

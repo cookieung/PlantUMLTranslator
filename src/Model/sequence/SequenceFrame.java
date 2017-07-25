@@ -10,18 +10,15 @@ import java.util.Map.Entry;
 import Model.state.StateDiagram;
 
 class SequenceFrame{
-	static Map<String, Map<String, String>> beginList;
-	static Map<String, Map<String, String>> endList;
+	static LinkedList<Map<String, Map<String, String>>> startToEnd;
+//	static Map<String, Map<String, String>> endList;
 	LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
 	static String name = "",typeFrame = "";
 	
-	public SequenceFrame(String name,String typeFrame,Map<String, Map<String, String>> beginList,Map<String, Map<String, String>> endList){
-		System.out.println("begin :"+beginList);
-		System.out.println("end :"+endList);
-		this.beginList = beginList;
-		this.endList = endList;
-		System.out.println("BEGIN :"+beginList);
-		System.out.println("END :"+endList);
+	public SequenceFrame(String name,String typeFrame,LinkedList<Map<String, Map<String, String>>> startToEnd){
+		System.out.println("start to end :"+startToEnd);
+//		System.out.println("end :"+endList);
+		this.startToEnd = startToEnd;
 		this.name = name;
 		this.typeFrame = typeFrame;
 		this.processFrame = getAllFrameProc();
@@ -57,18 +54,21 @@ class SequenceFrame{
 	
 	public static Map<String, LinkedList<LinkedList<String>>> processName(String m){
 		LinkedList<String> res= new LinkedList<>();
-		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
-			for (Entry<String, String> string : bg.getValue().entrySet()) {
-				if(string.getKey().equals(m))
-				res.add(string.getValue());
+		for (int i = 0; i < startToEnd.size(); i++) {
+			for (Entry<String, Map<String, String>> bg : startToEnd.get(i).entrySet()) {
+				for (Entry<String, String> string : bg.getValue().entrySet()) {
+					if(string.getKey().equals(m))
+					res.add(string.getValue());
+				}
 			}
 		}
-		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
-			for (Entry<String, String> string : en.getValue().entrySet()) {
-				if(string.getKey().equals(m))
-				res.add(string.getValue());
-			}
-		}
+		
+//		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+//			for (Entry<String, String> string : en.getValue().entrySet()) {
+//				if(string.getKey().equals(m))
+//				res.add(string.getValue());
+//			}
+//		}
 		LinkedList<LinkedList<String>> result = new LinkedList<>();
 		result.add(res);
 		Map<String, LinkedList<LinkedList<String>>> mRes = new LinkedHashMap<>();
@@ -81,19 +81,22 @@ class SequenceFrame{
 	public Set<StateDiagram> getAllStateDiagram(){
 		Set<StateDiagram> s = new LinkedHashSet<>();
 		int count=1;
-		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
-			for (Entry<String, String> string : bg.getValue().entrySet()) {
-				StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
-				s.add(stateDiagram);
+		for (int i = 0; i < startToEnd.size(); i++) {
+			for (Entry<String, Map<String, String>> bg : startToEnd.get(i).entrySet()) {
+				for (Entry<String, String> string : bg.getValue().entrySet()) {
+					StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
+					s.add(stateDiagram);
+				}
 			}
 		}
 		
-		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
-			for (Entry<String, String> string : en.getValue().entrySet()) {
-				StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
-				s.add(stateDiagram);
-			}
-		}
+		
+//		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+//			for (Entry<String, String> string : en.getValue().entrySet()) {
+//				StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
+//				s.add(stateDiagram);
+//			}
+//		}
 		System.out.println("Set :"+s);
 		return s;
 	}
@@ -102,17 +105,20 @@ class SequenceFrame{
 	public static Object[] getAllState(){
 		Set<String> setState = new LinkedHashSet<>();
 		int count=1;
-		for (Entry<String, Map<String, String>> bg : beginList.entrySet()) {
-			for (Entry<String, String> string : bg.getValue().entrySet()) {
-				setState.add(string.getKey());
+		for (int i = 0; i < startToEnd.size(); i++) {
+			for (Entry<String, Map<String, String>> bg : startToEnd.get(i).entrySet()) {
+				for (Entry<String, String> string : bg.getValue().entrySet()) {
+					setState.add(string.getKey());
+				}
 			}
 		}
 		
-		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
-			for (Entry<String, String> string : en.getValue().entrySet()) {
-				setState.add(string.getKey());
-			}
-		}
+		
+//		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+//			for (Entry<String, String> string : en.getValue().entrySet()) {
+//				setState.add(string.getKey());
+//			}
+//		}
 		System.out.println("Set :"+setState);
 		return setState.toArray();
 	}

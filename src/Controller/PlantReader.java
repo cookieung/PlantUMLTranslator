@@ -385,6 +385,7 @@ public class PlantReader {
 		
 		string += "Show Sequence Diagram:\n"+showSequenceDiagram()+"\n";
 
+		string += "Frame Channel :\n";
 		if(getFrameChannel().size()>0)
 		string += getRelationFrameWithSequenceDiagram();
 
