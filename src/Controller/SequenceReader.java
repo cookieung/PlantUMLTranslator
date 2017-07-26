@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.Map.Entry;
 
 import Model.oop.Diagram;
@@ -19,6 +20,8 @@ public class SequenceReader {
 	private static Set<String> traceMsg = new LinkedHashSet<>();
 	private static Set<String> originalMsg = new LinkedHashSet<>();
 	static ArrayList<String> res = new ArrayList<>();
+	
+	static Stack<String> stackframe = new Stack<>();
 
 	
 	public SequenceReader(ArrayList<String> res,ArrayList<Diagram> diagrams,Set<String> originalMessage,Set<String> traceMsg){
@@ -91,6 +94,12 @@ public class SequenceReader {
 			 r.add(left);
 			 rightL.add(r);
  
+			 System.out.println("[Type] :"+typeMap);
+			 
+			 if(!stackframe.isEmpty() &&( nextType.contains("end"))) {
+				 System.out.println("POP Stack :"+stackframe.pop());
+			 }
+			 else if(typeMap.contains("alt") ||typeMap.contains("opt") ||typeMap.contains("loop")) stackframe.push(typeMap);
 			 
 			 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
 				list.addProcess(newMsg,"r_"+newMsg.substring(2,newMsg.length()),leftL,rightL,typeMap,nextType);
@@ -106,7 +115,8 @@ public class SequenceReader {
 				 list.checkFrame();
 			 }
 			 
-			 System.out.println("Type Map"+typeMap);
+			 System.out.println("TypeM: "+typeMap);
+			 System.out.println("Stack Frame :"+stackframe);
 			 
 		}
 		 
