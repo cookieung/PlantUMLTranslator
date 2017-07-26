@@ -24,11 +24,16 @@ public class SequenceReader {
 	static Stack<String> stackframe = new Stack<>();
 
 	
-	public SequenceReader(ArrayList<String> res,ArrayList<Diagram> diagrams,Set<String> originalMessage,Set<String> traceMsg){
+	public SequenceReader(ArrayList<String> res,ArrayList<Diagram> diagrams,Set<String> originalMessage,Set<String> traceMsg,Stack<String> stackframe){
 		this.diagrams = diagrams;
 		this.originalMsg = originalMessage;
 		this.traceMsg = traceMsg;
 		this.res = res;
+		System.out.println("RES inSQ reader");
+		for (int i = 0; i < res.size(); i++) {
+			System.err.print(res.get(i)+",");
+		}
+		this.stackframe = stackframe;
 	}
 	
 	public Set<Diagram> getAllTempStateDiagram(){
@@ -49,74 +54,30 @@ public class SequenceReader {
 	}
 	
 
+
 	
 	 public static ProcessList getResult(){
 		 String newMsg="",left="",right="",state="";
 		 boolean isWait;
 		 ProcessList list=new SequenceProcess();
 		 for (int i = 1; i < res.size()-1; i++) {
+			 System.out.println("III :"+res.get(i));
 			 if (res.get(i+1).contains(">")) {
 				left = res.get(i);
 				right = res.get(i+2);
 				newMsg = "s_"+res.get(i+4);
+				doResult(i, newMsg, left, right, list);
 			}else if(res.get(i+1).contains("<")){
 				left = res.get(i+2);
 				right = res.get(i);
 				newMsg = "r_"+res.get(i+4);
-			}else continue;
-			 
-
-			 String typeMap = res.get(i-1);
-			 String nextType = res.get(i+5);
-			 
-			 String mmm = newMsg.substring(2);
-			 
-			 if(!(typeMap.contains("alt")||typeMap.contains("opt")||typeMap.contains("loop")||typeMap.contains("else")||typeMap.contains("end"))) typeMap = "NaN";
-			 
-			 System.out.println("Type Map :"+typeMap);
-			 
-			 System.out.println("Next Type :"+nextType);
-			 System.err.println(mmm+" : "+haveStateDiagram(mmm));
-			 
-			 originalMsg.add(res.get(i+4));
-			 Map<String, LinkedList<LinkedList<String>>> m = new LinkedHashMap<>();
-			 LinkedList<LinkedList<String>> leftL = new LinkedList<>();
-			 LinkedList<String> l = new LinkedList<>();
-			 l.add(left);
-			 l.add("->");
-			 l.add(right);
-			 leftL.add(l);
-			 
-			 LinkedList<LinkedList<String>> rightL = new LinkedList<>();
-			 LinkedList<String> r = new LinkedList<>();
-			 r.add(right);
-			 r.add("->");
-			 r.add(left);
-			 rightL.add(r);
- 
-			 System.out.println("[Type] :"+typeMap);
-			 
-			 if(!stackframe.isEmpty() &&( nextType.contains("end"))) {
-				 System.out.println("POP Stack :"+stackframe.pop());
-			 }
-			 else if(typeMap.contains("alt") ||typeMap.contains("opt") ||typeMap.contains("loop")) stackframe.push(typeMap);
-			 
-			 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
-				list.addProcess(newMsg,"r_"+newMsg.substring(2,newMsg.length()),leftL,rightL,typeMap,nextType);
-				traceMsg.add(newMsg);
-				traceMsg.add("r_"+newMsg.substring(2,newMsg.length()));
-			}else if(newMsg.charAt(0)=='r'&&newMsg.charAt(1)=='_'){
-				list.addProcess(newMsg,"s_"+newMsg.substring(2,newMsg.length()), leftL, rightL,typeMap,nextType);
-				traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
-				traceMsg.add(newMsg);
+				doResult(i, newMsg, left, right, list);
+			}else if(res.get(i).contains("alt") || res.get(i).contains("opt") || res.get(i).contains("loop") || res.get(i).contains("end")){
+				System.out.println("<Res> :"+res.get(i));
 			}
-
-			 if(res.get(i+5).equals("@enduml") || res.get(i+6).equals("@enduml")){
-				 list.checkFrame();
-			 }
 			 
-			 System.out.println("TypeM: "+typeMap);
-			 System.out.println("Stack Frame :"+stackframe);
+
+
 			 
 		}
 		 
@@ -127,6 +88,60 @@ public class SequenceReader {
 		 
 		 return list;
 		 
+	 }
+	 
+	 public static void doResult(int i,String newMsg,String left,String right,ProcessList list) {
+		 String typeMap = res.get(i-1);
+		 String nextType = res.get(i+5);
+		 
+		 String mmm = newMsg.substring(2);
+		 
+		 if(!(typeMap.contains("alt")||typeMap.contains("opt")||typeMap.contains("loop")||typeMap.contains("else")||typeMap.contains("end"))) typeMap = "NaN";
+		 
+		 System.out.println("<<Type Map :"+typeMap);
+		 
+		 System.out.println("<<Next Type :"+nextType);
+		 System.err.println(mmm+" : "+haveStateDiagram(mmm));
+		 
+		 originalMsg.add(res.get(i+4));
+		 Map<String, LinkedList<LinkedList<String>>> m = new LinkedHashMap<>();
+		 LinkedList<LinkedList<String>> leftL = new LinkedList<>();
+		 LinkedList<String> l = new LinkedList<>();
+		 l.add(left);
+		 l.add("->");
+		 l.add(right);
+		 leftL.add(l);
+		 
+		 LinkedList<LinkedList<String>> rightL = new LinkedList<>();
+		 LinkedList<String> r = new LinkedList<>();
+		 r.add(right);
+		 r.add("->");
+		 r.add(left);
+		 rightL.add(r);
+
+		 System.out.println("[Type] :"+typeMap);
+//		 
+//		 if(!stackframe.isEmpty() &&( nextType.contains("end"))) {
+//			 System.out.println("POP Stack :"+stackframe.peek());
+//		 }
+//		 else if(typeMap.contains("alt") ||typeMap.contains("opt") ||typeMap.contains("loop")) stackframe.push(typeMap);
+		 
+		 if (newMsg.charAt(0)=='s'&&newMsg.charAt(1)=='_') {
+			list.addProcess(newMsg,"r_"+newMsg.substring(2,newMsg.length()),leftL,rightL,typeMap,nextType);
+			traceMsg.add(newMsg);
+			traceMsg.add("r_"+newMsg.substring(2,newMsg.length()));
+		}else if(newMsg.charAt(0)=='r'&&newMsg.charAt(1)=='_'){
+			list.addProcess(newMsg,"s_"+newMsg.substring(2,newMsg.length()), leftL, rightL,typeMap,nextType);
+			traceMsg.add("s_"+newMsg.substring(2,newMsg.length()));
+			traceMsg.add(newMsg);
+		}
+
+		 if(res.get(i+5).equals("@enduml") || res.get(i+6).equals("@enduml")){
+			 list.checkFrame();
+		 }
+		 
+		 System.out.println("TypeM: "+typeMap);
+//		 System.out.println("Stack Frame :"+stackframe);
 	 }
 	 
 	 public static boolean isIndependentSequence(){
