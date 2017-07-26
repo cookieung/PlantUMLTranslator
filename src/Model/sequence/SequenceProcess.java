@@ -104,6 +104,7 @@ public class SequenceProcess extends ProcessList {
 	 public void checkFrame(){
 		 String nameKey = "";
 		 LinkedList<Map<String, Map<String, String>>> allFrameProcess = new LinkedList<>();
+		 Map<String, Map<String,String>> mp = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
 		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getOptProcess();
@@ -115,16 +116,23 @@ public class SequenceProcess extends ProcessList {
 				System.out.println("Map get Key :"+map.getKey()+" = "+nameKey);
 				if(map.getKey().contains("alt") || map.getKey().contains("opt") || map.getKey().contains("loop")){
 					begin = map.getValue();
-					allFrameProcess.add(map.getValue());
+					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
+						mp.put(p.getKey(), p.getValue());
+					}
+
 					nameKey = map.getKey();
 				}else if(map.getKey().contains("end")) {
 					end = map.getValue();
-					allFrameProcess.add(map.getValue());
+					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
+						mp.put(p.getKey(), p.getValue());
+					}
+					allFrameProcess.add(mp);
 					if(nameKey.contains("alt") || nameKey.contains("opt") || nameKey.contains("loop")) {
 					SequenceFrame frame = new SequenceFrame("F"+ ++counter,nameKey,allFrameProcess);
 					frames.add(frame);	
 					}
 				}
+
 				System.out.println("All Frame Proc :"+allFrameProcess);
 				System.err.println("NameKey :"+nameKey+","+map.getKey());
 				System.out.println("<Update>"+map.getKey()+" :"+frames);

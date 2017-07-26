@@ -17,6 +17,7 @@ import View.UMLReaderGUI;
 
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeSet;
 import java.util.LinkedHashSet;
 
@@ -51,6 +52,7 @@ public class PlantReader {
 	private static ProcessList procSequence;
 	
 	private static Set<String> frameChannel = new HashSet<>();
+	private static Stack<String> stackframe = new Stack<>();
 	
 	public PlantReader(){
 		count=0;
@@ -138,6 +140,7 @@ public class PlantReader {
 				}
     		}
 
+    		System.out.println("EQQQQ :"+equations[i]);
     		tmp.add(equations[i]);
     		if(equations[i].equals("@enduml")){
     			map.put(t,tmp);
@@ -152,12 +155,22 @@ public class PlantReader {
     	return allUML;
 	}
 	
+	public static void updateStack(String[] res) {
+		for (int i = 0; i < res.length; i++) {
+			System.out.println(res[i]);
+			if(!res[i].equals("@enduml") && (res[i].contains("alt")||res[i].contains("opt")||res[i].contains("loop")||res[i].contains("end"))) {
+				stackframe.push(res[i]);
+			}
+		}
+		System.out.println("STACK FRAME :"+stackframe);
+	}
+	
 	public static String[] prepareInput2(String s){
 		String[] ss = s.replace(">", "> ").replace("<", " <").split(" ");
 		ArrayList<String> sl = new ArrayList<>();
 		Map<String,String> countFrame = new LinkedHashMap<>();
 		Map<String,String> updateFrame = new LinkedHashMap<>();
-		
+		updateStack(ss);
 		for (int i = 0; i < ss.length; i++) {
 			if(ss[i].length()!=0)
 			if(ss[i].contains(":")){
@@ -182,6 +195,8 @@ public class PlantReader {
 
 			}else {
 				System.out.println("Check ss[i] :"+ss[i]);
+				System.out.println("Check ss[i] :"+ss[i]);
+				Stack<String> stack = new Stack<>();
 				if(ss[i].equals("alt")||ss[i].equals("opt")||ss[i].equals("loop")) {
 //						countFrame.replace(ss[i]+"2", (Integer.parseInt(countFrame.get(ss[i]))+1)+""); 
 					for (Entry<String, String> string : countFrame.entrySet()) {
@@ -201,9 +216,12 @@ public class PlantReader {
 					for (int j = l.size()-1; j >= 0; j--) {
 						if(updateFrame.get(l.get(j)).equals("0") && ss[i].equals("end")) {
 							updateFrame.replace(l.get(j), "1");
-							if(!sl.contains("end"+l.get(j).replaceAll("\\D+", ""))) sl.add("end"+l.get(j).replaceAll("\\D+", ""));
+							if(!sl.contains("end"+l.get(j))) {
+								if(!sl.contains("end"+l.get(j))) sl.add("end"+l.get(j));
+							}
 							System.out.println("End :"+updateFrame.get(l.get(j)));
 						}else {
+							if(!sl.contains(ss[i]+l.get(j).replaceAll("\\D+", "")))
 							sl.add(ss[i]+l.get(j).replaceAll("\\D+", ""));
 						}
 					}
@@ -265,7 +283,7 @@ public class PlantReader {
 	
 	 public static  ArrayList<Diagram> translateToDiagram(Map<String,ArrayList<String>> map){
 		 	Diagram diagram;
-		 	System.out.println("IN TranslateToDiagram :");
+		 	System.out.println("IN TranslateToDiagram :"+map);
 	    	ArrayList<String> res = convertToArrayList(map.values().toString().replace("[", "").replace("]", "").split(", "));
 	    	String state = map.keySet().toString().replace("[", "").replace("]", "");
 	    	System.out.println("State :" +state+res);
@@ -277,7 +295,11 @@ public class PlantReader {
 	    		System.out.println("TEST1 :"+diagram.toString());
 	    	}else if(state.contains("SQ")){
 	    		diagram = new SequenceDiagram(state);
-	    		sequenceReader = new SequenceReader(res,diagrams, originalMsg, traceMsg);
+	    		System.out.println("RES in  PlantReader:");
+	    		for (int i = 0; i < res.size(); i++) {
+	    			System.err.print(res.get(i)+",");
+	    		}
+	    		sequenceReader = new SequenceReader(res,diagrams, originalMsg, traceMsg,stackframe);
 	    		procSequence = sequenceReader.getResult();
 	    		diagram.addProcess(procSequence);
 	    		diagrams.add(diagram);

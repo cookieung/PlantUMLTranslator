@@ -97,8 +97,8 @@ public class ProcessLinkedList {
 			}
 			System.out.println(stackframe+"Stack peek :"+stack);
 			if(stack.contains("end"))
-			mm.put(nameframe+"_e", l);
-			else mm.put(nameframe+"_b", l);
+			mm.put("f"+stack+"_e", l);
+			else mm.put("f"+stack+"_b", l);
 			
 		}else if(typeMap.contains("end")){
 			Map<String, String> l  = new LinkedHashMap<>();
@@ -108,7 +108,7 @@ public class ProcessLinkedList {
 				}
 			}
 			System.out.println(stackframe+"Stack peek :"+stack);
-			mm.put(nameframe+"_e", l);
+			mm.put("f"+stack+"_e", l);
 			System.out.println( stackframe.size() >= 2);
 			if(stackframe.size()>=2) {
 				stackframe.pop();
