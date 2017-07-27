@@ -26,6 +26,7 @@ import javax.sound.midi.Sequence;
 
 import Model.oop.Diagram;
 import Model.oop.ProcessList;
+import Model.proc.FrameProcess;
 import Model.sequence.SequenceDiagram;
 import Model.sequence.SequenceProcess;
 import Model.state.StateDiagram;
@@ -158,7 +159,7 @@ public class PlantReader {
 	public static void updateStack(String[] res) {
 		for (int i = 0; i < res.length; i++) {
 			System.out.println(res[i]);
-			if(!res[i].equals("@enduml") && (res[i].contains("alt")||res[i].contains("opt")||res[i].contains("loop")||res[i].contains("end"))) {
+			if(!res[i].equals("@enduml") && (res[i].contains("alt")||res[i].contains("opt")||res[i].contains("loop")||res[i].contains("end") || res[i].contains("else"))) {
 				stackframe.push(res[i]);
 			}
 		}
@@ -646,24 +647,23 @@ public class PlantReader {
 		 return l;
 	 }
 	 
-	 public LinkedList<String> getLinkedListForSq(LinkedList<Map<String, Map<String, Map<String, String>>>> procs,String state){
+	 public LinkedList<String> getLinkedListForSq(LinkedList<FrameProcess> procs,String state){
 		 LinkedList<String> ll = new LinkedList<>();
 		 System.out.println("Check for F1 bug :"+procs);
 		 for (int j = 0; j < procs.size(); j++) {
-			for (Entry<String, Map<String, Map<String, String>>> map2 : procs.get(j).entrySet()) {
-				for (Entry<String, Map<String, String>> string : map2.getValue().entrySet()) {
+			FrameProcess map2 = procs.get(j); 
+					String string = map2.getName();
 					System.err.println("State :"+state+" = "+string);
-					if(string.getKey().charAt(0)=='f' && (string.getKey().contains("_e") ||string.getKey().contains("_b"))){
-						ll.add(string.getKey());
+					if(string.charAt(0)=='f' && (string.contains("_e") ||string.contains("_b"))){
+						ll.add(string);
 					}else{
-						for (Entry<String, String> l : string.getValue().entrySet()) {
+						for (Entry<String, String> l : map2.getAtomicProcess().entrySet()) {
 							if(l.getKey().equals(state)){
 								ll.add(l.getValue());
 							}
 						}
 					}
-				}
-			}
+
 		}
 		 return ll;
 	 }
@@ -684,7 +684,7 @@ public class PlantReader {
 					for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(j).entrySet()) {
 						System.out.println("<Map2> :"+map2);
 						for (int k = 0; k < map2.getValue().size(); k++) {
-							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListOpt(),map2.getValue().get(k).get(0));
+							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList(),map2.getValue().get(k).get(0));
 							ll.add("SKIP");
 							map.put(name+"_"+map2.getValue().get(0).get(0), ll);
 							for (int k2 = 0; k2 < diagrams.size(); k2++) {

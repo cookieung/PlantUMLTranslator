@@ -13,6 +13,11 @@ public class FrameProcess {
 		atomicProcess = new LinkedHashMap<>();
 	}
 	
+	public FrameProcess(String name,Map<String, String> atomicProcess) {
+		this.name = name;
+		this.atomicProcess = atomicProcess;
+	}
+	
 	
 	public void addProcess(String key,String value) {
 		this.atomicProcess.put(key, value);

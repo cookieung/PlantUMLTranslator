@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import Model.proc.FrameProcess;
+import Model.proc.FrameProcessMap;
 import Model.proc.ProcessLinkedList;
 
 public class ProcessList {
@@ -45,8 +46,12 @@ public class ProcessList {
 		return processMapByName.getNormalProcess();
 	}
 	
-	public LinkedList<Map<String, Map<String, Map<String, String>>>> getProcessListOpt() {
+	public FrameProcessMap getProcessListOpt() {
 		return processMapByName.getOptProcess();
+	}
+	
+	public LinkedList<FrameProcess> getProcessListOptList() {
+		return processMapByName.getOptProcessList();
 	}
 	
 

@@ -10,13 +10,16 @@ public class FrameProcessMap {
 	String name="";
 	
 	
-	public FrameProcessMap(String name) {
-		this.name= name;
+	public FrameProcessMap() {
 		this.frameProcesslist = new LinkedList<>();
 	}
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 	
 	

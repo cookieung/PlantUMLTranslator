@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import Model.oop.Diagram;
 import Model.oop.ProcessList;
+import Model.proc.FrameProcess;
+import Model.proc.FrameProcessMap;
 import Model.proc.ProcessLinkedList;
 import Model.sequence.frame.AltFrame;
 import Model.sequence.frame.LoopFrame;
@@ -109,42 +111,70 @@ public class SequenceProcess extends ProcessList {
 		 Map<String, Map<String,String>> mp = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
-		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getOptProcess();
-		 System.out.println("L before check frame :"+l);
-		 int counter = 0;
-		 for (int i = 0; i < l.size(); i++) {
-			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
-				System.out.println("CV Frame :"+map);
-				System.out.println("Map get Key :"+map.getKey()+" = "+nameKey);
-				if(map.getKey().contains("alt") || map.getKey().contains("opt") || map.getKey().contains("loop")){
-					begin = map.getValue();
-					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
-						mp.put(p.getKey(), p.getValue());
-					}
-
-					nameKey = map.getKey();
-				}else if(map.getKey().contains("end")) {
-					end = map.getValue();
-					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
-						mp.put(p.getKey(), p.getValue());
-					}
-					allFrameProcess.add(mp);
+		 LinkedList<Map<String, Map<String, String>>> trueFrame = new LinkedList<>();
+		 LinkedList<Map<String, Map<String, String>>> falseFrame = new LinkedList<>();
+		 FrameProcessMap l = processMapByName.getOptProcess();
+		 System.out.println(l.getName()+"L before check frame :"+l.getFrameProcesslist());
+		 
+			for (FrameProcess map : l.getFrameProcesslist()) {
+				if(map.getName().contains("alt") || map.getName().contains("opt") || map.getName().contains("loop")){
+				if(map.getName().contains("_b")) {
+					mp.put(map.getName(), map.getAtomicProcess());
+					nameKey = map.getName();
+					trueFrame.add(mp);
+				}else if(map.getName().contains("_e")) {
+					mp.put(map.getName(), map.getAtomicProcess());
+					nameKey = map.getName();
+					falseFrame.add(mp);
+					
 					if(nameKey.contains("alt") || nameKey.contains("opt")) {
-						SequenceFrame frame = new AltFrame("F"+ ++counter,nameKey,allFrameProcess);
+						SequenceFrame frame = new AltFrame(map.getName().toUpperCase(),nameKey,trueFrame,falseFrame);
 						frames.add(frame);	
 					}else if(nameKey.contains("loop")) {
-						SequenceFrame frame = new LoopFrame("F"+ ++counter,nameKey,allFrameProcess);
+						SequenceFrame frame = new LoopFrame(map.getName().toUpperCase(),nameKey,trueFrame,falseFrame);
 						frames.add(frame);	
-					}
+					}	
 				}
-
-				System.out.println("All Frame Proc :"+allFrameProcess);
-				System.err.println("NameKey :"+nameKey+","+map.getKey());
-				System.out.println("<Update>"+map.getKey()+" :"+frames);
-				System.out.println("F_b :"+begin);
-				System.out.println("F_e :"+end);
 			}
-		}
+				System.err.println(map.getName()+":"+map.getAtomicProcess());
+			}
+		 
+//		 int counter = 0;
+//		 for (int i = 0; i < l.size(); i++) {
+//			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
+//				System.out.println("CV Frame :"+map);
+//				System.out.println("Map get Key :"+map.getKey()+" = "+nameKey);
+//				if(map.getKey().contains("alt") || map.getKey().contains("opt") || map.getKey().contains("loop")){
+//					begin = map.getValue();
+//					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
+//						mp.put(p.getKey(), p.getValue());
+//					}
+//
+//					nameKey = map.getKey();
+//					
+//				}else if(map.getKey().contains("end")) {
+//					end = map.getValue();
+//					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
+//						mp.put(p.getKey(), p.getValue());
+//					}
+//					trueFrame.add(mp);
+//					
+//					if(nameKey.contains("alt") || nameKey.contains("opt")) {
+//						SequenceFrame frame = new AltFrame("F"+ ++counter,nameKey,trueFrame,falseFrame);
+//						frames.add(frame);	
+//					}else if(nameKey.contains("loop")) {
+//						SequenceFrame frame = new LoopFrame("F"+ ++counter,nameKey,trueFrame,falseFrame);
+//						frames.add(frame);	
+//					}
+//				}
+//
+//				System.out.println("All Frame Proc :"+allFrameProcess);
+//				System.err.println("NameKey :"+nameKey+","+map.getKey());
+//				System.out.println("<Update>"+map.getKey()+" :"+frames);
+//				System.out.println("F_b :"+begin);
+//				System.out.println("F_e :"+end);
+//			}
+//		}
 
 	 }
 	
