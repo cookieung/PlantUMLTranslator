@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import Model.oop.Diagram;
 import Model.oop.ProcessList;
 import Model.proc.ProcessLinkedList;
+import Model.sequence.frame.AltFrame;
+import Model.sequence.frame.LoopFrame;
 import Model.sequence.frame.SequenceFrame;
 import Model.state.StateDiagram;
 
@@ -22,8 +24,8 @@ public class SequenceProcess extends ProcessList {
 	int frameCounter = 0;
 	public Set<StateDiagram> states = new LinkedHashSet<>();
 	
-	public SequenceProcess(String name) {
-		super(name);
+	public SequenceProcess() {
+		super();
 		//Initial Storage
 		frames = new ArrayList<>();
 	}
@@ -109,7 +111,40 @@ public class SequenceProcess extends ProcessList {
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
 		 LinkedList<Map<String, Map<String, Map<String, String>>>> l = processMapByName.getOptProcess();
 		 System.out.println("L before check frame :"+l);
+		 int counter = 0;
+		 for (int i = 0; i < l.size(); i++) {
+			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
+				System.out.println("CV Frame :"+map);
+				System.out.println("Map get Key :"+map.getKey()+" = "+nameKey);
+				if(map.getKey().contains("alt") || map.getKey().contains("opt") || map.getKey().contains("loop")){
+					begin = map.getValue();
+					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
+						mp.put(p.getKey(), p.getValue());
+					}
 
+					nameKey = map.getKey();
+				}else if(map.getKey().contains("end")) {
+					end = map.getValue();
+					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
+						mp.put(p.getKey(), p.getValue());
+					}
+					allFrameProcess.add(mp);
+					if(nameKey.contains("alt") || nameKey.contains("opt")) {
+						SequenceFrame frame = new AltFrame("F"+ ++counter,nameKey,allFrameProcess);
+						frames.add(frame);	
+					}else if(nameKey.contains("loop")) {
+						SequenceFrame frame = new LoopFrame("F"+ ++counter,nameKey,allFrameProcess);
+						frames.add(frame);	
+					}
+				}
+
+				System.out.println("All Frame Proc :"+allFrameProcess);
+				System.err.println("NameKey :"+nameKey+","+map.getKey());
+				System.out.println("<Update>"+map.getKey()+" :"+frames);
+				System.out.println("F_b :"+begin);
+				System.out.println("F_e :"+end);
+			}
+		}
 
 	 }
 	
@@ -120,4 +155,3 @@ public class SequenceProcess extends ProcessList {
 	
 
 }
-

@@ -10,25 +10,29 @@ import java.util.Map.Entry;
 import Model.state.StateDiagram;
 
 public class SequenceFrame{
-	static LinkedList<Map<String, String>> trueFrame;
-	static LinkedList<Map<String, String>> falseFrame;
-	static LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
-	static String name = ""; //TypeFrame_index
-	static String typeFrame = "";
+	static LinkedList<Map<String, Map<String, String>>> startToEnd;
+//	static Map<String, Map<String, String>> endList;
+	LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
+	static String name = "",typeFrame = "";
 	
-	public SequenceFrame(String name,String typeFrame,LinkedList<Map<String, String>> trueFrame,LinkedList<Map<String, String>> falseFrame){
-		this.trueFrame = trueFrame;
-		this.falseFrame = falseFrame;
+	public SequenceFrame(String name,String typeFrame,LinkedList<Map<String, Map<String, String>>> startToEnd){
+		System.out.println("start to end :"+startToEnd);
+//		System.out.println("end :"+endList);
+		this.startToEnd = startToEnd;
 		this.name = name;
 		this.typeFrame = typeFrame;
 		this.processFrame = getAllFrameProc();
 	}
 	
-	public String getName() { return this.name; }
-	
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessFrame(){ return this.processFrame; }
+	public String getName() {
+		return this.name;
+	}
 	
 
+	
+	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessFrame() {
+		return processFrame;
+	}
 	
 	public String getTypeFrame() {
 		return this.typeFrame;
@@ -48,25 +52,27 @@ public class SequenceFrame{
 //				}
 //			}
 //		}
-		return "TRUE :"+trueFrame+"\nFALSE :"+falseFrame+"\n";
+		return s+processFrame;
 	}
 	
 	
 	public static Map<String, LinkedList<LinkedList<String>>> processName(String m){
 		LinkedList<String> res= new LinkedList<>();
-		for (int i = 0; i < trueFrame.size(); i++) {
-			for (Entry<String, String> bg : trueFrame.get(i).entrySet()) {
-				if(bg.getKey().equals(m))
-				res.add(bg.getValue());
+		for (int i = 0; i < startToEnd.size(); i++) {
+			for (Entry<String, Map<String, String>> bg : startToEnd.get(i).entrySet()) {
+				for (Entry<String, String> string : bg.getValue().entrySet()) {
+					if(string.getKey().equals(m))
+					res.add(string.getValue());
+				}
 			}
 		}
 		
-		for (int i = 0; i < falseFrame.size(); i++) {
-			for (Entry<String, String> bg : falseFrame.get(i).entrySet()) {
-				if(bg.getKey().equals(m))
-				res.add(bg.getValue());
-			}
-		}
+//		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+//			for (Entry<String, String> string : en.getValue().entrySet()) {
+//				if(string.getKey().equals(m))
+//				res.add(string.getValue());
+//			}
+//		}
 		LinkedList<LinkedList<String>> result = new LinkedList<>();
 		result.add(res);
 		Map<String, LinkedList<LinkedList<String>>> mRes = new LinkedHashMap<>();
@@ -79,19 +85,22 @@ public class SequenceFrame{
 	public Set<StateDiagram> getAllStateDiagram(){
 		Set<StateDiagram> s = new LinkedHashSet<>();
 		int count=1;
-		for (int i = 0; i < trueFrame.size(); i++) {
-			for (Entry<String, String> bg : trueFrame.get(i).entrySet()) {
-				StateDiagram stateDiagram = new StateDiagram("M_"+bg.getKey());
-				s.add(stateDiagram);
+		for (int i = 0; i < startToEnd.size(); i++) {
+			for (Entry<String, Map<String, String>> bg : startToEnd.get(i).entrySet()) {
+				for (Entry<String, String> string : bg.getValue().entrySet()) {
+					StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
+					s.add(stateDiagram);
+				}
 			}
 		}
 		
-		for (int i = 0; i < falseFrame.size(); i++) {
-			for (Entry<String, String> bg : falseFrame.get(i).entrySet()) {
-				StateDiagram stateDiagram = new StateDiagram("M_"+bg.getKey());
-				s.add(stateDiagram);
-			}
-		}
+		
+//		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+//			for (Entry<String, String> string : en.getValue().entrySet()) {
+//				StateDiagram stateDiagram = new StateDiagram("M_"+string.getKey());
+//				s.add(stateDiagram);
+//			}
+//		}
 		System.out.println("Set :"+s);
 		return s;
 	}
@@ -100,18 +109,20 @@ public class SequenceFrame{
 	public static Object[] getAllState(){
 		Set<String> setState = new LinkedHashSet<>();
 		int count=1;
-		for (int i = 0; i < trueFrame.size(); i++) {
-			for (Entry<String, String> bg : trueFrame.get(i).entrySet()) {
-				setState.add(bg.getKey());
+		for (int i = 0; i < startToEnd.size(); i++) {
+			for (Entry<String, Map<String, String>> bg : startToEnd.get(i).entrySet()) {
+				for (Entry<String, String> string : bg.getValue().entrySet()) {
+					setState.add(string.getKey());
+				}
 			}
 		}
 		
-		for (int i = 0; i < falseFrame.size(); i++) {
-			for (Entry<String, String> bg : falseFrame.get(i).entrySet()) {
-				setState.add(bg.getKey());
-			}
-		}
 		
+//		for (Entry<String, Map<String, String>> en : endList.entrySet()) {
+//			for (Entry<String, String> string : en.getValue().entrySet()) {
+//				setState.add(string.getKey());
+//			}
+//		}
 		System.out.println("Set :"+setState);
 		return setState.toArray();
 	}

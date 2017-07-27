@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import Model.proc.FrameProcess;
 import Model.proc.ProcessLinkedList;
 
 public class ProcessList {
@@ -12,9 +13,9 @@ public class ProcessList {
 	
 	protected ProcessLinkedList processMapByState;
 	
-	public ProcessList(String name){
-		processMapByName = new ProcessLinkedList(name);
-		processMapByState = new ProcessLinkedList(name);
+	public ProcessList(){
+		processMapByName = new ProcessLinkedList();
+		processMapByState = new ProcessLinkedList();
 	}
 	
 	public int getLength() {
