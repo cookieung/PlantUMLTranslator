@@ -10,13 +10,13 @@ public class ProcessLinkedList {
 	
 	private LinkedList<Map<String,LinkedList<LinkedList<String>>>> normalProcess;
 	
-	private LinkedList<Map<String, Map<String, Map<String, String>>>> optProcess;
+	private FrameProcessMap optProcess;
 	
 	Stack<String> stackframe = new Stack<>();
 	
-	public ProcessLinkedList(){
+	public ProcessLinkedList(String name){
 		this.normalProcess = new LinkedList<>();
-		this.optProcess = new LinkedList<>();
+		this.optProcess = new FrameProcessMap(name);
 	}
 	
 	public int size(){
@@ -25,13 +25,13 @@ public class ProcessLinkedList {
 
 	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
 		normalProcess.add(map);
-		Map<String, Map<String, Map<String, String>>> m = new LinkedHashMap<>();
+		FrameProcess m;
 		System.out.println("*[Type Map :"+typeMap);
 		System.out.println("[Next Type :"+nextTypeName);
 		if( typeMap.contains("end") || (!nextTypeName.contains("end") && !typeMap.contains("alt") && !typeMap.contains("opt") && !typeMap.contains("else") && !typeMap.contains("loop"))) {
 			System.out.println("ABC"+typeMap);
 			typeMap = "NaN";
-			m.put("NaN", getForOpt(map, typeMap,nameframe));
+			m = new FrameProcess("NaN", getForOpt(map, typeMap,nameframe));
 		}
 		else {
 			System.out.println("CDE"+typeMap);
@@ -46,7 +46,7 @@ public class ProcessLinkedList {
 			if(typeMap.contains("end") && !stackframe.isEmpty()) typeMap = "end"+stackframe.peek().replaceAll("\\D+", "");
 			else stackframe.push(typeMap);
 			System.out.println("<<Type Map :"+typeMap);
-			m.put(typeMap, getForOpt(map, typeMap,nameframe));
+			m = new FrameProcess(typeMap, getForOpt(map, typeMap,nameframe));
 		}
 		System.out.println(typeMap +"Add Normal Map :"+map+">>"+m);
 		optProcess.add(m);
@@ -56,11 +56,11 @@ public class ProcessLinkedList {
 	
 	public void addNormal2(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
 		normalProcess.add(map);
-		Map<String, Map<String, Map<String, String>>> m = new LinkedHashMap<>();
+		FrameProcess m;
 		System.out.println("[Type Map :"+typeMap);
 		System.out.println("[Next Type :"+nextTypeName);
 		if( typeMap.contains("end") || (!nextTypeName.contains("end") && !typeMap.contains("alt") && !typeMap.contains("opt") && !typeMap.contains("else") && !typeMap.contains("loop"))) {
-			m.put("NaN", getForOpt(map, typeMap,nameframe));
+			m = new FrameProcess("NaN", getForOpt(map, typeMap,nameframe));
 		}
 		else {
 			
@@ -73,7 +73,7 @@ public class ProcessLinkedList {
 			}
 			
 			System.out.println("<<Type Map :"+typeMap);
-			m.put(typeMap, getForOpt(map, typeMap,nameframe));
+			m = new FrameProcess(typeMap, getForOpt(map, typeMap,nameframe));
 		}
 		System.out.println(typeMap +"Add Normal Map :"+map+">>"+m);
 		optProcess.add(m);
@@ -165,7 +165,7 @@ public class ProcessLinkedList {
 		return mm;
 	}
 	
-	public void addOpt(Map<String, Map<String, Map<String, String>>> map) {
+	public void addOpt(FrameProcess map) {
 		optProcess.add(map);
 	}
 
@@ -178,15 +178,26 @@ public class ProcessLinkedList {
 	}
 
 	public LinkedList<Map<String, Map<String, Map<String,String>>>> getOptProcess() {
-		return optProcess;
+		LinkedList<Map<String, Map<String, Map<String,String>>>> opts = new LinkedList<>();
+		Map<String, Map<String, Map<String,String>>> m = new LinkedHashMap<>();
+		for(int i=0;i<optProcess.size();i++) {
+			m.put(optProcess.get(i).getName(),optProcess.get(i).getAtomicProcess());
+		}
+		opts.add(m);
+		return opts;
 	}
 
-	public void setOptProcess(LinkedList<Map<String, Map<String, Map<String, String>>>> optProcess) {
+	public void setOptProcess(LinkedList<FrameProcess> optProcess) {
 		this.optProcess = optProcess;
 	}
 	
 	public void testOpt(){
-		System.err.println("ALT:"+this.optProcess);
+		System.err.print("ALT:");
+		for (int i = 0; i < this.optProcess.size(); i++) {
+			System.err.println(this.optProcess.get(i).getName()+":"+this.optProcess.get(i).getAtomicProcess());
+			System.out.println("AAAAAAAAA"+this.optProcess.get(i).getFrameProcess());
+		}
+
 	}
 
 }

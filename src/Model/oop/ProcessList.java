@@ -12,9 +12,9 @@ public class ProcessList {
 	
 	protected ProcessLinkedList processMapByState;
 	
-	public ProcessList(){
-		processMapByName = new ProcessLinkedList();
-		processMapByState = new ProcessLinkedList();
+	public ProcessList(String name){
+		processMapByName = new ProcessLinkedList(name);
+		processMapByState = new ProcessLinkedList(name);
 	}
 	
 	public int getLength() {

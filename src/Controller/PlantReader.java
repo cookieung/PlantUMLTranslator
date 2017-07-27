@@ -235,6 +235,7 @@ public class PlantReader {
 		String[] rs = new String[sl.size()] ;
 		
 		rs = sl.toArray(rs);
+		System.out.println("SL :"+sl);
 		
 		System.out.println("Frame :"+countFrame);
 		System.out.println("Update :"+updateFrame);

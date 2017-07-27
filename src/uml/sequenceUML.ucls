@@ -3,7 +3,7 @@
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <interface id="1" language="java" name="Model.oop.Diagram" project="PlantUMLTranslator" 
     file="/PlantUMLTranslator/src/Model/oop/Diagram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="142" width="198" x="72" y="19"/>    
+    <position height="-1" width="-1" x="181" y="-7"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </interface>  
   <class id="2" language="java" name="Model.oop.ProcessList" project="PlantUMLTranslator" 
     file="/PlantUMLTranslator/src/Model/oop/ProcessList.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="377" y="523"/>    
+    <position height="-1" width="-1" x="406" y="321"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,15 +21,15 @@
   </class>  
   <class id="3" language="java" name="Model.sequence.SequenceDiagram" project="PlantUMLTranslator" 
     file="/PlantUMLTranslator/src/Model/sequence/SequenceDiagram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="653" y="95"/>    
+    <position height="-1" width="-1" x="636" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="Model.sequence.SequenceFrame" project="PlantUMLTranslator" 
-    file="/PlantUMLTranslator/src/Model/sequence/SequenceFrame.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="Model.sequence.frame.SequenceFrame" project="PlantUMLTranslator" 
+    file="/PlantUMLTranslator/src/Model/sequence/frame/SequenceFrame.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1093" y="70"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -39,33 +39,66 @@
   </class>  
   <class id="5" language="java" name="Model.sequence.SequenceProcess" project="PlantUMLTranslator" 
     file="/PlantUMLTranslator/src/Model/sequence/SequenceProcess.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1183" y="421"/>    
+    <position height="-1" width="-1" x="1151" y="384"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="6">    
+  <class id="6" language="java" name="Model.proc.ProcessLinkedList" project="PlantUMLTranslator" 
+    file="/PlantUMLTranslator/src/Model/proc/ProcessLinkedList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="381" y="686"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="7">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="8" name="processMapByName"/>      
+      <multiplicity id="9" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="10">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
-  <association id="7">    
+  <association id="11">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="12" name="processMapByState"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="8" name="frames"/>      
-      <multiplicity id="9" minimum="0" maximum="2147483647"/>    
+      <attribute id="15" name="frames">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="10">    
+  <realization id="17">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </realization>  
-  <association id="11">    
+  <association id="18">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="12" name="processes"/>      
-      <multiplicity id="13" minimum="0" maximum="1"/>    
+      <attribute id="19" name="processes">        
+        <position height="0" width="0" x="29" y="-202"/>      
+      </attribute>      
+      <multiplicity id="20" minimum="0" maximum="1">        
+        <position height="0" width="0" x="29" y="-202"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
