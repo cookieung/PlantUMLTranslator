@@ -95,6 +95,7 @@ public class ProcessLinkedList {
 	public Map<String, Map<String, String>> getForOpt(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeMap,String nameframe){
 		Map<String, Map<String, String>> mm = new LinkedHashMap<>();
 		System.out.println("<Type Map> :"+typeMap);
+		System.out.println("<Next Type Map> :"+nextTypeMap);
 		String stack;
 		if(stackframe.isEmpty()) stack = "";
 		else stack = stackframe.peek();
@@ -110,7 +111,7 @@ public class ProcessLinkedList {
 			mm.put("f"+stack+"_e", l);
 			else mm.put("f"+stack+"_b", l);
 			
-		}else if(nextTypeMap.contains("end"+stack)){
+		}else if(nextTypeMap.contains("end"+stack) && !nextTypeMap.equals("@enduml")){
 			Map<String, String> l  = new LinkedHashMap<>();
 			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {
 				for (int i = 0; i < s.getValue().size(); i++) {

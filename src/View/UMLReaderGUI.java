@@ -202,17 +202,23 @@ public class UMLReaderGUI extends JFrame {
 			System.out.println("UI");
 //			System.out.println(result.getText());
 			ArrayList<Map<String, ArrayList<String>>> a=plantReader.readAllInput(result.getText(),nameFile.getText());
+			System.out.println("Size A :"+a.size());
 			for (int i = 0; i < a.size(); i++) {
 				diagrams =  plantReader.translateToDiagram(a.get(i));
 				
 			}
 			
-			cspFile.append(a+"");
-			
-			cspFile.append("DIAGRAM :\n");
+			cspFile.append(a+"\n");
+			cspFile.append("Diagram:\n");
+//			cspFile.append("DIAGRAM :\n");
 			for (int i = 0; i < diagrams.size(); i++) {
 				cspFile.append(diagrams.get(i).getName()+" : \n");
-				cspFile.append(diagrams.get(i).getProcesses().getProcessListByName()+"\n");
+				for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListOptList().size(); j++) {
+					cspFile.append(diagrams.get(i).getProcesses().getProcessListOptList().get(j).getName()+":");
+					cspFile.append(diagrams.get(i).getProcesses().getProcessListOptList().get(j).getAtomicProcess()+"\n");
+					
+				}
+
 				
 			}
 

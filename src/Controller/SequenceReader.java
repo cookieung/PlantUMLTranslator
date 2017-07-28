@@ -79,7 +79,7 @@ public class SequenceReader {
 			 
 		}
 		 
-		 System.out.println("List :"+list);
+		 System.out.println("**List** :"+list);
 
 		 
 		 list.testOpt();

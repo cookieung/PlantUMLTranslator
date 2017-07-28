@@ -66,11 +66,11 @@ public class PlantReader {
 //    	//Add All UML to ArrayList by separate each state
     	diagrams = new ArrayList<>();
     	    	
-    	for (int i = 0; i < allUML.size(); i++) {
-    		System.out.println("State "+(i+1));
-    		translateToDiagram(allUML.get(i));
-
-		}
+//    	for (int i = 0; i < allUML.size(); i++) {
+//    		System.out.println("State "+(i+1));
+//    		translateToDiagram(allUML.get(i));
+//
+//		}
 
 		
     	UMLReaderGUI a = new UMLReaderGUI(new UMLReader());
@@ -315,9 +315,9 @@ public class PlantReader {
 					}
 	    			System.out.println("TEST STATE IND:"+diagrams);
 	    		}
-	    		System.out.println("TEST2 :"+diagram.toString());
-	    		System.out.println("7/5/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
-	    		System.out.println("RESULT SQIM1M2 :"+getRelationOfSequenceWithAllState()+"ENDD");
+//	    		System.out.println("TEST2 :"+diagram.toString());
+//	    		System.out.println("7/5/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
+//	    		System.out.println("RESULT SQIM1M2 :"+getRelationOfSequenceWithAllState()+"ENDD");
 	    	}
 
 	    	return diagrams;
@@ -625,6 +625,7 @@ public class PlantReader {
 	 public String showSequenceDiagram(){
 		 String s="";
 		 Map<String, LinkedList<String>> map = getSequenceDiagram();
+		 System.out.println("IN UML Map :"+map);
 		 for (Entry<String, LinkedList<String>> mp : map.entrySet()) {
 			String[] tmp = mp.getKey().split("_");
 			s+=tmp[tmp.length-1]+" = ";
@@ -699,6 +700,11 @@ public class PlantReader {
 					for (Entry<String, LinkedList<LinkedList<String>>> map2 : procs.get(j).entrySet()) {
 						System.out.println("<Map2> :"+map2);
 						for (int k = 0; k < map2.getValue().size(); k++) {
+							System.out.println("A:");
+							for (int k2 = 0; k2 < getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList().size(); k2++) {
+								System.out.println(getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList().get(k2).getName()+":"+getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList().get(k2).getAtomicProcess());
+							}
+							System.out.println("B:"+map2.getValue().get(k).get(0));
 							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList(),map2.getValue().get(k).get(0));
 							ll.add("SKIP");
 							map.put(name+"_"+map2.getValue().get(0).get(0), ll);
