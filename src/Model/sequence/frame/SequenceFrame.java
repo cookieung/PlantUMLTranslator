@@ -1,5 +1,6 @@
 package Model.sequence.frame;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -12,12 +13,14 @@ import Model.state.StateDiagram;
 public class SequenceFrame{
 	static LinkedList<Map<String, Map<String, String>>> trueFrame;
 	static LinkedList<Map<String, Map<String, String>>> falseFrame;
-	LinkedList<Map<String, LinkedList<LinkedList<String>>>> processFrame;
+	LinkedList<Map<String, LinkedList<Map<String, String>>>> processFrame;
 	static String name = "",typeFrame = "";
 	
 	public SequenceFrame(String name,String typeFrame,LinkedList<Map<String, Map<String, String>>> trueFrame,LinkedList<Map<String, Map<String, String>>> falseFrame){
 		this.falseFrame = falseFrame;
 		this.trueFrame = trueFrame;
+		System.out.println("True Frame :"+trueFrame);
+		System.out.println("False Frame :"+falseFrame);
 		this.name = name;
 		this.typeFrame = typeFrame;
 		this.processFrame = getAllFrameProc();
@@ -29,7 +32,7 @@ public class SequenceFrame{
 	
 
 	
-	public LinkedList<Map<String, LinkedList<LinkedList<String>>>> getProcessFrame() {
+	public LinkedList<Map<String, LinkedList<Map<String, String>>>> getProcessFrame() {
 		return processFrame;
 	}
 	
@@ -55,13 +58,13 @@ public class SequenceFrame{
 	}
 	
 	
-	public static Map<String, LinkedList<LinkedList<String>>> processName(String m){
-		LinkedList<String> res= new LinkedList<>();
+	public static Map<String, LinkedList<Map<String,String>>> processName(String m){
+		Map<String,String> res= new HashMap<>();
 		for (int i = 0; i < trueFrame.size(); i++) {
 			for (Entry<String, Map<String, String>> bg : trueFrame.get(i).entrySet()) {
 				for (Entry<String, String> string : bg.getValue().entrySet()) {
 					if(string.getKey().equals(m))
-					res.add(string.getValue());
+					res.put("f"+bg.getKey().substring(bg.getKey().length()-3),string.getValue());
 				}
 			}
 		}
@@ -70,13 +73,13 @@ public class SequenceFrame{
 			for (Entry<String, Map<String, String>> bg : falseFrame.get(i).entrySet()) {
 				for (Entry<String, String> string : bg.getValue().entrySet()) {
 					if(string.getKey().equals(m))
-					res.add(string.getValue());
+					res.put("f"+bg.getKey().substring(bg.getKey().length()-3),string.getValue());
 				}
 			}
 		}
-		LinkedList<LinkedList<String>> result = new LinkedList<>();
+		LinkedList<Map<String,String>> result = new LinkedList<>();
 		result.add(res);
-		Map<String, LinkedList<LinkedList<String>>> mRes = new LinkedHashMap<>();
+		Map<String, LinkedList<Map<String, String>>> mRes = new LinkedHashMap<>();
 		mRes.put(name+"_"+m, result);
 		System.out.println("Process Name M :"+name);
 		return mRes;
@@ -132,8 +135,8 @@ public class SequenceFrame{
 	}
 	
 	//Recent
-	public static LinkedList<Map<String, LinkedList<LinkedList<String>>>> getAllFrameProc() {
-		LinkedList<Map<String, LinkedList<LinkedList<String>>>> listM = new LinkedList<>();
+	public static LinkedList<Map<String, LinkedList<Map<String,String>>>> getAllFrameProc() {
+		LinkedList<Map<String, LinkedList<Map<String,String>>>> listM = new LinkedList<>();
 		for (int i = 0; i < getAllState().length; i++) {
 			listM.add(processName(getAllState()[i]+""));
 		}

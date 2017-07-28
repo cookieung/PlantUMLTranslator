@@ -52,8 +52,8 @@ public class SequenceProcess extends ProcessList {
 	}
 	
 	//Get All frame in this sequence to printout
-	 public ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> getFrames() {
-		 ArrayList<LinkedList<Map<String, LinkedList<LinkedList<String>>>>> r = new ArrayList<>();
+	 public ArrayList<LinkedList<Map<String, LinkedList<Map<String, String>>>>> getFrames() {
+		 ArrayList<LinkedList<Map<String, LinkedList<Map<String, String>>>>> r = new ArrayList<>();
 		 for (int i=0; i< frames.size(); i++) {
 			 System.err.println("Check "+frames.get(i).getName()+" :"+frames.get(i).getProcessFrame());
 			r.add(frames.get(i).getProcessFrame());
@@ -108,7 +108,6 @@ public class SequenceProcess extends ProcessList {
 	 public void checkFrame(){
 		 String nameKey = "";
 		 LinkedList<Map<String, Map<String, String>>> allFrameProcess = new LinkedList<>();
-		 Map<String, Map<String,String>> mp = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
 		 LinkedList<Map<String, Map<String, String>>> trueFrame = new LinkedList<>();
@@ -118,23 +117,38 @@ public class SequenceProcess extends ProcessList {
 		 
 			for (FrameProcess map : l.getFrameProcesslist()) {
 				if(map.getName().contains("alt") || map.getName().contains("opt") || map.getName().contains("loop")){
-				if(map.getName().contains("_b")) {
-					mp.put(map.getName(), map.getAtomicProcess());
-					nameKey = map.getName();
-					trueFrame.add(mp);
-				}else if(map.getName().contains("_e")) {
-					mp.put(map.getName(), map.getAtomicProcess());
-					nameKey = map.getName();
-					falseFrame.add(mp);
-					
-					if(nameKey.contains("alt") || nameKey.contains("opt")) {
-						SequenceFrame frame = new AltFrame(map.getName().toUpperCase(),nameKey,trueFrame,falseFrame);
-						frames.add(frame);	
-					}else if(nameKey.contains("loop")) {
-						SequenceFrame frame = new LoopFrame(map.getName().toUpperCase(),nameKey,trueFrame,falseFrame);
-						frames.add(frame);	
-					}	
-				}
+					String type = map.getName();
+					if(type.contains("alt")) {
+						nameKey = "alt";
+						type = type.replace("alt", "");
+					}
+					else if(type.contains("opt")) {
+						nameKey = "opt";
+						type = type.replace("opt", "");
+					}
+					else if(type.contains("loop")) {
+						nameKey = "loop";
+						type = type.replace("loop", "");
+					}
+					if(type.contains("_b")) {
+						Map<String, Map<String,String>> mp = new LinkedHashMap<>();
+						type = type.replace("_b", "");
+						mp.put(map.getName(), map.getAtomicProcess());
+						trueFrame.add(mp);
+					}else if(type.contains("_e")) {
+						Map<String, Map<String,String>> mp = new LinkedHashMap<>();
+						type = type.replace("_e", "");
+						mp.put(map.getName(), map.getAtomicProcess());
+						falseFrame.add(mp);
+						
+						if(nameKey.contains("alt") || nameKey.contains("opt")) {
+							SequenceFrame frame = new AltFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
+							frames.add(frame);	
+						}else if(nameKey.contains("loop")) {
+							SequenceFrame frame = new LoopFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
+							frames.add(frame);	
+						}	
+					}
 			}
 				System.err.println(map.getName()+":"+map.getAtomicProcess());
 			}

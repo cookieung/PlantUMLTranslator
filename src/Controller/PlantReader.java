@@ -479,20 +479,21 @@ public class PlantReader {
 		 String s ="";
 		 System.out.println("TRACKER :"+proc.getFrames());
 		 for (int i = 0; i < proc.getFrames().size(); i++) {
-			LinkedList<Map<String, LinkedList<LinkedList<String>>>> elem = proc.getFrames().get(i);
+			LinkedList<Map<String, LinkedList<Map<String, String>>>> elem = proc.getFrames().get(i);
 			String nameTypeFrame = proc.getFrameTypeName(i);
 			System.out.println("7/2/2017 :"+elem);
 			for (int j = 0; j < elem.size(); j++) {
-				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
+				for (Entry<String, LinkedList<Map<String, String>>> map : elem.get(j).entrySet()) {
 					s += map.getKey()+" = "+map.getKey()+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
 						System.out.println("DEBUG :"+map.getValue());
 						s += map.getKey().split("_")[0].toLowerCase()+"_b -> ";
 						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
-						LinkedList<String> tl = makeForBlankSpaceProc(map.getValue().get(k));
-						for (int k2 = 0; k2 < tl.size(); k2++) {
-							s += formatFrame(nameTypeFrame,tl.get(k2),k2+1,map.getKey().split("_")[0].toLowerCase());
-							if(k2<tl.size()-1) s+=" [] ";
+						Map<String, String> t = makeForBlankSpaceProc(map.getValue().get(k),map.getKey().split("_")[0].toLowerCase());
+						System.out.println("Plant Reader ::"+t);
+						for (Entry<String, String> tl:t.entrySet()) {
+							if(tl.getKey().contains("_e")) s+= " [] ";
+							s += formatFrame(nameTypeFrame,tl.getValue(),map.getKey().split("_")[0].toLowerCase());
 						}
 					}
 					s+="\n";
@@ -502,24 +503,38 @@ public class PlantReader {
 		 return s;
 	 }
 	 
-	 private static LinkedList<String> makeForBlankSpaceProc(LinkedList<String> ll) {
-		 if(ll.size()==1){
-			ll.add("");
-		}
+	 private static Map<String, String> makeForBlankSpaceProc(Map<String, String> ll,String m) {
+		Object[] s = ll.keySet().toArray();
+		if(!hasFBegin(s)) ll.put(m+"_b", "");
+		if(!hasFEnd(s)) ll.put(m+"_e", "");
 		return ll;
 	}
 	 
+	private static boolean hasFBegin(Object[] s) {
+		for (int i = 0; i < s.length; i++) {
+			if(s[i].toString().contains("f") && s[i].toString().contains("_b")) return true;
+		}
+		return false;
+	} 
+
+	private static boolean hasFEnd(Object[] s) {
+		for (int i = 0; i < s.length; i++) {
+			if(s[i].toString().contains("f") && s[i].toString().contains("_e")) return true;
+		}
+		return false;
+	} 
+	
 	 public static Map<String ,Map<String,LinkedList<String>>> getRelationWithFrame(SequenceProcess proc){
 		 String s ="";
 		 Map<String ,Map<String,LinkedList<String>>> m = new LinkedHashMap<>();
 		 System.out.println("TRACKER :"+proc.getFrames());
 		 for (int i = 0; i < proc.getFrames().size(); i++) {
 			String n=""; 
-			LinkedList<Map<String, LinkedList<LinkedList<String>>>> elem = proc.getFrames().get(i);
+			LinkedList<Map<String, LinkedList<Map<String, String>>>> elem = proc.getFrames().get(i);
 			System.out.println("7/2/2017 :"+elem);
 			LinkedList<String> state = new LinkedList<>();
 			for (int j = 0; j < elem.size(); j++) {
-				for (Entry<String, LinkedList<LinkedList<String>>> map : elem.get(j).entrySet()) {
+				for (Entry<String, LinkedList<Map<String, String>>> map : elem.get(j).entrySet()) {
 					n = map.getKey().split("_")[0];
 					state.add(map.getKey());
 				}
@@ -565,11 +580,11 @@ public class PlantReader {
 		 }
 		
 		
-	 public static String formatFrame(String typeframe,String msg,int i,String name){
-		 frameChannel.add(name+"_"+typeframe+i);
+	 public static String formatFrame(String typeframe,String msg,String name){
+		 frameChannel.add(name+"_"+typeframe);
 		 frameChannel.add(name+"_e");
-		 if(msg.length()==0) return "("+name+"_"+typeframe+i+" -> "+name+"_e"+" -> SKIP)";
-		 return "("+name+"_"+typeframe+i+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
+		 if(msg.length()==0) return "("+name+"_"+typeframe+" -> "+name+"_e"+" -> SKIP)";
+		 return "("+name+"_"+typeframe+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
 	 }
 
 	 public String showRelationOfAllMessage(){
