@@ -1,29 +1,25 @@
 package Model.proc;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class FrameProcess {
 	
-	Map<String, String> atomicProcess;
+	LinkedList<Map<String, String>> atomicProcess;
 	String name = "";
 	
 	public FrameProcess(String name) {
 		this.name = name;
-		atomicProcess = new LinkedHashMap<>();
+		atomicProcess = new LinkedList<>();
 	}
 	
-	public FrameProcess(String name,Map<String, String> atomicProcess) {
-		this.name = name;
-		this.atomicProcess = atomicProcess;
+		
+	public void addProcess(Map<String,String> m) {
+		this.atomicProcess.add(m);
 	}
 	
-	
-	public void addProcess(String key,String value) {
-		this.atomicProcess.put(key, value);
-	}
-	
-	public Map<String, String> getAtomicProcess(){
+	public LinkedList<Map<String, String>> getAtomicProcess(){
 		return this.atomicProcess;
 	}
 	

@@ -51,7 +51,9 @@ public class ProcessLinkedList {
 		for (Entry<String, Map<String, Map<String, String>>> map2 : m.entrySet()) {
 			optProcess.setName(map2.getKey());
 			for (Entry<String, Map<String, String>> map3 : map2.getValue().entrySet()) {
-				optProcess.addFrameProcess(new FrameProcess(map3.getKey(), map3.getValue()));
+				FrameProcess f = new FrameProcess(map3.getKey());
+				f.addProcess(map3.getValue());
+				optProcess.addFrameProcess(f);
 			}
 		}
 
@@ -84,7 +86,9 @@ public class ProcessLinkedList {
 		for (Entry<String, Map<String, Map<String, String>>> map2 : m.entrySet()) {
 			optProcess.setName(map2.getKey());
 			for (Entry<String, Map<String, String>> map3 : map2.getValue().entrySet()) {
-				optProcess.addFrameProcess(new FrameProcess(map3.getKey(), map3.getValue()));
+				FrameProcess f = new FrameProcess(map3.getKey());
+				f.addProcess(map3.getValue());
+				optProcess.addFrameProcess(f);
 			}
 		}
 		if(typeMap.contains("alt")||typeMap.contains("opt")||typeMap.contains("loop")||typeMap.contains("end"))
@@ -119,7 +123,11 @@ public class ProcessLinkedList {
 				}
 			}
 			System.out.println(typeMap+"HERE :"+stackframe+"Stack peek :"+stack);
-			mm.put("f"+stack+"_e", l);
+			if(stack.contains("loop")) {
+				mm.put("f"+stack+"_b", l);
+				mm.put("f"+stack+"_e", new LinkedHashMap<>());
+			}
+			else mm.put("f"+stack+"_e", l);
 			System.out.println( stackframe.size() >= 2);
 			if(stackframe.size()>=2) {
 				stackframe.pop();

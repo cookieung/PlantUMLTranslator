@@ -315,9 +315,9 @@ public class PlantReader {
 					}
 	    			System.out.println("TEST STATE IND:"+diagrams);
 	    		}
-//	    		System.out.println("TEST2 :"+diagram.toString());
-//	    		System.out.println("7/5/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
-//	    		System.out.println("RESULT SQIM1M2 :"+getRelationOfSequenceWithAllState()+"ENDD");
+	    		System.out.println("TEST2 :"+diagram.toString());
+	    		System.out.println("7/5/2017 :"+getRelationFrameWithSequenceDiagram((SequenceProcess) procSequence));
+	    		System.out.println("RESULT SQIM1M2 :"+getRelationOfSequenceWithAllState()+"ENDD");
 	    	}
 
 	    	return diagrams;
@@ -410,7 +410,6 @@ public class PlantReader {
 		string += "Show Sequence Diagram:\n"+showSequenceDiagram()+"\n";
 
 		string += "Frame Channel :\n";
-		if(getFrameChannel().size()>0)
 		string += getRelationFrameWithSequenceDiagram();
 
 		string += showRelationOfStateDiagram()+"\n";
@@ -479,21 +478,23 @@ public class PlantReader {
 		 String s ="";
 		 System.out.println("TRACKER :"+proc.getFrames());
 		 for (int i = 0; i < proc.getFrames().size(); i++) {
-			LinkedList<Map<String, LinkedList<Map<String, String>>>> elem = proc.getFrames().get(i);
+			LinkedList<Map<String, LinkedList<Map<String, LinkedList<String>>>>> elem = proc.getFrames().get(i);
 			String nameTypeFrame = proc.getFrameTypeName(i);
 			System.out.println("7/2/2017 :"+elem);
 			for (int j = 0; j < elem.size(); j++) {
-				for (Entry<String, LinkedList<Map<String, String>>> map : elem.get(j).entrySet()) {
+				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> map : elem.get(j).entrySet()) {
 					s += map.getKey()+" = "+map.getKey()+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
-						System.out.println("DEBUG :"+map.getValue());
+						System.out.println(k+"DEBUG :"+map.getValue());
 						s += map.getKey().split("_")[0].toLowerCase()+"_b -> ";
 						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
-						Map<String, String> t = makeForBlankSpaceProc(map.getValue().get(k),map.getKey().split("_")[0].toLowerCase());
+						Map<String, LinkedList<String>> t = map.getValue().get(k);
 						System.out.println("Plant Reader ::"+t);
-						for (Entry<String, String> tl:t.entrySet()) {
-							if(tl.getKey().contains("_e")) s+= " [] ";
+						int n = 0;
+						for (Entry<String, LinkedList<String>> tl:t.entrySet()) {
 							s += formatFrame(nameTypeFrame,tl.getValue(),map.getKey().split("_")[0].toLowerCase());
+							if(n < t.keySet().size()-1) s+= " [] ";
+							n++;
 						}
 					}
 					s+="\n";
@@ -503,15 +504,25 @@ public class PlantReader {
 		 return s;
 	 }
 	 
-	 private static Map<String, String> makeForBlankSpaceProc(Map<String, String> ll,String m) {
+	 private static Map<String, LinkedList<String>> makeForBlankSpaceProc(Map<String, LinkedList<String>> ll,String m) {
 		Object[] s = ll.keySet().toArray();
-		if(!hasFBegin(s)) ll.put(m+"_b", "");
-		if(!hasFEnd(s)) ll.put(m+"_e", "");
+		LinkedList<String> l = new LinkedList<>();
+		l.add("NaN");
+		System.out.println("has Begin"+!hasFBegin(s));
+		System.out.println("has End"+!hasFEnd(s));
+		if(!hasFBegin(s)) {
+			ll.put(m+"_b", l);
+		}
+		if(!hasFEnd(s)) {
+			ll.put(m+"_e", l);
+		}
+		System.out.println("LL :"+l);
 		return ll;
 	}
 	 
 	private static boolean hasFBegin(Object[] s) {
 		for (int i = 0; i < s.length; i++) {
+			System.out.println("W:"+s[i].toString()+(s[i].toString().contains("f") && s[i].toString().contains("_b")));
 			if(s[i].toString().contains("f") && s[i].toString().contains("_b")) return true;
 		}
 		return false;
@@ -519,6 +530,7 @@ public class PlantReader {
 
 	private static boolean hasFEnd(Object[] s) {
 		for (int i = 0; i < s.length; i++) {
+			System.out.println("V:"+s[i].toString()+(s[i].toString().contains("f") && s[i].toString().contains("_e")));
 			if(s[i].toString().contains("f") && s[i].toString().contains("_e")) return true;
 		}
 		return false;
@@ -530,11 +542,11 @@ public class PlantReader {
 		 System.out.println("TRACKER :"+proc.getFrames());
 		 for (int i = 0; i < proc.getFrames().size(); i++) {
 			String n=""; 
-			LinkedList<Map<String, LinkedList<Map<String, String>>>> elem = proc.getFrames().get(i);
+			LinkedList<Map<String, LinkedList<Map<String, LinkedList<String>>>>> elem = proc.getFrames().get(i);
 			System.out.println("7/2/2017 :"+elem);
 			LinkedList<String> state = new LinkedList<>();
 			for (int j = 0; j < elem.size(); j++) {
-				for (Entry<String, LinkedList<Map<String, String>>> map : elem.get(j).entrySet()) {
+				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> map : elem.get(j).entrySet()) {
 					n = map.getKey().split("_")[0];
 					state.add(map.getKey());
 				}
@@ -580,11 +592,16 @@ public class PlantReader {
 		 }
 		
 		
-	 public static String formatFrame(String typeframe,String msg,String name){
+	 public static String formatFrame(String typeframe,LinkedList<String> msg,String name){
 		 frameChannel.add(name+"_"+typeframe);
 		 frameChannel.add(name+"_e");
-		 if(msg.length()==0) return "("+name+"_"+typeframe+" -> "+name+"_e"+" -> SKIP)";
-		 return "("+name+"_"+typeframe+" -> "+msg+" -> "+name+"_e"+" -> SKIP)";
+		 System.out.println("Message :"+msg.size());
+//		 if(msg.size()==1) return "("+name+"_"+typeframe+" -> "+name+"_e"+" -> SKIP)";
+		 String message ="";
+		 for (int i = 0; i < msg.size(); i++) {
+			if(msg.get(i).length()>0) message += msg.get(i)+" -> ";
+		 }
+		 return "("+name+"_"+typeframe+" -> "+message+name+"_e"+" -> SKIP)";
 	 }
 
 	 public String showRelationOfAllMessage(){
@@ -673,11 +690,13 @@ public class PlantReader {
 					if(string.charAt(0)=='f' && (string.contains("_e") ||string.contains("_b"))){
 						ll.add(string);
 					}else{
-						for (Entry<String, String> l : map2.getAtomicProcess().entrySet()) {
-							if(l.getKey().equals(state)){
-								ll.add(l.getValue());
+						for (int i = 0; i < map2.getAtomicProcess().size(); i++) {
+							for (Entry<String, String> l : map2.getAtomicProcess().get(i).entrySet()) {
+								if(l.getKey().equals(state)){
+									ll.add(l.getValue());
+								}
 							}
-						}
+						}							
 					}
 
 		}

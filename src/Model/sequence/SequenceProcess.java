@@ -52,8 +52,8 @@ public class SequenceProcess extends ProcessList {
 	}
 	
 	//Get All frame in this sequence to printout
-	 public ArrayList<LinkedList<Map<String, LinkedList<Map<String, String>>>>> getFrames() {
-		 ArrayList<LinkedList<Map<String, LinkedList<Map<String, String>>>>> r = new ArrayList<>();
+	 public ArrayList<LinkedList<Map<String, LinkedList<Map<String, LinkedList<String>>>>>> getFrames() {
+		 ArrayList<LinkedList<Map<String, LinkedList<Map<String, LinkedList<String>>>>>> r = new ArrayList<>();
 		 for (int i=0; i< frames.size(); i++) {
 			 System.err.println("Check "+frames.get(i).getName()+" :"+frames.get(i).getProcessFrame());
 			r.add(frames.get(i).getProcessFrame());
@@ -110,8 +110,8 @@ public class SequenceProcess extends ProcessList {
 		 LinkedList<Map<String, Map<String, String>>> allFrameProcess = new LinkedList<>();
 		 Map<String, Map<String, String>> begin = new LinkedHashMap<>();
 		 Map<String, Map<String, String>> end = new LinkedHashMap<>();
-		 LinkedList<Map<String, Map<String, String>>> trueFrame = new LinkedList<>();
-		 LinkedList<Map<String, Map<String, String>>> falseFrame = new LinkedList<>();
+		 LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame = new LinkedList<>();
+		 LinkedList<Map<String, LinkedList<Map<String, String>>>> falseFrame = new LinkedList<>();
 		 FrameProcessMap l = processMapByName.getOptProcess();
 		 System.out.println(l.getName()+"L before check frame :"+l.getFrameProcesslist());
 		 
@@ -131,12 +131,12 @@ public class SequenceProcess extends ProcessList {
 						type = type.replace("loop", "");
 					}
 					if(type.contains("_b")) {
-						Map<String, Map<String,String>> mp = new LinkedHashMap<>();
+						Map<String, LinkedList<Map<String,String>>> mp = new LinkedHashMap<>();
 						type = type.replace("_b", "");
 						mp.put(map.getName(), map.getAtomicProcess());
 						trueFrame.add(mp);
 					}else if(type.contains("_e")) {
-						Map<String, Map<String,String>> mp = new LinkedHashMap<>();
+						Map<String, LinkedList<Map<String,String>>> mp = new LinkedHashMap<>();
 						type = type.replace("_e", "");
 						mp.put(map.getName(), map.getAtomicProcess());
 						falseFrame.add(mp);
@@ -152,43 +152,14 @@ public class SequenceProcess extends ProcessList {
 			}
 				System.err.println(map.getName()+":"+map.getAtomicProcess());
 			}
-		 
-//		 int counter = 0;
-//		 for (int i = 0; i < l.size(); i++) {
-//			for (Entry<String, Map<String, Map<String, String>>> map : l.get(i).entrySet()) {
-//				System.out.println("CV Frame :"+map);
-//				System.out.println("Map get Key :"+map.getKey()+" = "+nameKey);
-//				if(map.getKey().contains("alt") || map.getKey().contains("opt") || map.getKey().contains("loop")){
-//					begin = map.getValue();
-//					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
-//						mp.put(p.getKey(), p.getValue());
-//					}
-//
-//					nameKey = map.getKey();
-//					
-//				}else if(map.getKey().contains("end")) {
-//					end = map.getValue();
-//					for (Entry<String, Map<String, String>> p : map.getValue().entrySet()) {
-//						mp.put(p.getKey(), p.getValue());
-//					}
-//					trueFrame.add(mp);
-//					
-//					if(nameKey.contains("alt") || nameKey.contains("opt")) {
-//						SequenceFrame frame = new AltFrame("F"+ ++counter,nameKey,trueFrame,falseFrame);
-//						frames.add(frame);	
-//					}else if(nameKey.contains("loop")) {
-//						SequenceFrame frame = new LoopFrame("F"+ ++counter,nameKey,trueFrame,falseFrame);
-//						frames.add(frame);	
-//					}
-//				}
-//
-//				System.out.println("All Frame Proc :"+allFrameProcess);
-//				System.err.println("NameKey :"+nameKey+","+map.getKey());
-//				System.out.println("<Update>"+map.getKey()+" :"+frames);
-//				System.out.println("F_b :"+begin);
-//				System.out.println("F_e :"+end);
-//			}
-//		}
+			System.out.println("Frames :");
+			for (int i = 0; i < frames.size(); i++) {
+				System.err.println(frames.get(i).getName());
+				System.out.println(frames.get(i).getTypeFrame());
+				System.out.println(frames.get(i).getProcessFrame());
+			}
+			System.out.println("=====================");
+			
 
 	 }
 	

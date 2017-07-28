@@ -49,7 +49,7 @@ public class SequenceReader {
 		return s;
 	}
 	
-	public ArrayList<LinkedList<Map<String, LinkedList<Map<String, String>>>>> getRelationFrameWithSequenceDiagram(SequenceProcess process){		
+	public ArrayList<LinkedList<Map<String, LinkedList<Map<String, LinkedList<String>>>>>> getRelationFrameWithSequenceDiagram(SequenceProcess process){		
 		return process.getFrames();
 	}
 	
