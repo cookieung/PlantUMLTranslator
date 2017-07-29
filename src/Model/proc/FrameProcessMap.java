@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class FrameProcessMap {
 	
-	LinkedList<FrameProcess> frameProcesslist;
-	String name="";
+	private LinkedList<FrameProcess> frameProcesslist;
+	private String name="";
 	
 	
 	public FrameProcessMap() {

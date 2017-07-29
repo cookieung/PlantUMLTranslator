@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.0" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="Model.sequence.SequenceDiagram" project="PlantUMLTranslator" 
-    file="/PlantUMLTranslator/src/Model/sequence/SequenceDiagram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="209" y="63"/>    
+  <class id="1" language="java" name="Model.sequence.frame.SequenceFrame" project="PlantUMLTranslator" 
+    file="/PlantUMLTranslator/src/Model/sequence/frame/SequenceFrame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="471" y="446"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,71 +12,53 @@
   </class>  
   <class id="2" language="java" name="Model.sequence.SequenceProcess" project="PlantUMLTranslator" 
     file="/PlantUMLTranslator/src/Model/sequence/SequenceProcess.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1038" y="402"/>    
+    <position height="-1" width="-1" x="372" y="790"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="Model.sequence.frame.SequenceFrame" project="PlantUMLTranslator" 
-    file="/PlantUMLTranslator/src/Model/sequence/frame/SequenceFrame.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="997" y="81"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="4" language="java" name="Model.proc.ProcessLinkedList" project="PlantUMLTranslator" 
-    file="/PlantUMLTranslator/src/Model/proc/ProcessLinkedList.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="347" y="404"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="Model.proc.FrameProcess" project="PlantUMLTranslator" 
-    file="/PlantUMLTranslator/src/Model/proc/FrameProcess.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1224" y="648"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="6" language="java" name="Model.proc.FrameProcessMap" project="PlantUMLTranslator" 
+  <class id="3" language="java" name="Model.proc.FrameProcessMap" project="PlantUMLTranslator" 
     file="/PlantUMLTranslator/src/Model/proc/FrameProcessMap.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="319" y="677"/>    
+    <position height="-1" width="-1" x="680" y="138"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="7">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="8" name="frameProcesslist"/>      
-      <multiplicity id="9" minimum="0" maximum="2147483647"/>    
+  <class id="4" language="java" name="Model.proc.FrameProcess" project="PlantUMLTranslator" 
+    file="/PlantUMLTranslator/src/Model/proc/FrameProcess.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="216" y="125"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="5">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="6" name="frames"/>      
+      <multiplicity id="7" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="10">    
+  <association id="8">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="11" name="frames"/>      
-      <multiplicity id="12" minimum="0" maximum="2147483647"/>    
+      <attribute id="9" name="frames"/>      
+      <multiplicity id="10" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="13">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="14" name="optProcess"/>      
-      <multiplicity id="15" minimum="0" maximum="1"/>    
+  <association id="11">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="12" name="frameProcesslist"/>      
+      <multiplicity id="13" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

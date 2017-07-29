@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class FrameProcess {
 	
-	LinkedList<Map<String, String>> atomicProcess;
-	String name = "";
+	private LinkedList<Map<String, String>> atomicProcess;
+	private String name = "";
 	
 	public FrameProcess(String name) {
 		this.name = name;

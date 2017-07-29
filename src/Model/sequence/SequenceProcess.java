@@ -146,21 +146,26 @@ public class SequenceProcess extends ProcessList {
 						System.out.println(falseFrame);
 						if(nameKey.contains("alt") || nameKey.contains("opt")) {
 							SequenceFrame frame = new AltFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
-							frames.add(frame);	
-							
+							frames.add(frame);
 						}else if(nameKey.contains("loop")) {
 							SequenceFrame frame = new LoopFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
-							frames.add(frame);	
+							frames.add(frame);
 						}	
 					}
 			}
 				System.err.println(map.getName()+":"+map.getAtomicProcess());
 			}
-			System.out.println("Frames :");
+			System.out.println("Frames :"+frames.size());
 			for (int i = 0; i < frames.size(); i++) {
 				System.err.println(frames.get(i).getName());
 				System.out.println(frames.get(i).getTypeFrame());
 				System.out.println(frames.get(i).getProcessFrame());
+				System.out.println("A:"+frames.get(i).getProcessFrameSq().size());
+				for (int j = 0; j < frames.get(i).getProcessFrameSq().size(); j++) {
+					System.err.println("XXX:"+frames.get(i).getProcessFrameSq().get(j).getTypeFrame());
+					System.err.println("XXX:"+frames.get(i).getProcessFrameSq().get(j).getProcessFrame());
+				}
+				
 			}
 			System.out.println("=====================");
 			

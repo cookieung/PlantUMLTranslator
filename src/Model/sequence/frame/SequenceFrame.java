@@ -14,6 +14,7 @@ public class SequenceFrame{
 	static LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame;
 	static LinkedList<Map<String, LinkedList<Map<String, String>>>> falseFrame;
 	LinkedList<Map<String, LinkedList<Map<String, LinkedList<String>>>>> processFrame;
+	LinkedList<SequenceFrame> frames = new LinkedList<>();
 	static String name = "",typeFrame = "";
 	
 	public SequenceFrame(String name,String typeFrame,LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame,LinkedList<Map<String, LinkedList<Map<String, String>>>> falseFrame){
@@ -21,9 +22,32 @@ public class SequenceFrame{
 		this.trueFrame = trueFrame;
 		System.out.println("True Frame :"+trueFrame);
 		System.out.println("False Frame :"+falseFrame);
-		this.name = name;
+		this.name = name+"_"+typeFrame;
 		this.typeFrame = typeFrame;
 		this.processFrame = getAllFrameProc();
+	}
+	
+	public SequenceFrame(String name,LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame){
+		this.falseFrame = falseFrame;
+		this.trueFrame = trueFrame;		
+		System.out.println("True Frame :"+trueFrame);		
+		System.out.println("False Frame :"+falseFrame);		
+		this.name = name;		
+		this.typeFrame = typeFrame;		
+		this.processFrame = getAllFrameProc();		
+	}		
+		
+	public void addFrameInside(String m,LinkedList<Map<String,LinkedList<String>>> result) {		
+		if(m.equals("loop")) {		
+			frames.add(new LoopFrame(m, result));		
+		}		
+		else {		
+			frames.add(new AltFrame(m, result));		
+		}
+	}
+	
+	public LinkedList<SequenceFrame> getAllFrame(){
+		return frames;
 	}
 	
 	public String getName() {
@@ -36,6 +60,18 @@ public class SequenceFrame{
 		return processFrame;
 	}
 	
+	public LinkedList<SequenceFrame> getProcessFrameSq() {
+		LinkedList<SequenceFrame> l = new LinkedList<>();
+		System.out.println("Get ProcessFrame size :"+processFrame.size());
+		for (int i = 0; i < processFrame.size(); i++) {
+			for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> sequenceFrame : processFrame.get(i).entrySet()) {
+				if(name.equals("loop"))l.add(new LoopFrame(sequenceFrame.getKey(), sequenceFrame.getValue()));
+				else l.add(new AltFrame(sequenceFrame.getKey(), sequenceFrame.getValue()));
+			}
+		}
+		return l;
+	}
+	
 	public String getTypeFrame() {
 		return this.typeFrame;
 	}
@@ -44,16 +80,6 @@ public class SequenceFrame{
 
 	public String toString(){
 		String s ="###"+typeFrame;
-//		for (int i = 0; i < processFrame.size(); i++) {
-//			for (Entry<String, LinkedList<LinkedList<String>>> map : processFrame.get(i).entrySet()) {
-//				s+=map.getKey()+" = ";
-//				for (int j = 0; j < map.getValue().size(); j++) {
-//					for (int k = 0; k < map.getValue().get(j).size(); k++) {
-//						s+=map.getValue().get(j).get(k);
-//					}
-//				}
-//			}
-//		}
 		return s+processFrame;
 	}
 	

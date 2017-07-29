@@ -11,6 +11,9 @@ public class AltFrame extends SequenceFrame{
 		// TODO Auto-generated constructor stub
 	}
 
+	public AltFrame(String m,LinkedList<Map<String, LinkedList<String>>> result) {
+		super(name, trueFrame);
+	}
 
 
 

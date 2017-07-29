@@ -11,6 +11,10 @@ public class LoopFrame extends SequenceFrame{
 		// TODO Auto-generated constructor stub
 	}
 
+	public LoopFrame(String m,LinkedList<Map<String, LinkedList<String>>> result) {
+		super(name, trueFrame);
+	}
+
 
 
 
