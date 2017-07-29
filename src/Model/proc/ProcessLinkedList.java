@@ -113,7 +113,12 @@ public class ProcessLinkedList {
 			System.out.println(typeMap+"THAT :"+stackframe+"Stack peek :"+stack);
 			if(stack.contains("end"))
 			mm.put("f"+stack+"_e", l);
-			else mm.put("f"+stack+"_b", l);
+			else {
+				mm.put("f"+stack+"_b", l);
+				if(nextTypeMap.contains("end"+stack)) {
+					mm.put("f"+stack+"_e", new LinkedHashMap<>());
+				}
+			}
 			
 		}else if(nextTypeMap.contains("end"+stack) && !nextTypeMap.equals("@enduml")){
 			Map<String, String> l  = new LinkedHashMap<>();
