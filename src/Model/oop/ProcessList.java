@@ -69,7 +69,7 @@ public class ProcessList {
 	}
 
 	public void addProcess(String newMsg, String string, LinkedList<LinkedList<String>> leftL,
-			LinkedList<LinkedList<String>> rightL, String typeMap,String nextMap) {
+			LinkedList<LinkedList<String>> rightL, String typeMap,String nextMap,String before) {
 		// TODO Auto-generated method stub
 		
 	}

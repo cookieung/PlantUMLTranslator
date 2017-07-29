@@ -33,13 +33,13 @@ public class SequenceProcess extends ProcessList {
 	}
 	
 	@Override
-	public void addProcess(String nameL,String nameR ,LinkedList<LinkedList<String>> linkedListL,LinkedList<LinkedList<String>> linkedListR,String typeName,String nextTypeName) {
+	public void addProcess(String nameL,String nameR ,LinkedList<LinkedList<String>> linkedListL,LinkedList<LinkedList<String>> linkedListR,String typeName,String nextTypeName,String before) {
 		Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
 		System.out.println("Map in Sequence Process Class :"+map);
 		if(typeName.contains("alt") || typeName.contains("opt") || typeName.contains("loop")) frameCounter++;
-		processMapByName.addNormal(map,typeName,nextTypeName,"f"+frameCounter);
+		processMapByName.addNormal(before,map,typeName,nextTypeName,"f"+frameCounter);
 		addStateToSet(linkedListL);
 		addStateToSet(linkedListR);
 		System.out.println("Object in Sequence Process Class :"+processMapByName.getNormalProcess());

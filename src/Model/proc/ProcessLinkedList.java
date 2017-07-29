@@ -23,19 +23,24 @@ public class ProcessLinkedList {
 		return normalProcess.size();
 	}
 
-	
-	
-	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
-		normalProcess.add(map);
+	public void addOptInNormal(String before,Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
 		Map<String, Map<String, Map<String, String>>> m = new LinkedHashMap<>();
+		System.out.println("Before :"+before);
 		System.out.println("*[Type Map :"+typeMap);
 		System.out.println("[Next Type :"+nextTypeName);
 		if( typeMap.contains("end") || (!nextTypeName.contains("end") && !typeMap.contains("alt") && !typeMap.contains("opt") && !typeMap.contains("else") && !typeMap.contains("loop"))) {
-			System.out.println("ABC"+typeMap);
-			m.put("NaN", getForOpt(map, typeMap,nextTypeName,nameframe));
+			System.out.println("ABC"+typeMap+","+before);
+			if(typeMap.equals("NaN") && (nextTypeName.contains("alt") || nextTypeName.contains("opt") || nextTypeName.contains("loop") || nextTypeName.contains("else") || nextTypeName.contains("end")) ) {
+				m.put(nextTypeName, getForOpt(map, typeMap,nextTypeName,nameframe));
+			}
+			else m.put("NaN", getForOpt(map, typeMap,nextTypeName,nameframe));
 		}
 		else {
-			System.out.println("CDE"+typeMap);
+			System.out.println("CDE"+typeMap+","+before);
+			if(before.contains("alt") || before.contains("opt") || before.contains("loop") || before.contains("else") || before.contains("end")) {
+				stackframe.push(before);
+			}
+			
 			if(typeMap.contains("loop") && nextTypeName.contains("end")) {
 				typeMap = typeMap;
 			}
@@ -59,6 +64,16 @@ public class ProcessLinkedList {
 
 //		if(typeMap.contains("alt")||typeMap.contains("opt")||typeMap.contains("loop")||typeMap.contains("end"))	
 		System.out.println("Stack Frame :"+stackframe);
+	}
+	
+	
+	public void addNormal(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
+		normalProcess.add(map);
+	}
+	
+	public void addNormal(String before,Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
+		normalProcess.add(map);
+		addOptInNormal(before, map, typeMap, nextTypeName, nameframe);
 	}
 	
 	public void addNormal2(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
