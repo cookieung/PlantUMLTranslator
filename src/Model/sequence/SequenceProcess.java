@@ -118,6 +118,7 @@ public class SequenceProcess extends ProcessList {
 			for (FrameProcess map : l.getFrameProcesslist()) {
 				System.out.println("Name Key in SQ :"+map.getName());
 				if(map.getName().contains("alt") || map.getName().contains("opt") || map.getName().contains("loop")){
+					
 					String type = map.getName();
 					if(type.contains("alt")) {
 						nameKey = "alt";
@@ -153,6 +154,8 @@ public class SequenceProcess extends ProcessList {
 							System.err.println("COUNT LOOP:"+frame.getName()+"\n"+frame.getProcessFrame());
 							frames.add(frame);
 						}	
+						trueFrame = new LinkedList<>();
+						falseFrame = new LinkedList<>();
 					}
 			}
 				System.err.println(map.getName()+":"+map.getAtomicProcess());
