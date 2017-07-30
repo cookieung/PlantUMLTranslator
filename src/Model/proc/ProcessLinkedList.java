@@ -28,27 +28,26 @@ public class ProcessLinkedList {
 		System.out.println("Before :"+before);
 		System.out.println("*[Type Map :"+typeMap);
 		System.out.println("[Next Type :"+nextTypeName);
+
+		if(!typeMap.equals("NaN"))	stackframe.push(typeMap);
+		
+		System.out.println("STACK :"+stackframe);
 		if( typeMap.contains("end") || (!nextTypeName.contains("end") && !typeMap.contains("alt") && !typeMap.contains("opt") && !typeMap.contains("else") && !typeMap.contains("loop"))) {
 			System.out.println("ABC"+typeMap+","+before);
-			if(typeMap.equals("NaN") && (nextTypeName.contains("alt") || nextTypeName.contains("opt") || nextTypeName.contains("loop") || nextTypeName.contains("else") || nextTypeName.contains("end")) ) {
-				m.put(nextTypeName, getForOpt(map, typeMap,nextTypeName,nameframe));
-			}
-			else m.put("NaN", getForOpt(map, typeMap,nextTypeName,nameframe));
+			m.put("NaN", getForOpt(map, typeMap,nextTypeName,nameframe));
 		}
 		else {
 			System.out.println("CDE"+typeMap+","+before);
-			if(before.contains("alt") || before.contains("opt") || before.contains("loop") || before.contains("else") || before.contains("end")) {
-				stackframe.push(before);
-			}
+
 			
 			if(typeMap.contains("loop") && nextTypeName.contains("end")) {
 				typeMap = typeMap;
 			}
 			
+
 			System.out.println("Stack in CDE :"+stackframe);
 			System.out.println("#Q"+typeMap);
-			if(!stackframe.isEmpty() && nextTypeName.contains("end"+stackframe.peek())) typeMap = typeMap;
-			else if(!typeMap.contains("end")) stackframe.push(typeMap);
+
 			System.out.println(">><<Type Map :"+typeMap);
 			m.put(typeMap, getForOpt(map, typeMap,nextTypeName,nameframe));
 		}
@@ -106,8 +105,7 @@ public class ProcessLinkedList {
 				optProcess.addFrameProcess(f);
 			}
 		}
-		if(typeMap.contains("alt")||typeMap.contains("opt")||typeMap.contains("loop")||typeMap.contains("end"))
-		stackframe.push(typeMap);
+
 		System.out.println("Stack Frame :"+stackframe);
 	}
 
@@ -116,8 +114,16 @@ public class ProcessLinkedList {
 		System.out.println("<Type Map> :"+typeMap);
 		System.out.println("<Next Type Map> :"+nextTypeMap);
 		String stack;
-		if(stackframe.isEmpty()) stack = "";
-		else stack = stackframe.peek();
+		
+		Stack<String> stk = stackframe;
+		
+		if(stk.isEmpty()) stack = "";
+		else if(stk.peek().contains("else")) {
+			stk.pop();
+			stack = stk.peek();
+		}else stack = stk.peek();
+		
+		System.out.println("Checker :"+"end"+stack);
 		if((typeMap.contains("alt") || typeMap.contains("opt") || typeMap.contains("loop")) && !typeMap.contains("end") ){
 			Map<String, String> l  = new LinkedHashMap<>();
 			for (Entry<String, LinkedList<LinkedList<String>>> s : map.entrySet()) {

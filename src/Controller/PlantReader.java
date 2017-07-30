@@ -157,12 +157,14 @@ public class PlantReader {
 	}
 	
 	public static void updateStack(String[] res) {
+		Stack<String> st = new Stack<>();
 		for (int i = 0; i < res.length; i++) {
 			System.out.println(res[i]);
 			if(!res[i].equals("@enduml") && (res[i].contains("alt")||res[i].contains("opt")||res[i].contains("loop")||res[i].contains("end") || res[i].contains("else"))) {
 				stackframe.push(res[i]);
 			}
 		}
+		
 		System.out.println("STACK FRAME :"+stackframe);
 	}
 	
@@ -172,6 +174,8 @@ public class PlantReader {
 		Map<String,String> countFrame = new LinkedHashMap<>();
 		Map<String,String> updateFrame = new LinkedHashMap<>();
 		updateStack(ss);
+		Stack<String> stk = new Stack<>();
+		Stack<String> trace = new Stack<>();
 		for (int i = 0; i < ss.length; i++) {
 			if(ss[i].length()!=0)
 			if(ss[i].contains(":")){
@@ -195,38 +199,18 @@ public class PlantReader {
 				}
 
 			}else {
-				System.out.println("Check ss[i] :"+ss[i]);
-				System.out.println("Check ss[i] :"+ss[i]);
-				Stack<String> stack = new Stack<>();
+				System.out.println(sl+"Check ss[i] :"+ss[i]+" = "+ containsInStack(stk, ss[i]));
 				if(ss[i].equals("alt")||ss[i].equals("opt")||ss[i].equals("loop")) {
-//						countFrame.replace(ss[i]+"2", (Integer.parseInt(countFrame.get(ss[i]))+1)+""); 
-					for (Entry<String, String> string : countFrame.entrySet()) {
-						System.out.println("Key :"+string.getKey()+"/Value :"+string.getValue());
-						if(string.getKey().contains(ss[i])) {
-							System.out.println(ss[i]+(Integer.parseInt(string.getKey().replaceAll("\\D+", ""))+1));
-							updateFrame.put(ss[i]+(Integer.parseInt(string.getKey().replaceAll("\\D+", ""))+1),0+"");
-//							sl.add(ss[i]+(Integer.parseInt(string.getKey().replaceAll("\\D+", ""))+1));
-						}
-					}
-					updateFrame.put(ss[i]+"1", 0+"");
-					countFrame.put(ss[i]+"1", 0+"");
-					if(sl.contains(ss[i]+"1")) sl.add(ss[i]+"2");
-					else sl.add(ss[i]+"1");
-				}else if(ss[i].equals("end") || ss[i].equals("else")) {
-					ArrayList<String> l = new ArrayList<String>(updateFrame.keySet());
-					for (int j = l.size()-1; j >= 0; j--) {
-						if(updateFrame.get(l.get(j)).equals("0") && ss[i].equals("end")) {
-							updateFrame.replace(l.get(j), "1");
-							if(!sl.contains("end"+l.get(j))) {
-								if(!sl.contains("end"+l.get(j))) sl.add("end"+l.get(j));
-							}
-							System.out.println("End :"+updateFrame.get(l.get(j)));
-						}else {
-							if(!sl.contains(ss[i]+l.get(j).replaceAll("\\D+", "")))
-							sl.add(ss[i]+l.get(j).replaceAll("\\D+", ""));
-						}
-					}
-					System.out.println(countFrame+"At end :"+updateFrame);
+					stk.push(containsInStack(stk, ss[i]));
+					sl.add(stk.peek());
+					trace.add(stk.peek());
+				}else if(ss[i].equals("else")) {
+					stk.push(containsInStack(stk, ss[i]));
+					sl.add(stk.peek());
+				}else if(ss[i].equals("end")) {
+					System.err.println(trace);
+					stk.push(ss[i]+trace.pop());
+					sl.add(stk.peek());
 				}else {
 					sl.add(ss[i]);
 				}
@@ -241,6 +225,16 @@ public class PlantReader {
 		System.out.println("Frame :"+countFrame);
 		System.out.println("Update :"+updateFrame);
 		return rs;
+	}
+	
+	public static String containsInStack(Stack<String> statck,String s) {
+		for (int i = 0; i < statck.size(); i++) {
+			System.out.println("CHECK :"+statck.get(i)+" = "+s);
+			if(statck.get(i).contains(s)) {
+				return s+(Integer.parseInt(statck.get(i).replaceAll("\\D+", ""))+1);
+			}
+		}
+		return s+"1";
 	}
 
 	public static String[] prepareInput(String s){
