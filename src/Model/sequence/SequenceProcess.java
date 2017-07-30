@@ -37,7 +37,7 @@ public class SequenceProcess extends ProcessList {
 		Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
-		System.out.println("Map in Sequence Process Class :"+map);
+		System.out.println(before+"<>"+typeName+"<>"+nextTypeName+"Map in Sequence Process Class :"+map);
 		if(typeName.contains("alt") || typeName.contains("opt") || typeName.contains("loop")) frameCounter++;
 		processMapByName.addNormal(before,map,typeName,nextTypeName,"f"+frameCounter);
 		addStateToSet(linkedListL);
@@ -165,10 +165,10 @@ public class SequenceProcess extends ProcessList {
 				System.err.println(frames.get(i).getName());
 				System.out.println(frames.get(i).getTypeFrame());
 				System.out.println(frames.get(i).getProcessFrame());
-				System.out.println("A:"+frames.get(i).getProcessFrameSq().size());
+				System.out.println("SIZE:"+frames.get(i).getProcessFrameSq().size());
 				for (int j = 0; j < frames.get(i).getProcessFrameSq().size(); j++) {
-					System.err.println("XXX:"+frames.get(i).getProcessFrameSq().get(j).getTypeFrame());
-					System.err.println("XXX:"+frames.get(i).getProcessFrameSq().get(j).getProcessFrame());
+					System.err.println("XXX TYPE FRAME:"+frames.get(i).getProcessFrameSq().get(j).getTypeFrame());
+					System.err.println("XXX PROCESS:"+frames.get(i).getProcessFrameSq().get(j).getProcessFrame());
 				}
 				
 			}
