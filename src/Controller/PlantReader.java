@@ -401,9 +401,9 @@ public class PlantReader {
 			string += s[i]+"\n";
 		}
 		
-		string += "Show Sequence Diagram:\n"+showSequenceDiagram()+"\n";
+		string += showSequenceDiagram()+"\n";
 
-		string += "Frame Channel :\n";
+//		string += "Frame Channel :\n";
 		string += getRelationFrameWithSequenceDiagram();
 
 		string += showRelationOfStateDiagram()+"\n";
@@ -411,7 +411,7 @@ public class PlantReader {
 		
 		string += showAllTraceOfMessage()+"\n";
 
-		string += "ABC :"+showRelationOfAllMessage()+"\n";
+		string += showRelationOfAllMessage()+"\n";
 		
 		string += showRelationWithSMIAndMSG()+"\n";
 

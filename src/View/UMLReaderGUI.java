@@ -236,19 +236,19 @@ public class UMLReaderGUI extends JFrame {
 				
 			}
 			
-			cspFile.append(a+"\n");
-			cspFile.append("Diagram:\n");
-//			cspFile.append("DIAGRAM :\n");
-			for (int i = 0; i < diagrams.size(); i++) {
-				cspFile.append(diagrams.get(i).getName()+" : \n");
-				for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListOptList().size(); j++) {
-					cspFile.append(diagrams.get(i).getProcesses().getProcessListOptList().get(j).getName()+":");
-					cspFile.append(diagrams.get(i).getProcesses().getProcessListOptList().get(j).getAtomicProcess()+"\n");
-					
-				}
-
-				
-			}
+//			cspFile.append(a+"\n");
+//			cspFile.append("Diagram:\n");
+////			cspFile.append("DIAGRAM :\n");
+//			for (int i = 0; i < diagrams.size(); i++) {
+//				cspFile.append(diagrams.get(i).getName()+" : \n");
+//				for (int j = 0; j < diagrams.get(i).getProcesses().getProcessListOptList().size(); j++) {
+//					cspFile.append(diagrams.get(i).getProcesses().getProcessListOptList().get(j).getName()+":");
+//					cspFile.append(diagrams.get(i).getProcesses().getProcessListOptList().get(j).getAtomicProcess()+"\n");
+//					
+//				}
+//
+//				
+//			}
 
 
 			cspFile.append(plantReader.getCSP());
