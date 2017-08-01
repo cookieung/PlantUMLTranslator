@@ -7,14 +7,14 @@ import java.util.Map;
 public class FrameProcess {
 	
 	private LinkedList<Map<String, String>> atomicProcess;
-	private String name = "",superFrame = "",subFrame = "";
+	private String name = "";
+
 	
-	public FrameProcess(String name,String superFrame,String subFrame) {
+	public FrameProcess(String name) {
 		this.name = name;
-		this.superFrame = superFrame;
-		this.subFrame = subFrame;
-		atomicProcess = new LinkedList<>();
+		this.atomicProcess = new LinkedList<>();
 	}
+	
 	
 		
 	public void addProcess(Map<String,String> m) {

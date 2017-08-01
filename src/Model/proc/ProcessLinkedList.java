@@ -60,9 +60,13 @@ public class ProcessLinkedList {
 			optProcess.setName(map2.getKey());
 			System.out.println("$$$"+map2.getKey()+"/"+begin);
 			for (Entry<String, Map<String, String>> map3 : map2.getValue().entrySet()) {
-				FrameProcess f = new FrameProcess(map3.getKey(),map2.getKey(),nextTypeName);
+				FrameProcess f = new FrameProcess(map3.getKey());
 				f.addProcess(map3.getValue());
 				optProcess.addFrameProcess(f);
+				for (int i = 0; i < optProcess.getFrameProcesslist().size(); i++) {
+					System.out.println("Name :"+optProcess.getFrameProcesslist().get(i)+"\nAtomic :"+optProcess.getFrameProcesslist().get(i).getAtomicProcess());
+				}
+				
 			}
 		}
 
