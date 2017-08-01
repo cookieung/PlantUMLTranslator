@@ -255,7 +255,7 @@ public class UMLReaderGUI extends JFrame {
 	
 			cspFile.append(plantReader.showAssert());
 			
-			saveNameCSP.setText(inputSource.getText().replace("\\", "/").replaceAll("file:/", "").replace(".txt", ".csp"));
+			saveNameCSP.setText(inputSource.getText().replace("\\", "/").replaceAll("file:/", "").replace(".txt", ".csp").replace(".puml",".csp"));
 
 
 		}
