@@ -477,10 +477,10 @@ public class PlantReader {
 			System.out.println("7/2/2017 :"+elem);
 			for (int j = 0; j < elem.size(); j++) {
 				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> map : elem.get(j).entrySet()) {
-					s += map.getKey()+" = "+map.getKey()+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
+					s += map.getKey()+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
 						System.out.println(k+"DEBUG :"+map.getValue());
-						s += map.getKey().split("_")[0].toLowerCase()+"_b -> ";
+						s += map.getKey().split("_")[0].toLowerCase()+"_b -> "+map.getKey()+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
 						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
 						Map<String, LinkedList<String>> t = map.getValue().get(k);
 						System.out.println("Plant Reader ::"+t);
