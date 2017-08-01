@@ -489,16 +489,17 @@ public class PlantReader {
 			System.out.println("7/2/2017 :"+elem);
 			for (int j = 0; j < elem.size(); j++) {
 				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> map : elem.get(j).entrySet()) {
-					s += map.getKey()+" = ";
+					s += map.getKey().replace("_loop", "").replace("_opt", "").replace("_alt", "")+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
 						System.out.println(k+"DEBUG :"+map.getValue());
-						s += map.getKey().split("_")[0].toLowerCase()+"_b -> "+map.getKey()+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
+						s += map.getKey().split("_")[0].toLowerCase()+"_b -> "+map.getKey().replace("_loop", "").replace("_opt", "").replace("_alt", "")+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
 						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
 						Map<String, LinkedList<String>> t = map.getValue().get(k);
 						System.out.println("Plant Reader ::"+t);
 						int n = 0;
 						for (Entry<String, LinkedList<String>> tl:t.entrySet()) {
-							s += formatFrame(nameTypeFrame,tl.getValue(),map.getKey().split("_")[0].toLowerCase());
+							if(tl.getKey().contains("_b")) s += formatFrame(nameTypeFrame,1,tl.getValue(),map.getKey().split("_")[0].toLowerCase());
+							else if(tl.getKey().contains("_e")) s += formatFrame(nameTypeFrame,2,tl.getValue(),map.getKey().split("_")[0].toLowerCase());
 							if(n < t.keySet().size()-1) s+= " [] ";
 							n++;
 						}
@@ -579,9 +580,11 @@ public class PlantReader {
 		 public String showRelationWithFrame(){
 			 String s = "";
 			 Map<String, Map<String,LinkedList<String>>> map = getRelationWithFrame((SequenceProcess)procSequence);
+			 System.out.println("<<>>MAP :"+map);
 			 for (Entry<String, Map<String, LinkedList<String>>> mp : map.entrySet()) {
 				s+= mp.getKey()+" = ";
 				Map<String, LinkedList<String>> m = mp.getValue();
+				System.out.println("<<>>m :"+m);
 				LinkedList<String> st = m.get("state");
 				s+=st.get(0)+"[|{";
 				LinkedList<String> cond = m.get("condition");
@@ -598,8 +601,8 @@ public class PlantReader {
 		 }
 		
 		
-	 public static String formatFrame(String typeframe,LinkedList<String> msg,String name){
-		 frameChannel.add(name+"_"+typeframe);
+	 public static String formatFrame(String typeframe,int j,LinkedList<String> msg,String name){
+		 frameChannel.add(name+"_"+typeframe+j);
 		 frameChannel.add(name+"_e");
 		 System.out.println("Message :"+msg.size());
 //		 if(msg.size()==1) return "("+name+"_"+typeframe+" -> "+name+"_e"+" -> SKIP)";
@@ -607,7 +610,7 @@ public class PlantReader {
 		 for (int i = 0; i < msg.size(); i++) {
 			if(msg.get(i).length()>0) message += msg.get(i)+" -> ";
 		 }
-		 return "("+name+"_"+typeframe+" -> "+message+name+"_e"+" -> SKIP)";
+		 return "("+name+"_"+typeframe+j+" -> "+message+name+"_e"+" -> SKIP)";
 	 }
 
 	 public String showRelationOfAllMessage(){
@@ -682,12 +685,12 @@ public class PlantReader {
 					String string = map2.getName();
 					System.err.println("State :"+state+" = "+string);
 					if(string.charAt(0)=='f' && (string.contains("_e") ||string.contains("_b"))){
-						ll.add(string);
+						ll.add(string.replace("loop", "").replace("opt", "").replace("alt", ""));
 					}else{
 						for (int i = 0; i < map2.getAtomicProcess().size(); i++) {
 							for (Entry<String, String> l : map2.getAtomicProcess().get(i).entrySet()) {
 								if(l.getKey().equals(state)){
-									ll.add(l.getValue());
+									ll.add(l.getValue().replace("loop", "").replace("opt", "").replace("alt", ""));
 								}
 							}
 						}							
@@ -718,9 +721,10 @@ public class PlantReader {
 								System.out.println(getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList().get(k2).getName()+":"+getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList().get(k2).getAtomicProcess());
 							}
 							System.out.println("B:"+map2.getValue().get(k).get(0));
-							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList(),map2.getValue().get(k).get(0));
+							ll = getLinkedListForSq(getAllSequenceDiagram().get(i).getProcesses().getProcessListOptList(),"M_"+map2.getValue().get(k).get(0));
 							ll.add("SKIP");
-							map.put(name+"_"+map2.getValue().get(0).get(0), ll);
+							map.put("M_"+map2.getValue().get(0).get(0), ll);
+							System.out.println("Check Here : "+map);
 							for (int k2 = 0; k2 < diagrams.size(); k2++) {
 								System.err.println("What the res:"+diagrams.get(k2)+" = "+(map2.getValue().get(0).get(0)));
 								if(diagrams.get(k2).getName().equals(map2.getValue().get(0).get(0))){
