@@ -60,7 +60,7 @@ public class ProcessLinkedList {
 			optProcess.setName(map2.getKey());
 			System.out.println("$$$"+map2.getKey()+"/"+begin);
 			for (Entry<String, Map<String, String>> map3 : map2.getValue().entrySet()) {
-				FrameProcess f = new FrameProcess(map3.getKey());
+				FrameProcess f = new FrameProcess(map3.getKey(),map2.getKey(),nextTypeName);
 				f.addProcess(map3.getValue());
 				optProcess.addFrameProcess(f);
 			}
@@ -79,40 +79,7 @@ public class ProcessLinkedList {
 		normalProcess.add(map);
 		addOptInNormal(before, map, typeMap, nextTypeName, nameframe);
 	}
-	
-	public void addNormal2(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeName,String nameframe) {
-		normalProcess.add(map);
-		Map<String, Map<String, Map<String, String>>> m = new LinkedHashMap<>();
-		System.out.println("[Type Map :"+typeMap);
-		System.out.println("[Next Type :"+nextTypeName);
-		if( typeMap.contains("end") || (!nextTypeName.contains("end") && !typeMap.contains("alt") && !typeMap.contains("opt") && !typeMap.contains("else") && !typeMap.contains("loop"))) {
-			m.put("NaN", getForOpt(map, typeMap,nextTypeName,nameframe));
-		}
-		else {
-			
-			if(typeMap.contains("loop") && nextTypeName.contains("end")) {
-				typeMap = typeMap;
-			}else if(typeMap.contains("else")) {
-				typeMap = "end"+typeMap.replaceAll("\\D+", "");
-			}else if(nextTypeName.contains("end")) {
-				typeMap = nextTypeName;
-			}
-			
-			System.out.println("<<Type Map :"+typeMap);
-			m.put(typeMap, getForOpt(map, typeMap,nextTypeName,nameframe));
-		}
-		System.out.println(typeMap +"Add Normal Map :"+map+">>"+m);
-		for (Entry<String, Map<String, Map<String, String>>> map2 : m.entrySet()) {
-			optProcess.setName(map2.getKey());
-			for (Entry<String, Map<String, String>> map3 : map2.getValue().entrySet()) {
-				FrameProcess f = new FrameProcess(map3.getKey());
-				f.addProcess(map3.getValue());
-				optProcess.addFrameProcess(f);
-			}
-		}
 
-		System.out.println("Stack Frame :"+stackframe);
-	}
 
 	public Map<String, Map<String, String>> getForOpt(Map<String,LinkedList<LinkedList<String>>> map,String typeMap,String nextTypeMap,String nameframe){
 		Map<String, Map<String, String>> mm = new LinkedHashMap<>();
