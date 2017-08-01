@@ -15,7 +15,7 @@ At this time, the program has just been developing so run file src/Controller/Pl
 What it support now?
 
 |                 | STATE DIAGRAM | SEQUENCE DIAGRAM |     MULTIPLE     |     COMPLEX      |
-|-----------------|---------------|------------------|------------------|------------------|
+|-----------------|:-------------:|:----------------:|:----------------:|:----------------:|
 | STATE DIAGRAM   |       /       |        /         |        -         |        -         |
 | SQ with ALT/OPT |       /       |        /         |        /         |     in process   |
 | SQ with LOOP    |       /       |        /         |        /         |     in process   |

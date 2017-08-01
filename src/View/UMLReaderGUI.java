@@ -204,11 +204,11 @@ public class UMLReaderGUI extends JFrame {
 			umlReader = new UMLReader();
 			if(nameFile.getText().length()==0){
 				result.setText(umlReader.readAllLine(url));
-				nameFile.setText(umlReader.fileName(url+""));
+				nameFile.setText(umlReader.fileName(url+"").replaceAll("-", ""));
 			}
 			else {
 				result.append(umlReader.readAllLine(url));
-				nameFile.setText(nameFile.getText()+","+umlReader.fileName(url+""));
+				nameFile.setText(nameFile.getText()+","+umlReader.fileName(url+"").replaceAll("-", ""));
 			}
 		}
 	}

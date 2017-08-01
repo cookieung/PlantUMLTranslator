@@ -327,8 +327,8 @@ public class PlantReader {
 			 LinkedList<String> listAllState = new LinkedList<>();
 			 for (int i = 0; i < getAllStateDiagramName().length ; i++) {
 				listAllState.add(getAllStateDiagramName()[i]+"");
-				String[] ss= getAllStateDiagramName()[i].toString().split("_");  
-				s+=ss[ss.length-1];
+				String ss= getAllStateDiagramName()[i].toString();  
+				s+=ss;
 			}
 			 map.put("states", listAllState);
 			 LinkedList<String> listAllProcess = new LinkedList<>();
@@ -404,6 +404,7 @@ public class PlantReader {
 		string += showSequenceDiagram()+"\n";
 
 //		string += "Frame Channel :\n";
+		if(frameChannel.size()>0)
 		string += getRelationFrameWithSequenceDiagram();
 
 		string += showRelationOfStateDiagram()+"\n";
@@ -416,7 +417,7 @@ public class PlantReader {
 		string += showRelationWithSMIAndMSG()+"\n";
 
 //		string += "Relation between Sequence:\n";
-		if(getFrameChannel().size()>0)
+//		if(getFrameChannel().size()>0)
 		string += showTheRelationBetweenSequenceDiagramAndMessage()+"\n";
 		return string;
 	}
@@ -444,18 +445,29 @@ public class PlantReader {
 		 return map;
 	 }
 	 
-	 public String showRelationOfStateDiagram(){
+	 public String templateBracket(Map<String, LinkedList<String>> m){
 		 String str="";
-		 Map<String, LinkedList<String>> m = getRelationOfStateDiagram();
+		 Stack<String> bracket = new Stack<>();
 		 for (Entry<String, LinkedList<String>> eachLine : m.entrySet()) {
 			str+=eachLine.getKey().toUpperCase()+" = ";
 			for (int i = 0; i < eachLine.getValue().size(); i++) {
+				if(i>0 && i<eachLine.getValue().size()-1) {
+					str+="(";
+					bracket.add(")");
+				}
 				str+=eachLine.getValue().get(i);
 				if(i<eachLine.getValue().size()-1) str+=" ||| ";
 				
 			}
 		}
+		 while (!bracket.isEmpty()) {
+			str+=bracket.pop();
+		}
 		 return str;
+	 }
+	 
+	 public String showRelationOfStateDiagram(){
+		 return templateBracket(getRelationOfStateDiagram());
 	 }
 
 	 public Map<String,LinkedList<String>> getRelationOfAllMessage(){
@@ -599,19 +611,7 @@ public class PlantReader {
 	 }
 
 	 public String showRelationOfAllMessage(){
-		 String str = "";
-		 Map<String, LinkedList<String>> map = getRelationOfAllMessage();
-		 for (Entry<String, LinkedList<String>> eachLine:map.entrySet()) {
-			 str+=eachLine.getKey()+" = ";
-			 if(eachLine.getValue().size()==0) return "";
-			 for (int i = 0; i < eachLine.getValue().size(); i++) {
-				 str+=eachLine.getValue().get(i);
-				 if(i<eachLine.getValue().size()-1) str+=" ||| ";
-				
-			}
-			 
-		}
-		 return str+"\n";
+		 return templateBracket(getRelationOfAllMessage())+"\n";
 	 }
 	 
 	 public Map<String ,Map<String,String>> getRelationWithSMIAndMSG(){
@@ -638,8 +638,8 @@ public class PlantReader {
 		 Map<String, LinkedList<String>> map = getSequenceDiagram();
 		 System.out.println("IN UML Map :"+map);
 		 for (Entry<String, LinkedList<String>> mp : map.entrySet()) {
-			String[] tmp = mp.getKey().split("_");
-			s+=tmp[tmp.length-1]+" = ";
+			String tmp = mp.getKey();
+			s+=tmp+" = ";
 			for (int i = 0; i < mp.getValue().size(); i++) {
 				s+=mp.getValue().get(i);
 				if(i<mp.getValue().size()-1) s+= "->";
@@ -898,11 +898,19 @@ public class PlantReader {
 				
 		 }else
 			for (Entry<String, LinkedList<String>> s : map.entrySet()) {
+				Stack<String> br = new Stack<>();
 				str+=s.getKey()+" = ";
 				for (int i = 0; i < s.getValue().size(); i++) {
-					String[] tmp = s.getValue().get(i).split("_");
-					str+=tmp[tmp.length-1];
+					String tmp = s.getValue().get(i);
+					if(i>0 && i<s.getValue().size()-1) {
+						str+="(";
+						br.push(")");
+					}
+					str+=tmp;
 					if(i<s.getValue().size()-1) str+=" ||| ";
+				}
+				while (!br.isEmpty()) {
+					str+=br.pop();
 				}
 				str+="\n";
 				
@@ -937,7 +945,7 @@ public class PlantReader {
 									k++;
 									continue;
 								}
-								res += entry2.getValue().get(j).get(k);
+								res += entry2.getValue().get(j).get(k).replace("-->", "->");
 //								if(k%3==1) res += " - >";
 								
 							}
