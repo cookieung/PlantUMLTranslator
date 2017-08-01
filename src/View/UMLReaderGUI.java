@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import Controller.PlantReader;
+import Controller.WriterCSP;
 import Model.oop.Diagram;
 
 
@@ -38,14 +39,14 @@ public class UMLReaderGUI extends JFrame {
 	private UMLReader umlReader;
 	private Container contents,contentResult,contentNameFile,contentResultAll;
 	private LayoutManager layout,layoutResult,layoutNameFile,layoutResultAll;
-	private JButton browseButton, countButton ,clearButton,addButton,convertButton;
+	private JButton browseButton, countButton ,clearButton,saveFileButton,addButton,convertButton;
 	private JTextField inputSource;
-	private JTextField nameFile;
+	private JTextField nameFile,saveNameCSP;
 	private JTextArea result,cspFile;
-	private JLabel label;
+	private JLabel label,labelNameSaveFile;
 	private JFileChooser filechooser;
-	private JPanel panel1;
-	private JPanel panel2;
+	private JPanel panel1,panel2;
+	private JPanel panel3;
 	private File file;
 	private JScrollPane scroll1,scroll2;
 	
@@ -78,6 +79,7 @@ public class UMLReaderGUI extends JFrame {
 		contentResultAll = new Container();
 		panel1 = new JPanel();
 		panel2 = new JPanel();
+		panel3 = new JPanel();
 		contents.setLayout(new BoxLayout(contents, BoxLayout.Y_AXIS));
 		result = new JTextArea();
 		result.setFont(new Font("Courier", Font.PLAIN,20));
@@ -91,17 +93,23 @@ public class UMLReaderGUI extends JFrame {
 		countButton.setFont(new Font("Courier", Font.PLAIN,15));
 		clearButton = new JButton("Clear");
 		clearButton.setFont(new Font("Courier", Font.PLAIN,15));
+		saveFileButton = new JButton("Save CSP File");
+		saveFileButton.setFont(new Font("Courier", Font.PLAIN,15));
 		addButton = new JButton("Add File");
 		addButton.setFont(new Font("Courier", Font.PLAIN,15));
 		convertButton = new JButton("Convert to CSP");
 		convertButton.setFont(new Font("Courier", Font.PLAIN,15));
 		filechooser = new JFileChooser();
 		label =new JLabel("File or URL name");
+		labelNameSaveFile =new JLabel("CSP File Name");
 		label.setFont(new Font("Courier", Font.BOLD,15));
+		labelNameSaveFile.setFont(new Font("Courier", Font.BOLD,15));
 		inputSource = new JTextField(100);
 		inputSource.setFont(new Font("Courier", Font.PLAIN,15));
 		nameFile = new JTextField(10);
 		nameFile.setFont(new Font("Courier", Font.PLAIN,15));
+		saveNameCSP = new JTextField(100);
+		saveNameCSP.setFont(new Font("Courier", Font.PLAIN,15));
 		scroll1 = new JScrollPane(result);
 		scroll2 = new JScrollPane(cspFile);
 		panel1.add(label);
@@ -109,7 +117,11 @@ public class UMLReaderGUI extends JFrame {
 		panel1.add(browseButton);
 		panel1.add(countButton);
 		panel1.add(clearButton);
+		panel2.add(labelNameSaveFile);
+		panel2.add(saveNameCSP);
+		panel2.add(saveFileButton);
 		panel1.setPreferredSize(new Dimension(1600,40));
+		panel2.setPreferredSize(new Dimension(1600,40));
 		contentNameFile.setLayout(new BoxLayout(contentNameFile, BoxLayout.X_AXIS));
 		contentNameFile.add(nameFile);
 		contentNameFile.add(addButton);
@@ -122,10 +134,11 @@ public class UMLReaderGUI extends JFrame {
 		contentResult.setLayout(new BoxLayout(contentResult, BoxLayout.Y_AXIS));
 		contentResult.add(contentNameFile);
 		contentResult.add(contentResultAll);
-		panel2.add(contentResult);
-		panel2.setPreferredSize(new Dimension(2000,1000));
+		panel3.add(contentResult);
+		panel3.setPreferredSize(new Dimension(2000,1000));
 		contents.add(panel1);
 		contents.add(panel2);
+		contents.add(panel3);
 
 		this.add(contents);
 
@@ -146,8 +159,23 @@ public class UMLReaderGUI extends JFrame {
 		ActionListener listener5 = new ConvertToDiagramListener();
 		convertButton.addActionListener(listener5);
 		nameFile.addActionListener(listener5);
+		
+		ActionListener saveFileListener = new SaveCSPFileListener();
+		saveFileButton.addActionListener(saveFileListener);
+		
+		
 	}
-	
+
+	public class SaveCSPFileListener implements ActionListener {
+		/**
+		 *  method to perform action when the button is pressed 
+		 */
+		public void actionPerformed(ActionEvent evt) {
+			WriterCSP writer = new WriterCSP();
+			writer.writing(cspFile.getText(),saveNameCSP.getText());
+
+		}
+	}
 	
 	public class AddFileListener implements ActionListener {
 		/**
@@ -226,6 +254,8 @@ public class UMLReaderGUI extends JFrame {
 			cspFile.append(plantReader.getCSP());
 	
 			cspFile.append(plantReader.showAssert());
+			
+			saveNameCSP.setText(inputSource.getText().replace("\\", "/").replaceAll("file:/", "").replace(".txt", ".csp"));
 
 
 		}

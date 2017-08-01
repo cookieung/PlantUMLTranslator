@@ -37,7 +37,7 @@ public class SequenceProcess extends ProcessList {
 		Map<String, LinkedList<LinkedList<String>>> map = new LinkedHashMap<>();
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
-		System.out.println(before+"<>"+typeName+"<>"+nextTypeName+"Map in Sequence Process Class :"+map);
+		System.out.println("Map in Sequence Process Class :"+map);
 		if(typeName.contains("alt") || typeName.contains("opt") || typeName.contains("loop")) frameCounter++;
 		processMapByName.addNormal(before,map,typeName,nextTypeName,"f"+frameCounter);
 		addStateToSet(linkedListL);

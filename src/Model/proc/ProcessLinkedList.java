@@ -12,6 +12,8 @@ public class ProcessLinkedList {
 	
 	private FrameProcessMap optProcess;
 	
+	String begin = "";
+	
 	Stack<String> stackframe = new Stack<>();
 	
 	public ProcessLinkedList(){
@@ -28,7 +30,9 @@ public class ProcessLinkedList {
 		System.out.println("Before :"+before);
 		System.out.println("*[Type Map :"+typeMap);
 		System.out.println("[Next Type :"+nextTypeName);
-
+		
+		this.begin = before;
+		
 		if(!typeMap.equals("NaN"))	stackframe.push(typeMap);
 		
 		System.out.println("STACK :"+stackframe);
@@ -54,6 +58,7 @@ public class ProcessLinkedList {
 		System.out.println(typeMap +"Add Normal Map :"+map+">>"+m);
 		for (Entry<String, Map<String, Map<String, String>>> map2 : m.entrySet()) {
 			optProcess.setName(map2.getKey());
+			System.out.println("$$$"+map2.getKey()+"/"+begin);
 			for (Entry<String, Map<String, String>> map3 : map2.getValue().entrySet()) {
 				FrameProcess f = new FrameProcess(map3.getKey());
 				f.addProcess(map3.getValue());
