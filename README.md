@@ -14,12 +14,14 @@ At this time, the program has just been developing so run file src/Controller/Pl
 
 What it support now?
 
-|                 | STATE DIAGRAM | SEQUENCE DIAGRAM |     MULTIPLE     |     COMPLEX      |
-|-----------------|:-------------:|:----------------:|:----------------:|:----------------:|
-| STATE DIAGRAM   |       /       |        /         |        -         |        -         |
-| SQ with ALT/OPT |       /       |        /         |        /         |     in process   |
-| SQ with LOOP    |       /       |        /         |        /         |     in process   |
+|                 | STATE DIAGRAM | SEQUENCE DIAGRAM | MULTIPLE INDEPENDENT |
+|-----------------|:-------------:|:----------------:|:--------------------:|
+| STATE DIAGRAM   |       /       |        /         |          -           |
+| SQ with ALT/OPT |       /       |        /         |          /           |
+| SQ with LOOP    |       /       |        /         |          /           |
 
 
-updated : 8/1/2017
+Now, the program is not support the complex frame.
+
+updated : 8/3/2017
 Salilthip Phuklang

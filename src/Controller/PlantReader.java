@@ -489,17 +489,23 @@ public class PlantReader {
 			System.out.println("7/2/2017 :"+elem);
 			for (int j = 0; j < elem.size(); j++) {
 				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> map : elem.get(j).entrySet()) {
-					s += map.getKey().replace("_loop", "").replace("_opt", "").replace("_alt", "")+" = ";
+					String start_f = map.getKey().replace("_loop", "").replace("_opt", "").replace("_alt", "").toUpperCase();
+					s += start_f+" = ";
 					for (int k = 0; k < map.getValue().size(); k++) {
 						System.out.println(k+"DEBUG :"+map.getValue());
-						s += map.getKey().split("_")[0].toLowerCase()+"_b -> "+map.getKey().replace("_loop", "").replace("_opt", "").replace("_alt", "")+"_"+nameTypeFrame.toUpperCase()+"\n"+map.getKey()+"_"+nameTypeFrame.toUpperCase()+" = ";
+						String name_f = map.getKey().replace("_loop", "").replace("_opt", "").replace("_alt", "")+"_"+nameTypeFrame.toUpperCase();
+						s += map.getKey().split("_")[0].toLowerCase()+"_b -> "+name_f+"\n"+name_f+" = ";
 						frameChannel.add(map.getKey().split("_")[0].toLowerCase()+"_b");
 						Map<String, LinkedList<String>> t = map.getValue().get(k);
 						System.out.println("Plant Reader ::"+t);
 						int n = 0;
 						for (Entry<String, LinkedList<String>> tl:t.entrySet()) {
-							if(tl.getKey().contains("_b")) s += formatFrame(nameTypeFrame,1,tl.getValue(),map.getKey().split("_")[0].toLowerCase());
-							else if(tl.getKey().contains("_e")) s += formatFrame(nameTypeFrame,2,tl.getValue(),map.getKey().split("_")[0].toLowerCase());
+							if(tl.getKey().contains("_b")) {
+								if(nameTypeFrame.equals("loop"))
+								s += formatFrame(nameTypeFrame,1,tl.getValue(),map.getKey().split("_")[0].toLowerCase(),name_f);
+								else s += formatFrame(nameTypeFrame,1,tl.getValue(),map.getKey().split("_")[0].toLowerCase(),start_f);
+							}
+							else if(tl.getKey().contains("_e")) s += formatFrame(nameTypeFrame,2,tl.getValue(),map.getKey().split("_")[0].toLowerCase(),start_f);
 							if(n < t.keySet().size()-1) s+= " [] ";
 							n++;
 						}
@@ -555,7 +561,7 @@ public class PlantReader {
 			for (int j = 0; j < elem.size(); j++) {
 				for (Entry<String, LinkedList<Map<String, LinkedList<String>>>> map : elem.get(j).entrySet()) {
 					n = map.getKey().split("_")[0];
-					state.add(map.getKey());
+					state.add(map.getKey().replace("loop_", "").replace("alt_", "").replace("opt_", ""));
 				}
 			}
 			Map<String,LinkedList<String>> ml = new LinkedHashMap<>();
@@ -586,7 +592,7 @@ public class PlantReader {
 				Map<String, LinkedList<String>> m = mp.getValue();
 				System.out.println("<<>>m :"+m);
 				LinkedList<String> st = m.get("state");
-				s+=st.get(0)+"[|{";
+				s+=st.get(0);
 				LinkedList<String> cond = m.get("condition");
 				String c = "[|{";
 				for (int i = 0; i < cond.size(); i++) {
@@ -601,7 +607,7 @@ public class PlantReader {
 		 }
 		
 		
-	 public static String formatFrame(String typeframe,int j,LinkedList<String> msg,String name){
+	 public static String formatFrame(String typeframe,int j,LinkedList<String> msg,String name,String NEXT_F){
 		 frameChannel.add(name+"_"+typeframe+j);
 		 frameChannel.add(name+"_e");
 		 System.out.println("Message :"+msg.size());
@@ -610,7 +616,7 @@ public class PlantReader {
 		 for (int i = 0; i < msg.size(); i++) {
 			if(msg.get(i).length()>0) message += msg.get(i)+" -> ";
 		 }
-		 return "("+name+"_"+typeframe+j+" -> "+message+name+"_e"+" -> SKIP)";
+		 return "("+name+"_"+typeframe+j+" -> "+message+name+"_e"+" -> "+NEXT_F+")";
 	 }
 
 	 public String showRelationOfAllMessage(){
@@ -781,7 +787,7 @@ public class PlantReader {
 					}
 						
 				}
-//				 System.out.println("=======================");
+				 System.out.println("=========");
 				 ll.add("SKIP");
 				 map.put(name,ll);
 				 name =getAllSequenceDiagram().get(i).getName();
@@ -1081,7 +1087,7 @@ public class PlantReader {
 			if(i<l.size()-1)c+=",";
 		}
 		c+="}|]";
-		s+=c+getRightStateForPrint(resM.get("sequenceState"), 1,c );
+		s+=c+getRightStateForPrint(resM.get("sequenceState"), 0,c );
 		
 		return s;
 	}
