@@ -3,6 +3,7 @@ package Model.proc;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class FrameProcess {
 	
@@ -17,6 +18,15 @@ public class FrameProcess {
 	
 	
 		
+	public void addFrameProcess(Map<String, Map<String, String>> forOpt) {
+		for (Entry<String, Map<String, String>> map : forOpt.entrySet()) {
+			System.out.println("FRAME PROCESS"+map);
+			atomicProcess.add(map.getValue());
+		}
+	}
+
+
+
 	public void addProcess(Map<String,String> m) {
 		this.atomicProcess.add(m);
 	}

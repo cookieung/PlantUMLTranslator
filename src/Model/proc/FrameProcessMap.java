@@ -1,10 +1,9 @@
 package Model.proc;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class FrameProcessMap {
+public class FrameProcessMap{
 	
 	private LinkedList<FrameProcess> frameProcesslist;
 	private String name="";
@@ -22,6 +21,11 @@ public class FrameProcessMap {
 		return this.name;
 	}
 	
+	@Override
+	public String toString() {
+		return this.name;
+	}
+	
 	
 	public LinkedList<FrameProcess> getFrameProcesslist() {
 		return frameProcesslist;
@@ -34,6 +38,15 @@ public class FrameProcessMap {
 	public void addFrameProcess(FrameProcess frameProcess) {
 		frameProcesslist.add(frameProcess);
 	}
-	
+
+	public void addFrameProcess(Map<String, Map<String, String>> forOpt) {
+		FrameProcess ff= new FrameProcess(forOpt.keySet().toArray()[0]+"");
+		ff.addFrameProcess(forOpt);
+		frameProcesslist.add(ff);
+		
+	}
+
+
+
 
 }

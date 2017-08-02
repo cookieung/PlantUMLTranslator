@@ -63,10 +63,6 @@ public class ProcessLinkedList {
 				FrameProcess f = new FrameProcess(map3.getKey());
 				f.addProcess(map3.getValue());
 				optProcess.addFrameProcess(f);
-				for (int i = 0; i < optProcess.getFrameProcesslist().size(); i++) {
-					System.out.println("Name :"+optProcess.getFrameProcesslist().get(i)+"\nAtomic :"+optProcess.getFrameProcesslist().get(i).getAtomicProcess());
-				}
-				
 			}
 		}
 

@@ -683,20 +683,24 @@ public class PlantReader {
 		 for (int j = 0; j < procs.size(); j++) {
 			FrameProcess map2 = procs.get(j); 
 					String string = map2.getName();
-					System.err.println("State :"+state+" = "+string);
+					System.err.println("State :"+state+" = "+map2.getAtomicProcess());
 					if(string.charAt(0)=='f' && (string.contains("_e") ||string.contains("_b"))){
-						ll.add(string.replace("loop", "").replace("opt", "").replace("alt", ""));
+						String rr = string.replace("loop", "").replace("opt", "").replace("alt", "");
+						if(!ll.contains(rr)) ll.add(rr);
 					}else{
+						System.out.println("Check !!!!!"+map2.getAtomicProcess().size());
 						for (int i = 0; i < map2.getAtomicProcess().size(); i++) {
 							for (Entry<String, String> l : map2.getAtomicProcess().get(i).entrySet()) {
-								if(l.getKey().equals(state)){
-									ll.add(l.getValue().replace("loop", "").replace("opt", "").replace("alt", ""));
+								if(("M_"+l.getKey()).equals(state)){
+									String rr = l.getValue().replace("loop", "").replace("opt", "").replace("alt", "");
+									if(!ll.contains(rr)) ll.add(rr);
 								}
 							}
 						}							
 					}
 
 		}
+		 System.out.println("LL >>>>"+ll);
 		 return ll;
 	 }
 	 
