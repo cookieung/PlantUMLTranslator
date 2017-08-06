@@ -20,6 +20,7 @@ public class SequenceFrame{
 	public SequenceFrame(String name,String typeFrame,LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame,LinkedList<Map<String, LinkedList<Map<String, String>>>> falseFrame){
 		this.falseFrame = falseFrame;
 		this.trueFrame = trueFrame;
+		System.out.println(typeFrame);
 		System.out.println("True Frame :"+trueFrame);
 		System.out.println("False Frame :"+falseFrame);
 		this.name = name+"_"+typeFrame;

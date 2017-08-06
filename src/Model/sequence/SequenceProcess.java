@@ -143,15 +143,20 @@ public class SequenceProcess extends ProcessList {
 						mp.put(map.getName(), map.getAtomicProcess());
 						falseFrame.add(mp);
 						
+						frameCounter = frames.size();
+						
+						type = "f"+(frameCounter+1);
+						
 						System.out.println(trueFrame);
 						System.out.println(falseFrame);
 						if(nameKey.contains("alt") || nameKey.contains("opt")) {
+							
 							SequenceFrame frame = new AltFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
-							System.err.println("COUNT ALT:"+frame.getName()+"\n"+frame.getProcessFrame());
+							System.err.println(type+"/"+nameKey+"COUNT ALT:"+frame.getName()+"\n"+frame.getProcessFrame());
 							frames.add(frame);
 						}else if(nameKey.contains("loop")) {
 							SequenceFrame frame = new LoopFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
-							System.err.println("COUNT LOOP:"+frame.getName()+"\n"+frame.getProcessFrame());
+							System.err.println(type+"/"+nameKey+"COUNT LOOP:"+frame.getName()+"\n"+frame.getProcessFrame());
 							frames.add(frame);
 						}	
 						trueFrame = new LinkedList<>();
