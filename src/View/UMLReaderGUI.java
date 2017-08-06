@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -73,6 +74,9 @@ public class UMLReaderGUI extends JFrame {
 	private void initComponents() {
 		
 		contents = new Container();
+		
+
+		getContentPane().setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
 
 		contentResult = new Container();
 		contentNameFile = new Container();
@@ -104,11 +108,11 @@ public class UMLReaderGUI extends JFrame {
 		labelNameSaveFile =new JLabel("CSP File Name");
 		label.setFont(new Font("Courier", Font.BOLD,15));
 		labelNameSaveFile.setFont(new Font("Courier", Font.BOLD,15));
-		inputSource = new JTextField(100);
+		inputSource = new JTextField(150);
 		inputSource.setFont(new Font("Courier", Font.PLAIN,15));
 		nameFile = new JTextField(10);
 		nameFile.setFont(new Font("Courier", Font.PLAIN,15));
-		saveNameCSP = new JTextField(100);
+		saveNameCSP = new JTextField(150);
 		saveNameCSP.setFont(new Font("Courier", Font.PLAIN,15));
 		scroll1 = new JScrollPane(result);
 		scroll2 = new JScrollPane(cspFile);
@@ -120,22 +124,23 @@ public class UMLReaderGUI extends JFrame {
 		panel2.add(labelNameSaveFile);
 		panel2.add(saveNameCSP);
 		panel2.add(saveFileButton);
-		panel1.setPreferredSize(new Dimension(1600,40));
-		panel2.setPreferredSize(new Dimension(1600,40));
+		panel1.setPreferredSize(new Dimension(1800,40));
+		panel2.setPreferredSize(new Dimension(1800,40));
 		contentNameFile.setLayout(new BoxLayout(contentNameFile, BoxLayout.X_AXIS));
 		contentNameFile.add(nameFile);
 		contentNameFile.add(addButton);
 		contentNameFile.add(convertButton);
 		contentResultAll.setLayout(new GridLayout(1, 2));
-		scroll1.setPreferredSize(new Dimension(800,800));
-		scroll2.setPreferredSize(new Dimension(800,800));
+		System.out.println("SIZE :"+this.getPreferredSize()+" , "+this.getHeight());
+		scroll1.setPreferredSize(new Dimension(900,1000));
+		scroll2.setPreferredSize(new Dimension(900,1000));
 		contentResultAll.add(scroll1);
 		contentResultAll.add(scroll2);
 		contentResult.setLayout(new BoxLayout(contentResult, BoxLayout.Y_AXIS));
 		contentResult.add(contentNameFile);
 		contentResult.add(contentResultAll);
 		panel3.add(contentResult);
-		panel3.setPreferredSize(new Dimension(2000,1000));
+		panel3.setPreferredSize(new Dimension(1800,1000));
 		contents.add(panel1);
 		contents.add(panel2);
 		contents.add(panel3);

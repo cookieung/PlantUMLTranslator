@@ -554,7 +554,9 @@ public class PlantReader {
 								s += formatFrame(nameTypeFrame,1,tl.getValue(),map.getKey().split("_")[0].toLowerCase(),name_f);
 								else s += formatFrame(nameTypeFrame,1,tl.getValue(),map.getKey().split("_")[0].toLowerCase(),start_f);
 							}
-							else if(tl.getKey().contains("_e")) s += formatFrame(nameTypeFrame,2,tl.getValue(),map.getKey().split("_")[0].toLowerCase(),start_f);
+							else if(tl.getKey().contains("_e")) {
+								s += formatFrame(nameTypeFrame,2,tl.getValue(),map.getKey().split("_")[0].toLowerCase(),start_f);
+							}
 							if(n < t.keySet().size()-1) s+= " [] ";
 							n++;
 						}
@@ -678,6 +680,7 @@ public class PlantReader {
 			 for (Entry<String,LinkedList<String>> mp : map.entrySet()) {
 				s+= mp.getKey()+" = ";
 				LinkedList<String> m = mp.getValue();
+				if(m.size()<=1) return "";
 				s+=m.get(0);
 				String c = "[|{";
 				c+="}|]";
@@ -689,15 +692,18 @@ public class PlantReader {
 		
 		
 	 public static String formatFrame(String typeframe,int j,LinkedList<String> msg,String name,String NEXT_F){
-		 frameChannel.add(name+"_"+typeframe+j);
-		 frameChannel.add(name+"_e");
 		 System.out.println("Message :"+msg.size());
 //		 if(msg.size()==1) return "("+name+"_"+typeframe+" -> "+name+"_e"+" -> SKIP)";
 		 String message ="";
+		 String num = "";
+		 if(!typeframe.contains("loop")) num+=j;
+		 frameChannel.add(name+"_"+typeframe+num);
+		 frameChannel.add(name+"_e");
 		 for (int i = 0; i < msg.size(); i++) {
 			if(msg.get(i).length()>0) message += msg.get(i)+" -> ";
 		 }
-		 return "("+name+"_"+typeframe+j+" -> "+message+name+"_e"+" -> "+NEXT_F+")";
+		 if(j==2 && typeframe.contains("loop")) return "("+message+name+"_e"+" -> "+NEXT_F+")";
+		 return "("+name+"_"+typeframe+num+" -> "+message+name+"_e"+" -> "+NEXT_F+")";
 	 }
 
 	 public String showRelationOfAllMessage(){
