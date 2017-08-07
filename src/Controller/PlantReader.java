@@ -703,6 +703,7 @@ public class PlantReader {
 			if(msg.get(i).length()>0) message += msg.get(i)+" -> ";
 		 }
 		 if(j==2 && typeframe.contains("loop")) return "("+message+name+"_e"+" -> "+NEXT_F+")";
+		 else if(j==1 && typeframe.contains("loop")) return "("+name+"_"+typeframe+num+" -> "+message+NEXT_F+")";
 		 return "("+name+"_"+typeframe+num+" -> "+message+name+"_e"+" -> "+NEXT_F+")";
 	 }
 
@@ -1040,6 +1041,7 @@ public class PlantReader {
 			for (int n = 0;n<diagrams.size();n++)
 			{
 				String namestate = diagrams.get(n).getName();
+				System.out.println(namestate);
 			    LinkedList<Map<String, LinkedList<LinkedList<String>>>> l = diagrams.get(n).getProcesses().getProcessListByState();
 			    if(namestate.equals(nowstate))
 			    for (int i = 0; i < l.size(); i++) {

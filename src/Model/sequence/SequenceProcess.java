@@ -165,7 +165,7 @@ public class SequenceProcess extends ProcessList {
 			}
 				System.err.println(map.getName()+":"+map.getAtomicProcess());
 			}
-			System.out.println("Frames :"+frames.size());
+			System.out.println("Frames :"+frames);
 			for (int i = 0; i < frames.size(); i++) {
 				System.err.println(frames.get(i).getName());
 				System.out.println(frames.get(i).getTypeFrame());

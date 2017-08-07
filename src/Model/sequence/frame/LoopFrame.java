@@ -7,12 +7,24 @@ public class LoopFrame extends SequenceFrame{
 
 	public LoopFrame(String name, String typeFrame, LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame,
 			LinkedList<Map<String, LinkedList<Map<String, String>>>> falseFrame) {
-		super(name, typeFrame, trueFrame, falseFrame);
-		// TODO Auto-generated constructor stub
+		super(name, "loop", trueFrame, falseFrame);
+		this.name = name+"_loop";
+		this.typeFrame = "loop";
 	}
 
 	public LoopFrame(String m,LinkedList<Map<String, LinkedList<String>>> result) {
 		super(name, trueFrame);
+	}
+	
+	@Override
+	public String getTypeFrame() {
+		return "loop";
+	}
+	
+	@Override
+	public String toString(){
+		String s ="###"+this.typeFrame;
+		return s+processFrame;
 	}
 
 

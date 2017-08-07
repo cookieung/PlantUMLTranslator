@@ -14,17 +14,18 @@ public class SequenceFrame{
 	static LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame;
 	static LinkedList<Map<String, LinkedList<Map<String, String>>>> falseFrame;
 	LinkedList<Map<String, LinkedList<Map<String, LinkedList<String>>>>> processFrame;
-	LinkedList<SequenceFrame> frames = new LinkedList<>();
+//	LinkedList<SequenceFrame> frames = new LinkedList<>();
 	static String name = "",typeFrame = "";
 	
 	public SequenceFrame(String name,String typeFrame,LinkedList<Map<String, LinkedList<Map<String, String>>>> trueFrame,LinkedList<Map<String, LinkedList<Map<String, String>>>> falseFrame){
 		this.falseFrame = falseFrame;
 		this.trueFrame = trueFrame;
-		System.out.println(typeFrame);
+		System.out.println("Before :"+typeFrame);
 		System.out.println("True Frame :"+trueFrame);
 		System.out.println("False Frame :"+falseFrame);
 		this.name = name+"_"+typeFrame;
 		this.typeFrame = typeFrame;
+		System.out.println("After :"+typeFrame);
 		this.processFrame = getAllFrameProc();
 	}
 	
@@ -38,18 +39,18 @@ public class SequenceFrame{
 		this.processFrame = getAllFrameProc();		
 	}		
 		
-	public void addFrameInside(String m,LinkedList<Map<String,LinkedList<String>>> result) {		
-		if(m.equals("loop")) {		
-			frames.add(new LoopFrame(m, result));		
-		}		
-		else {		
-			frames.add(new AltFrame(m, result));		
-		}
-	}
-	
-	public LinkedList<SequenceFrame> getAllFrame(){
-		return frames;
-	}
+//	public void addFrameInside(String m,LinkedList<Map<String,LinkedList<String>>> result) {		
+//		if(m.equals("loop")) {		
+//			frames.add(new LoopFrame(m, result));		
+//		}		
+//		else {		
+//			frames.add(new AltFrame(m, result));		
+//		}
+//	}
+//	
+//	public LinkedList<SequenceFrame> getAllFrame(){
+//		return frames;
+//	}
 	
 	public String getName() {
 		return this.name;
@@ -80,7 +81,7 @@ public class SequenceFrame{
 
 
 	public String toString(){
-		String s ="###"+typeFrame;
+		String s ="###";
 		return s+processFrame;
 	}
 	
