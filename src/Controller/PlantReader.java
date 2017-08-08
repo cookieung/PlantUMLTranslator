@@ -734,6 +734,7 @@ public class PlantReader {
 		 String s="";
 		 Map<String, LinkedList<String>> map = getSequenceDiagram();
 		 System.out.println("IN UML Map :"+map);
+		 System.out.println(((SequenceProcess) procSequence).frames);
 		 for (Entry<String, LinkedList<String>> mp : map.entrySet()) {
 			String tmp = mp.getKey();
 			s+=tmp+" = ";
@@ -779,14 +780,22 @@ public class PlantReader {
 					String string = map2.getName();
 					System.err.println("State :"+state+" = "+map2.getAtomicProcess());
 					if(string.charAt(0)=='f' && (string.contains("_e") ||string.contains("_b"))){
-						String rr = string.replace("loop", "").replace("opt", "").replace("alt", "");
-						if(!ll.contains(rr)) ll.add(rr);
+						for (int i = 0; i < map2.getAtomicProcess().size(); i++) {
+							for (Entry<String, String> string2 : map2.getAtomicProcess().get(i).entrySet()) {
+								System.out.println(string2.getKey()+" == "+state);
+								if(state.contains(string2.getKey())) {
+								String rr = string;
+								if(!ll.contains(rr)) ll.add(rr);
+								}
+							}
+						}
+						
 					}else{
 						System.out.println("Check !!!!!"+map2.getAtomicProcess().size());
 						for (int i = 0; i < map2.getAtomicProcess().size(); i++) {
 							for (Entry<String, String> l : map2.getAtomicProcess().get(i).entrySet()) {
 								if(("M_"+l.getKey()).equals(state)){
-									String rr = l.getValue().replace("loop", "").replace("opt", "").replace("alt", "");
+									String rr = l.getValue();
 									if(!ll.contains(rr)) ll.add(rr);
 								}
 							}
@@ -794,8 +803,29 @@ public class PlantReader {
 					}
 
 		}
-		 System.out.println("LL >>>>"+ll);
-		 return ll;
+		 
+		 LinkedList<String> resWrap = new LinkedList<>();
+		 for (int i = 0; i < ll.size(); i++) {
+			 String curr = ll.get(i);
+			if(ll.get(i).contains("_b") && !checkHasIn(ll.get(i).replace("_b", "_e"), ll)) {
+				resWrap.add(ll.get(i));
+				resWrap.add(curr.replace("_b", "_e"));
+			}
+			else if(ll.get(i).contains("_e") && !checkHasIn(ll.get(i).replace("_e", "_b"), ll)) {
+				resWrap.add(curr.replace("_e", "_b"));
+				resWrap.add(ll.get(i));
+			}
+			else resWrap.add(ll.get(i));
+		}
+		 System.out.println("LL >>>>"+resWrap);
+		 return resWrap;
+	 }
+	 
+	 private boolean checkHasIn(String s,LinkedList<String> l) {
+		 for (int i = 0; i < l.size(); i++) {
+			if(l.get(i).equals(s)) return true;
+		}
+		 return false;
 	 }
 	 
 	 public Map<String, LinkedList<String>> getSequenceDiagram(){
@@ -807,6 +837,7 @@ public class PlantReader {
 				 System.out.println("GET ALL SQ SIZE :"+getAllSequenceDiagram().get(i).getName());
 				 LinkedList<Map<String, LinkedList<LinkedList<String>>>> procs = getAllSequenceDiagram().get(i).getProcesses().getProcessListByName();
 				 //All Diagram in ArrayList
+				 System.out.println("Procs :"+procs);
 				 for (int j = 0; j < procs.size(); j++) {
 					 String curr="";
 					 System.out.println("Procs SIZE :"+procs.get(j));

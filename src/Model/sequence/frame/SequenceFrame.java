@@ -89,6 +89,9 @@ public class SequenceFrame{
 	public static Map<String, LinkedList<Map<String,LinkedList<String>>>> processName(String m){
 		Map<String,LinkedList<String>> res= new HashMap<>();
 		LinkedList<String> l;
+		
+		String fname = name.split("_")[0].toLowerCase();
+		
 		for (int i = 0; i < trueFrame.size(); i++) {
 			for (Entry<String, LinkedList<Map<String, String>>> bg : trueFrame.get(i).entrySet()) {
 				l  = new LinkedList<>();
@@ -104,8 +107,8 @@ public class SequenceFrame{
 					for (int j = 0; j < l.size(); j++) {
 						ll.add(l.get(j));
 					}
-					res.put("f"+bg.getKey().substring(bg.getKey().length()-3),ll);
-				}else res.put("f"+bg.getKey().substring(bg.getKey().length()-3),l);
+					res.put(fname+bg.getKey().substring(bg.getKey().length()-2),ll);
+				}else res.put(fname+bg.getKey().substring(bg.getKey().length()-2),l);
 			}
 		}
 		
@@ -119,13 +122,13 @@ public class SequenceFrame{
 						}		
 					}
 				}
-				if(res.containsKey("f"+bg.getKey().substring(bg.getKey().length()-3))) {
-					LinkedList<String> ll = res.get("f"+bg.getKey().substring(bg.getKey().length()-3));
+				if(res.containsKey("f"+bg.getKey().substring(bg.getKey().length()-4))) {
+					LinkedList<String> ll = res.get("f"+bg.getKey().substring(bg.getKey().length()-4));
 					for (int j = 0; j < l.size(); j++) {
 						ll.add(l.get(j));
 					}
-					res.put("f"+bg.getKey().substring(bg.getKey().length()-3),ll);
-				}else res.put("f"+bg.getKey().substring(bg.getKey().length()-3),l);
+					res.put(fname+bg.getKey().substring(bg.getKey().length()-2),ll);
+				}else res.put(fname+bg.getKey().substring(bg.getKey().length()-2),l);
 			}
 		}
 		LinkedList<Map<String,LinkedList<String>>> result = new LinkedList<>();

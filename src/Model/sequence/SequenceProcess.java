@@ -38,7 +38,8 @@ public class SequenceProcess extends ProcessList {
 		map.put(nameL, linkedListL);
 		map.put(nameR, linkedListR);
 		System.out.println("Map in Sequence Process Class :"+map);
-		if(typeName.contains("alt") || typeName.contains("opt") || typeName.contains("loop")) frameCounter++;
+		System.err.println("Check >> "+before+","+map+","+typeName+","+nextTypeName+",f"+frameCounter);
+//		if(typeName.contains("alt") || typeName.contains("opt") || typeName.contains("loop")) frameCounter++;
 		processMapByName.addNormal(before,map,typeName,nextTypeName,"f"+frameCounter);
 		addStateToSet(linkedListL);
 		addStateToSet(linkedListR);
@@ -143,18 +144,18 @@ public class SequenceProcess extends ProcessList {
 						mp.put(map.getName(), map.getAtomicProcess());
 						falseFrame.add(mp);
 						
-						frameCounter = frames.size();
 						
 						type = "f"+(frameCounter+1);
 						
 						System.out.println(trueFrame);
 						System.out.println(falseFrame);
 						if(nameKey.contains("alt") || nameKey.contains("opt")) {
-							
+							frameCounter++;
 							SequenceFrame frame = new AltFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
 							System.err.println(type+"/"+nameKey+"COUNT ALT:"+frame.getName()+"\n"+frame.getProcessFrame());
 							frames.add(frame);
 						}else if(nameKey.contains("loop")) {
+							frameCounter++;
 							SequenceFrame frame = new LoopFrame(type.toUpperCase(),nameKey,trueFrame,falseFrame);
 							System.err.println(type+"/"+nameKey+"COUNT LOOP:"+frame.getName()+"\n"+frame.getProcessFrame());
 							frames.add(frame);

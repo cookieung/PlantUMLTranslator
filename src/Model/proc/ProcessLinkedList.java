@@ -31,6 +31,8 @@ public class ProcessLinkedList {
 		System.out.println("*[Type Map :"+typeMap);
 		System.out.println("[Next Type :"+nextTypeName);
 		
+		System.out.println("Name Frame :"+nameframe);
+		
 		this.begin = before;
 		
 		if(!typeMap.equals("NaN"))	stackframe.push(typeMap);
